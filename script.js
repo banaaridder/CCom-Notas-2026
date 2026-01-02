@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
         btnSalvar.addEventListener("click", salvarNotas);
     }
 
-    carregarNotas();
+ //   carregarNotas();
 });
 
 /* =========================
@@ -15,67 +15,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function salvarNotas() {
   const usuarioId = localStorage.getItem("usuarioLogado");
-
   if (!usuarioId) {
-    alert("Usuário não autenticado");
+    alert("Usuário não logado");
     return;
   }
 
-  // 🔹 EXEMPLO DE DADOS (AJUSTE AOS SEUS CAMPOS)
-  const dados = {
-    portugues: Number(document.getElementById("portugues").value),
-    matematica: Number(document.getElementById("matematica").value),
-    didatica: Number(document.getElementById("didatica").value),
-    raciocinio: Number(document.getElementById("raciocinio").value)
-  };
-
-  // 🔹 CÁLCULO DA MÉDIA (EXEMPLO)
-  const mediaGeral =
-    (dados.portugues +
-      dados.matematica +
-      dados.didatica +
-      dados.raciocinio) / 4;
-
-  console.log("DADOS:", dados);
-  console.log("MEDIA:", mediaGeral);
+  const notas = {};
+  document.querySelectorAll("input").forEach(input => {
+    if (input.id) {
+      notas[input.id] = input.value;
+    }
+  });
 
   const { error } = await window.supabaseClient
     .from("notas")
-    .insert({
+    .upsert({
       usuario_id: usuarioId,
-      dados: dados,                 // 👈 JSON
-      media_geral: mediaGeral       // 👈 nome EXATO da coluna
+      dados: notas,
+      media_geral: window.mediaGeralAtual
     });
 
   if (error) {
     console.error(error);
     alert("Erro ao salvar notas");
-    return;
+  } else {
+    alert("Notas salvas com sucesso!");
   }
-
-  alert("Notas salvas com sucesso!");
 }
 
-
-
-function carregarNotas() {
-    const usuario = localStorage.getItem("usuarioLogado");
-    if (!usuario) return;
-
-    const usuarios = JSON.parse(localStorage.getItem("usuarios")) || {};
-    if (!usuarios[usuario] || !usuarios[usuario].notas) return;
-
-    const notas = usuarios[usuario].notas;
-
-    Object.keys(notas).forEach(id => {
-        const input = document.getElementById(id);
-        if (input) {
-            input.value = notas[id];
-        }
-    });
-
-    calcularTudo();
-}
 
 function salvarNoRanking() {
     const usuarioLogado = localStorage.getItem("usuarioLogado");
@@ -98,12 +65,6 @@ function salvarNoRanking() {
 
     localStorage.setItem("ranking", JSON.stringify(ranking));
 }
-
-document.getElementById("btnSalvar").addEventListener("click", () => {
-    salvarNotas();        // função que você já tem
-    salvarNoRanking();    // ranking
-    alert("Notas salvas com sucesso!");
-});
 
 
 
@@ -564,7 +525,5 @@ function mascaraTempo(input) {
 
     input.value = valor;
 }
-
-
 
 
