@@ -1,4 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
+      const usuario = localStorage.getItem("usuarioLogado");
+
+  // Se NÃO estiver logado → vai pro login
+  if (!usuario) {
+    window.location.href = "login.html";
+    
     document.addEventListener("input", calcularTudo);
 
     const btnSalvar = document.getElementById("btnSalvar");
@@ -10,8 +16,6 @@ carregarNotasDoUsuario();
 
  //   carregarNotas();
 });
-
-
 
 
 async function carregarNotasDoUsuario() {
@@ -585,6 +589,7 @@ function mascaraTempo(input) {
 
     input.value = valor;
 }
+
 
 
 
