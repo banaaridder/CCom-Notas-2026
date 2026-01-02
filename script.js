@@ -11,16 +11,6 @@ carregarNotasDoUsuario();
  //   carregarNotas();
 });
 
-.upsert(
-  {
-    usuario_id: usuarioId,
-    dados: notas,
-    media_geral: window.mediaGeralAtual
-  },
-  {
-    onConflict: "usuario_id"
-  }
-);
 
 
 
@@ -62,11 +52,13 @@ async function carregarNotasDoUsuario() {
 
 async function salvarNotas() {
   const usuarioId = localStorage.getItem("usuarioLogado");
+
   if (!usuarioId) {
     alert("Usuário não logado");
     return;
   }
 
+  // 🔹 coleta TODOS os inputs da página
   const notas = {};
   document.querySelectorAll("input").forEach(input => {
     if (input.id) {
@@ -74,21 +66,42 @@ async function salvarNotas() {
     }
   });
 
-  const { error } = await window.supabaseClient
+  // 🔹 tenta ATUALIZAR primeiro
+  const { data, error } = await window.supabaseClient
     .from("notas")
-    .upsert({
-      usuario_id: usuarioId,
+    .update({
       dados: notas,
       media_geral: window.mediaGeralAtual
-    });
+    })
+    .eq("usuario_id", usuarioId)
+    .select(); // 👈 importante para saber se atualizou
+
+  // 🔹 se não existia registro → INSERT
+  if (!error && data.length === 0) {
+    const { error: insertError } = await window.supabaseClient
+      .from("notas")
+      .insert({
+        usuario_id: usuarioId,
+        dados: notas,
+        media_geral: window.mediaGeralAtual
+      });
+
+    if (insertError) {
+      console.error(insertError);
+      alert("Erro ao salvar notas");
+      return;
+    }
+  }
 
   if (error) {
     console.error(error);
     alert("Erro ao salvar notas");
-  } else {
-    alert("Notas salvas com sucesso!");
+    return;
   }
+
+  alert("Notas salvas com sucesso!");
 }
+
 
 
 function salvarNoRanking() {
@@ -572,6 +585,7 @@ function mascaraTempo(input) {
 
     input.value = valor;
 }
+
 
 
 
