@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
    SALVAR / CARREGAR NOTAS
 ========================= */
 
-async function salvarNotas(mediaFinal) {
+async function salvarNotas() {
   const usuarioId = localStorage.getItem("usuarioLogado");
 
   if (!usuarioId) {
@@ -21,11 +21,30 @@ async function salvarNotas(mediaFinal) {
     return;
   }
 
+  // 🔹 EXEMPLO DE DADOS (AJUSTE AOS SEUS CAMPOS)
+  const dados = {
+    portugues: Number(document.getElementById("portugues").value),
+    matematica: Number(document.getElementById("matematica").value),
+    didatica: Number(document.getElementById("didatica").value),
+    raciocinio: Number(document.getElementById("raciocinio").value)
+  };
+
+  // 🔹 CÁLCULO DA MÉDIA (EXEMPLO)
+  const mediaGeral =
+    (dados.portugues +
+      dados.matematica +
+      dados.didatica +
+      dados.raciocinio) / 4;
+
+  console.log("DADOS:", dados);
+  console.log("MEDIA:", mediaGeral);
+
   const { error } = await window.supabaseClient
     .from("notas")
     .insert({
       usuario_id: usuarioId,
-      media: mediaFinal
+      dados: dados,                 // 👈 JSON
+      media_geral: mediaGeral       // 👈 nome EXATO da coluna
     });
 
   if (error) {
@@ -36,6 +55,7 @@ async function salvarNotas(mediaFinal) {
 
   alert("Notas salvas com sucesso!");
 }
+
 
 
 function carregarNotas() {
@@ -544,6 +564,7 @@ function mascaraTempo(input) {
 
     input.value = valor;
 }
+
 
 
 
