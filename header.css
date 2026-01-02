@@ -1,0 +1,222 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* =========================
+   HEADER FIXO
+========================= */
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1100;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 16px 20px;
+
+    background: linear-gradient(
+        90deg,
+        rgba(13,13,13,0.6),
+        rgba(34,69,82,0.25),
+        rgba(13,13,13,0.6)
+    );
+
+    border-bottom: 1px solid rgba(0,175,239,0.25);
+    backdrop-filter: blur(6px);
+
+    transition: background 0.3s ease, backdrop-filter 0.3s ease;
+}
+
+
+/* Espaço do conteúdo */
+body {
+    padding-top: 95px;
+}
+
+/* Logos */
+.logo {
+    width: 40px;
+    position: absolute;
+}
+
+.logo:first-of-type {
+    left: 20px;
+}
+
+.logo:last-of-type {
+    right: 20px;
+}
+
+/* =========================
+   CENTRO
+========================= */
+
+.center {
+    text-align: center;
+}
+
+.center h1 {
+    font-family: 'Orbitron', sans-serif;
+    color: rgb(0,175,239);
+    letter-spacing: 2px;
+    font-size: clamp(22px, 3vw, 30px);
+}
+
+/* NAV CENTRAL */
+.nav-links {
+    margin-top: 8px;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.nav-links a {
+    color: rgb(0,175,239);
+    text-decoration: none;
+    font-size: 14px;
+}
+
+/* =========================
+   SAIR DESKTOP
+========================= */
+
+.logout-desktop {
+    position: absolute;
+    right: 80px; /* antes da imagem direita */
+
+    color: rgb(0,175,239);
+    text-decoration: none;
+    font-size: 14px;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* =========================
+   BOTÃO MOBILE
+========================= */
+
+.menu-toggle {
+    display: none;
+    position: absolute;
+    right: 20px;
+
+    background: none;
+    border: none;
+    color: rgb(0,175,239);
+    font-size: 28px;
+    cursor: pointer;
+    z-index: 1200;
+}
+
+#username{
+    cursor: auto;
+}
+
+/* =========================
+   MENU MOBILE
+========================= */
+
+.mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -50%;
+    width: 50%;
+    height: 100vh;
+
+    background: linear-gradient(180deg, #0b0b0b, #0f1f26);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+
+    transition: 0.35s;
+    z-index: 1001;
+}
+
+.mobile-menu a {
+    color: rgb(0,175,239);
+    text-decoration: none;
+    font-size: 18px;
+}
+
+/* SAIR MOBILE */
+.logout-mobile {
+    margin-top: 40px;
+    color: #ff4d4d;
+}
+
+/* FECHAR */
+.close-menu {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+
+    background: none;
+    border: none;
+    color: rgb(0,175,239);
+    font-size: 26px;
+    cursor: pointer;
+}
+
+/* OVERLAY */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.3s;
+    z-index: 1000;
+}
+
+.mobile-menu.active {
+    right: 0;
+}
+
+.overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+    .logo,
+    .logout-desktop,
+    .nav-links {
+        display: none;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+}
+
+@media (max-width: 420px) {
+    .mobile-menu {
+        width: 100%;
+        right: -100%;
+    }
+}
+
+
+.menu-toggle i {
+    transition: transform 0.25s ease;
+}
+
+.mobile-menu.active + .menu-toggle i {
+    transform: rotate(90deg);
+}

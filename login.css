@@ -1,0 +1,97 @@
+* {
+    overflow: hidden; /* bloqueia scroll horizontal */
+
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+   
+   
+   body {
+      background: #0d0d0d;
+      color: white;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    background-image:url("assets/COM VAZADO.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 60%;
+    background-color: #000;
+    backdrop-filter: blur(10px)
+    
+    }
+
+    .login-box {
+      background: #111;
+      padding: 30px;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 320px;
+      box-shadow: 0 0 15px rgba(0,175,239,0.4);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: rgb(0,175,239);
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 12px;
+      background: #000;
+      border: 1px solid #444;
+      color: white;
+      border-radius: 4px;
+    }
+        input:focus {
+            outline: none;
+            border-color: rgb(0, 175, 239);
+            box-shadow: 0 0 6px rgb(0, 175, 239, 0.6);
+            background: #000;
+        }
+
+        input::placeholder {
+            color: #888;
+        }
+
+
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: rgb(0,175,239);
+      border: none;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    p {
+      text-align: center;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    a {
+      color: rgb(0,175,239);
+      cursor: pointer;
+    }
+
+    .erro {
+      color: #ff4d4d;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    

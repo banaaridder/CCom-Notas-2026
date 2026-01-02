@@ -1,0 +1,352 @@
+/* =========================
+   RESET BÁSICO
+========================= */
+* {
+    overflow-x: hidden; /* bloqueia scroll horizontal */
+
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+
+body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: radial-gradient(circle at top, #1b383a 0%, #0d0d0d 100%);
+    color: #e6e6e6;
+    min-height: 100vh;
+    transition: background 0.3s ease;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+    display: grid;
+    grid-template-columns: auto 1fr auto; /* imagens nas extremidades, texto central */
+    align-items: center;
+    width: 100%;
+    background: linear-gradient(90deg, #0d0d0d, rgba(34, 69, 82, 0.2), #0d0d0d);
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(0, 175, 239, 0.2);
+    box-sizing: border-box;
+    position: relative;
+    z-index: 10;
+}
+
+header img {
+    width: 40px;
+    height: auto;
+}
+
+header h1 {
+    text-align: center;
+    font-family: 'Orbitron', Arial, sans-serif;
+    color: rgb(0, 175, 239);
+    letter-spacing: 2px;
+    font-size: clamp(22px, 3vw, 30px);
+}
+
+header a{
+    color: rgb(0, 175, 239);
+    text-decoration: none;
+}
+
+/* =========================
+   LOGO-COM
+========================= */
+.logo-com {
+    position: absolute;
+    right: 4vw;
+    top: 50vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: fit-content;
+    z-index: -1;
+}
+
+.logo-com img {
+    width: 650px;
+    height: auto;
+}
+
+.logo-com h2 {
+    color: rgba(255, 255, 255, 0.39);
+    font-size: 20px;
+    font-family: 'Share Tech Mono', monospace;
+    text-align: center;
+    margin-top: 6px;
+}
+
+/* =========================
+   RESPONSIVO LOGO-COM
+========================= */
+@media (max-width: 900px) {
+    .logo-com {
+        position: relative;
+        top: auto;
+        right: auto;
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    .logo-com {
+        width: 100%;
+        margin-top: 15px;
+    }
+}
+
+
+
+
+
+/* =========================
+   LAYOUT PRINCIPAL
+========================= */
+.layout {
+    display: flex;
+    gap: 24px;
+    padding: 20px;
+    flex-wrap: wrap;
+}
+
+.materias {
+    flex: 3 1 600px;
+    min-width: 300px;
+     max-width: 800px;
+}
+
+/* =========================
+   MEDIA-GERAL RESPONSIVO E FLUIDO
+========================= */
+.media-geral {
+    flex: 1 1 250px;
+    min-width: 220px;
+    max-width: 220px;
+    max-height: fit-content;
+    background: linear-gradient(180deg, #142b2c, #0d0d0d);
+    border: 1px solid rgba(0, 175, 239, 0.5);
+    border-radius: 8px;
+    padding: 24px;
+    text-align: center;
+    box-shadow: 0 0 25px rgba(0, 175, 239, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeIn 0.5s ease forwards;
+
+    
+}
+
+/* Sticky lateral em telas grandes */
+@media (min-width: 901px) {
+    .media-geral {
+        position: sticky;
+       
+        align-self: flex-start;
+    }
+}
+
+/* Painel no topo para tablets */
+@media (max-width: 900px) and (min-width: 601px) {
+   .layout {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .materias{
+        width: 90%;
+    }
+    
+    .media-geral {
+        position: relative;
+        width: 100%;
+        margin-bottom: 20px;
+        
+    }
+}
+
+/* Painel abaixo das matérias em celulares */
+@media (max-width: 600px) {
+    .layout {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .materias {
+        flex: 1 1 100%;
+    }
+
+    .media-geral {
+        width: 100%;
+        position: relative;
+        margin-top: 20px;
+    }
+}
+
+.media-geral:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 35px rgba(0, 175, 239, 0.3);
+}
+
+.media-geral span {
+    display: block;
+    margin-top: 10px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(24px, 4vw, 32px);
+    color: rgb(0, 175, 239);
+}
+
+/* =========================
+   CARDS DE MATÉRIA
+========================= */
+.materia {
+    background: linear-gradient(180deg, #111, #0b0b0b);
+    border: 1px solid #ffffff10;
+    border-left: 4px solid rgb(0, 175, 239);
+    border-radius: 8px;
+    padding: 18px;
+    margin-bottom: 22px;
+    box-shadow: 0 8px 20px #00000080;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+}
+
+.materia:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 25px #000000a0;
+}
+
+.materia h2 {
+    font-family: 'Orbitron', Arial, sans-serif;
+    font-size: clamp(16px, 2.2vw, 20px);
+    color: #ffffff;
+    border-bottom: 1px solid rgba(0, 175, 239, 0.3);
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+}
+
+/* =========================
+   LINHAS DE PROVA
+========================= */
+.prova, .prova-tfm {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+    align-items: center;
+    padding: 6px 0;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(12px, 1.5vw, 14px);
+}
+
+/* =========================
+   INPUTS
+========================= */
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 6px 0;
+    background: #111;
+    border: 1px solid #2c2c2c;
+    color: rgb(255, 255, 255);
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+input:focus {
+    outline: none;
+    border-color: rgb(0, 175, 239);
+    box-shadow: 0 0 6px rgb(0, 175, 239, 0.6);
+    background: #000;
+}
+
+input::placeholder {
+    color: #888;
+}
+
+/* =========================
+   RESULTADOS
+========================= */
+.resultado {
+    text-align: right;
+    margin-top: 10px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(13px, 1.5vw, 15px);
+}
+
+.resultado span {
+    color: rgb(0, 175, 239);
+    font-size: clamp(14px, 2vw, 18px);
+}
+
+/* =========================
+   RESPONSIVO
+========================= */
+
+
+@media (max-width: 600px) {
+    header {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .materias {
+        flex: 1 1 100%;
+    }
+
+    .prova, .prova-tfm {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    input {
+       
+        max-width: 150px;
+    }
+}
+
+/* =========================
+   ANIMAÇÕES LEVES
+========================= */
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(10px);}
+    100% { opacity: 1; transform: translateY(0);}
+}
+
+.materia, .media-geral {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+
+
+button { 
+    padding: 20px;
+    width: fit-content;
+    height: fit-content;
+    padding: 12px;
+    margin-top: 12px;
+    background: rgb(0, 175, 239);;
+    color: #000;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+    text-decoration: none;
+}
+
+.username {
+    font-weight: 600;
+    color: rgb(0,175,239);
+    margin-right: 50px;
+    text-decoration:underline;
+}

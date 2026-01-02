@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Ranking Geral</title>
+
+    <!-- Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="header.css">
+    <link rel="stylesheet" href="ranking.css">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+</head>
+<body>
+<header class="header">
+    <img src="assets/AL.png" class="logo">
+
+    <div class="center">
+        <h1>COMUNICAÇÕES</h1>
+
+        <!-- NAV CENTRAL -->
+        <nav class="nav-links">
+            <a href="index.html">Calculadora</a>
+            <a href="ranking.html">Ranking Geral</a>
+        </nav>
+    </div>
+
+    <!-- SAIR DESKTOP -->
+    <a href="login.html" class="logout-desktop">
+        <span class="username" id="username"></span>
+        <i class="fas fa-right-from-bracket"></i>
+        Sair
+    </a>
+
+    <img src="assets/com.png" class="logo">
+
+    <!-- BOTÃO MOBILE -->
+    <button class="menu-toggle">
+        <i class="fas fa-bars"></i>
+    </button>
+</header>
+
+<nav class="mobile-menu">
+
+    <a href="index.html">Calculadora</a>
+    <a href="ranking.html">Ranking Geral</a>
+
+    <!-- SAIR MOBILE -->
+    <a href="login.html" class="logout-mobile">
+         <span class="username" id="username-mobile"></span>
+        <i class="fas fa-right-from-bracket"></i>
+        Sair
+    </a>
+</nav>
+
+<div class="overlay"></div>
+
+
+
+ <div class="layout">
+
+<div class="materia ranking">
+    <h2>Ranking Geral</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Aluno</th>
+                <th>Média Geral</th>
+            </tr>
+        </thead>
+        <tbody id="ranking-body"></tbody>
+    </table>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script src="header.js"></script>
+<script src="ranking.js"></script>
+
+
+</body>
+</html>

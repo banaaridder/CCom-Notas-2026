@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="header.css">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+       <!-- Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+ 
+    <title>NOTA - CCom</title>
+    
+</head>
+
+<body>
+   <header class="header">
+    <img src="assets/AL.png" class="logo">
+
+    <div class="center">
+        <h1>COMUNICAÇÕES</h1>
+
+        <!-- NAV CENTRAL -->
+        <nav class="nav-links">
+            <a href="index.html">Calculadora</a>
+            <a href="ranking.html">Ranking Geral</a>
+        </nav>
+    </div>
+
+    <!-- SAIR DESKTOP -->
+    <a href="login.html" class="logout-desktop">
+        <span class="username" id="username"></span>
+        <i class="fas fa-right-from-bracket"></i>
+        Sair
+    </a>
+
+    <img src="assets/com.png" class="logo">
+
+    <!-- BOTÃO MOBILE -->
+    <button class="menu-toggle">
+        <i class="fas fa-bars"></i>
+    </button>
+</header>
+
+<nav class="mobile-menu">
+
+    <a href="index.html">Calculadora</a>
+    <a href="ranking.html">Ranking Geral</a>
+
+    <!-- SAIR MOBILE -->
+    <a href="login.html" class="logout-mobile">
+        <span class="username" id="username-mobile"></span>
+        <i class="fas fa-right-from-bracket"></i>
+        Sair
+    </a>
+</nav>
+
+<div class="overlay"></div>
+
+   <div class="layout">
+    
+    <div class="materias">
+         <!-- TEC MIL-->
+    <div class="materia">
+        <h2>Técnicas Militares de Comunicações</h2>
+        
+        <div class="prova">
+            <a>AA1</a>
+            <input type="number" id="acertos-tec-aa1" placeholder="Gaivotas feitas">
+            <input type="number" id="total-tec-aa1" placeholder="Gaivotas totais">
+        </div>
+
+        <div class="prova">
+            <a>AA2</a>
+            <input type="number" id="acertos-tec-aa2" placeholder="Gaivotas feitas">
+            <input type="number" id="total-tec-aa2" placeholder="Gaivotas totais">
+        </div>
+
+        <div class="prova">
+            <a>AC</a>
+            <input type="number" id="acertos-tec-ac" placeholder="Gaivotas feitas">
+            <input type="number" id="total-tec-ac" placeholder="Gaivotas totais">
+        </div>
+
+        <div class="resultado">
+            Média de Tec Mil: <span id="media-tec">--</span>
+        </div>
+    </div>
+        <!--FUNDAMENTOS DAS COMUNICAÇÕES-->
+    <div class="materia">
+        <h2>Fundamentos das Comunicações</h2>
+        
+        <div class="prova">
+            <a>AA</a>
+            <input type="number" id="acertos-fund-aa" placeholder="Gaivotas feitas">
+            <input type="number" id="total-fund-aa" placeholder="Gaivotas totais">
+        </div>
+
+
+        <div class="prova">
+            <a>AC</a>
+            <input type="number" id="acertos-fund-ac" placeholder="Gaivotas feitas">
+            <input type="number" id="total-fund-ac" placeholder="Gaivotas totais">
+        </div>
+
+        <div class="resultado">
+            Média de Fund. das Com: <span id="media-fund">--</span>
+        </div>
+    </div>
+
+ <!--CIBERNÉTICA-->
+    <div class="materia">
+        <h2>Cibernética</h2>
+        
+        <div class="prova">
+            <a>AA1</a>
+            <input type="number" id="acertos-ciber-aa1" placeholder="Gaivotas feitas">
+            <input type="number" id="total-ciber-aa1" placeholder="Gaivotas totais">
+        </div>
+
+        <div class="prova">
+            <a>AA2</a>
+            <input type="number" id="acertos-ciber-aa2" placeholder="Gaivotas feitas">
+            <input type="number" id="total-ciber-aa2" placeholder="Gaivotas totais">
+        </div>
+
+        <div class="prova">
+            <a>AC </a>
+            <input type="number" id="acertos-ciber-ac" placeholder="Gaivotas feitas">
+            <input type="number" id="total-ciber-ac" placeholder="Gaivotas totais">
+        </div>
+
+        <div class="resultado">
+            Média de Ciber: <span id="media-ciber">--</span>
+        </div>
+</div>
+
+        <!--EMPREGO DAS COMUNICAÇÕES-->
+    <div class="materia">
+        <h2>Emprego das Comunicações</h2>
+        
+        <div class="prova">
+            <a>AA</a>
+            <input type="number" id="acertos-empre-aa" placeholder="Gaivotas feitas">
+            <input type="number" id="total-empre-aa" placeholder="Gaivotas totais">
+        </div>
+
+
+        <div class="prova">
+            <a>AC</a>
+            <input type="number" id="acertos-empre-ac" placeholder="Gaivotas feitas">
+            <input type="number" id="total-empre-ac" placeholder="Gaivotas totais">
+        </div>
+
+        <div class="resultado">
+            Média de Emprego das Com: <span id="media-empre">--</span>
+        </div>
+    </div>
+
+        <!--PORTUGUÊS INSTRUMENTAL-->
+    <div class="materia">
+        <h2>Português Instrumental</h2>
+
+        <div class="prova">
+            <a>AC</a>
+            <input type="number" id="acertos-pt-ac" placeholder="Gaivotas feitas">
+            <input type="number" id="total-pt-ac" placeholder="Gaivotas totais">
+        </div>
+
+        <div class="resultado">
+            Média de Português Instrumental: <span id="media-pt">--</span>
+        </div>
+    </div>
+
+        <!--TCC-->
+<div class="materia" data-tipo="simples">
+    <h2>Metodologia de ensino (TCC)</h2>
+
+    <input type="number" id="nota-tcc" min="0" max="10" step="0.01" placeholder="Nota do TCC">
+
+    <div class="resultado">
+        Média: <span class="media-materia">--</span>
+    </div>
+</div>
+
+            <!--RACIOCÍNIO LÓGICO-->
+    <div class="materia">
+        <h2>Raciocínio Lógico</h2>
+
+        <div class="prova">
+            <a>AC</a>
+            <input type="number" id="acertos-racio-ac" placeholder="Gaivotas feitas">
+            <input type="number" id="total-racio-ac" placeholder="Gaivotas totais">
+        </div>
+
+        <div class="resultado">
+            Média de Raciocínio Lógico: <span id="media-racio">--</span>
+        </div>
+    </div>
+
+            <!--DIDÁTICA DE INSTRUÇÃO-->
+    <div class="materia">
+        <h2>Didática de Instrução</h2>
+
+        <div class="prova">
+            <a>AC</a>
+            <input type="number" id="acertos-didat-ac" placeholder="Gaivotas feitas">
+            <input type="number" id="total-didat-ac" placeholder="Gaivotas totais">
+        </div>
+
+        <div class="resultado">
+            Média de Didática de Instrução: <span id="media-didat">--</span>
+        </div>
+    </div>
+
+         <!-- TFM -->
+<div class="materia">
+    <h2>TFM</h2>
+
+    <!-- CORRIDA -->
+    <div class="prova-tfm">
+        <strong>Corrida</strong><br>
+        AA:
+        <input type="text" id="corrida-aa" placeholder="mm:ss" oninput="mascaraTempo(this)">
+        AC:
+        <input type="text" id="corrida-ac" placeholder="mm:ss" oninput="mascaraTempo(this)">
+        Nota:
+        <span id="nota-corrida">--</span>
+    </div>
+
+    <!-- FLEXÕES -->
+    <div class="prova-tfm">
+        <strong>Flexões</strong><br>
+        AA: <input type="number" id="flexao-aa" placeholder="Quantidade">
+        AC: <input type="number" id="flexao-ac" placeholder="Quantidade">
+        Nota: <span id="nota-flexao">--</span>
+
+    </div>
+
+    <!-- BARRA FIXA -->
+    <div class="prova-tfm">
+        <strong>Barra fixa</strong><br>
+        AA: <input type="number" id="barra-aa" placeholder="Quantidade">
+        AC: <input type="number" id="barra-ac" placeholder="Quantidade">
+        Nota: <span id="nota-barra">--</span>
+    </div>
+
+    <!-- NATAÇÃO -->
+    <div class="prova-tfm">
+        <strong>Natação</strong><br>
+        AA: <input type="text" id="natacao-aa" placeholder="mm:ss" oninput="mascaraTempo(this)">
+        AC: <input type="text" id="natacao-ac" placeholder="mm:ss" oninput="mascaraTempo(this)">
+        Nota: <span id="nota-natacao">--</span>
+    </div>
+
+    <!-- SUBIDA NA CORDA -->
+    <div class="prova-tfm">
+        <strong>Subida na corda</strong><br>
+        AA: <input type="number" step="0.1" id="corda-aa" placeholder="metros">
+        AC: <input type="number" step="0.1" id="corda-ac" placeholder="metros">
+        Nota: <span id="nota-corda">--</span>
+    </div>
+
+    <!-- PPM -->
+    <div class="prova-tfm">
+        <strong>PPM</strong><br>
+        AA: <input type="text" id="ppm-aa" placeholder="mm:ss" oninput="mascaraTempo(this)">
+        AC: <input type="text" id="ppm-ac" placeholder="mm:ss" oninput="mascaraTempo(this)">
+        Nota: <span id="nota-ppm">--</span>
+    </div>
+
+    <div class="resultado">
+        Média do TFM: <span id="media-tfm">--</span>
+    </div>
+</div>
+    
+
+<!--TIRO-->
+<div class="materia">
+    <h2>Tiro</h2>
+
+    <div class="prova">
+        <a>AA</a>
+        <input type="number" id="tiro-aa" placeholder="Nota AA (Pst Imbel)">
+    </div>
+
+    <div class="prova">
+        <a>AC 1</a>
+        <input type="number" id="tiro-ac1" placeholder="Nota AC (Fz IA-2)">
+    </div>
+
+    <div class="prova">
+        <a>AC 2</a>
+        <input type="number" id="tiro-ac2" placeholder="Nota AC (Fz IA-2)">
+    </div>
+
+    <div class="resultado">
+        Média de Tiro: <span id="media-tiro">--</span>
+    </div>
+</div>
+
+    <!--CONCEITO-->
+<div class="materia" data-tipo="simples">
+    <h2>Conceito</h2>
+
+    <input type="number" id="nota-conceito" min="0" max="10" step="0.01" placeholder="Nota do conceito">
+
+    <div class="resultado">
+        Média: <span class="media-materia">--</span>
+    </div>
+</div>
+    </div>
+
+        <div class="media-geral">
+        Média Geral: <span id="media-geral">--</span>
+    </div>
+<button id="btnSalvar">Salvar Notas</button>
+
+    <div class="logo-com">
+        <img src="assets/COM VAZADO.png">
+         <h2 id="nome">Code By: AL Davi Costa</h2>
+    </div>
+
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+   <script src="header.js"></script>
+    <script src="script.js"></script>
+
+
+
+
+</body>
+</html>
