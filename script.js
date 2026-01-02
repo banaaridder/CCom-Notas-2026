@@ -11,13 +11,17 @@ carregarNotasDoUsuario();
  //   carregarNotas();
 });
 
-const { error } = await window.supabaseClient
-  .from("notas")
-  .update({
+.upsert(
+  {
+    usuario_id: usuarioId,
     dados: notas,
     media_geral: window.mediaGeralAtual
-  })
-  .eq("usuario_id", usuarioId);
+  },
+  {
+    onConflict: "usuario_id"
+  }
+);
+
 
 
 async function carregarNotasDoUsuario() {
@@ -568,6 +572,7 @@ function mascaraTempo(input) {
 
     input.value = valor;
 }
+
 
 
 
