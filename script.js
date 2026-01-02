@@ -103,6 +103,7 @@ async function salvarNotas() {
 
 
 
+
 function salvarNoRanking() {
     const usuarioLogado = localStorage.getItem("usuarioLogado");
 
@@ -584,6 +585,7 @@ function mascaraTempo(input) {
 
     input.value = valor;
 }
+
 
 
 
