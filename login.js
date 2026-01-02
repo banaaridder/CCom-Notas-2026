@@ -1,10 +1,14 @@
-document.getElementById("btnLogin").addEventListener("click", login);
+document.addEventListener("DOMContentLoaded", () => {
+  document
+    .getElementById("btnLogin")
+    .addEventListener("click", login);
+});
 
 async function login() {
   const usuario = document.getElementById("usuario").value.trim();
   const senha = document.getElementById("senha").value;
 
-  const { data, error } = await window.supabase
+  const { data, error } = await window.supabaseClient
     .from("usuarios")
     .select("*")
     .eq("nome", usuario)
