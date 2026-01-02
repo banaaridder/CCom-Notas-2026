@@ -13,34 +13,28 @@ document.addEventListener("DOMContentLoaded", () => {
    SALVAR / CARREGAR NOTAS
 ========================= */
 
-async function salvarNotas() {
+async function salvarNotas(mediaFinal) {
   const usuarioId = localStorage.getItem("usuarioLogado");
+
   if (!usuarioId) {
-    alert("Usuário não logado");
+    alert("Usuário não autenticado");
     return;
   }
 
-  const notas = {};
-  document.querySelectorAll("input").forEach(input => {
-    if (input.id) {
-      notas[input.id] = input.value;
-    }
-  });
-
-  const { error } = await window.supabase
+  const { error } = await window.supabaseClient
     .from("notas")
-    .upsert({
+    .insert({
       usuario_id: usuarioId,
-      dados: notas,
-      media_geral: window.mediaGeralAtual
+      media: mediaFinal
     });
 
   if (error) {
     console.error(error);
     alert("Erro ao salvar notas");
-  } else {
-    alert("Notas salvas com sucesso!");
+    return;
   }
+
+  alert("Notas salvas com sucesso!");
 }
 
 
@@ -550,5 +544,6 @@ function mascaraTempo(input) {
 
     input.value = valor;
 }
+
 
 
