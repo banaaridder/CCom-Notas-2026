@@ -11,6 +11,19 @@ carregarNotasDoUsuario();
  //   carregarNotas();
 });
 
+const { error } = await window.supabaseClient
+  .from("notas")
+  .upsert(
+    {
+      usuario_id: usuarioId,
+      dados: notas,
+      media_geral: window.mediaGeralAtual
+    },
+    {
+      onConflict: "usuario_id"
+    }
+  );
+
 async function carregarNotasDoUsuario() {
   const usuarioId = localStorage.getItem("usuarioLogado");
   if (!usuarioId) return;
@@ -559,6 +572,7 @@ function mascaraTempo(input) {
 
     input.value = valor;
 }
+
 
 
 
