@@ -4,3 +4,5 @@ export const supabase = createClient(
   'https://rqsokwtewfmvdnsyddrn.supabase.co',
   'sb_publishable_TlJfKaHL_skoJbrD6kfBzQ_gIcnGTx_'
 );
+
+console.log("Supabase conectado:", window.supabase);
