@@ -5,9 +5,42 @@ document.addEventListener("DOMContentLoaded", () => {
     if (btnSalvar) {
         btnSalvar.addEventListener("click", salvarNotas);
     }
+carregarNotasDoUsuario();
 
  //   carregarNotas();
 });
+
+async function carregarNotasDoUsuario() {
+  const usuarioId = localStorage.getItem("usuarioLogado");
+  if (!usuarioId) return;
+
+  const { data, error } = await window.supabaseClient
+    .from("notas")
+    .select("dados, media_geral")
+    .eq("usuario_id", usuarioId)
+    .single(); // 👈 garante 1 registro por usuário
+
+  if (error && error.code !== "PGRST116") {
+    console.error("Erro ao carregar notas:", error);
+    return;
+  }
+
+  if (!data) return;
+
+  // 🔹 Preencher inputs
+  Object.entries(data.dados).forEach(([id, valor]) => {
+    const input = document.getElementById(id);
+    if (input) {
+      input.value = valor;
+    }
+  });
+
+  // 🔹 Atualiza média global se existir
+  if (data.media_geral !== null) {
+    window.mediaGeralAtual = data.media_geral;
+  }
+}
+
 
 /* =========================
    SALVAR / CARREGAR NOTAS
@@ -525,5 +558,6 @@ function mascaraTempo(input) {
 
     input.value = valor;
 }
+
 
 
