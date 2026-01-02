@@ -1,9 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-      const usuario = localStorage.getItem("usuarioLogado");
-
-  // Se NÃO estiver logado → vai pro login
-  if (!usuario) {
-    window.location.href = "login.html";
     
     document.addEventListener("input", calcularTudo);
 
@@ -589,6 +584,7 @@ function mascaraTempo(input) {
 
     input.value = valor;
 }
+
 
 
 
