@@ -44,6 +44,15 @@ async function carregarNotasDoUsuario() {
   }
 }
 
+btnSalvar.addEventListener("click", async () => {
+  btnSalvar.disabled = true;
+  btnSalvar.textContent = "Salvando...";
+
+  await salvarNotas();
+
+  btnSalvar.disabled = false;
+  btnSalvar.textContent = "Salvar Notas";
+});
 
 /* =========================
    SALVAR / CARREGAR NOTAS
@@ -587,6 +596,7 @@ function mascaraTempo(input) {
 
     input.value = valor;
 }
+
 
 
 
