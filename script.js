@@ -50,6 +50,8 @@ async function carregarNotasDoUsuario() {
 ========================= */
 
 async function salvarNotas() {
+    calcularTudo();
+
   const usuarioId = localStorage.getItem("usuarioLogado");
 
   if (!usuarioId) {
@@ -585,6 +587,7 @@ function mascaraTempo(input) {
 
     input.value = valor;
 }
+
 
 
 
