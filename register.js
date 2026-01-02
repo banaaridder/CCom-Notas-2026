@@ -1,4 +1,7 @@
-document.getElementById("btn").addEventListener("click", registrar);
+document.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("btn");
+  btn.addEventListener("click", registrar);
+});
 
 async function registrar() {
   const usuario = document.getElementById("usuario").value.trim();
@@ -15,20 +18,13 @@ async function registrar() {
     return;
   }
 
-  const { error } = await window.supabase
+  const { error } = await window.supabaseClient
     .from("usuarios")
-    .insert({
-      nome: usuario,
-      senha: senha
-    });
+    .insert({ nome: usuario, senha });
 
   if (error) {
-    if (error.code === "23505") {
-      alert("Usuário já existe");
-    } else {
-      console.error(error);
-      alert("Erro ao criar conta");
-    }
+    console.error(error);
+    alert("Erro ao criar conta");
     return;
   }
 
