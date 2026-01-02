@@ -1,8 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const nomeUsuario = localStorage.getItem("nomeUsuario");
 
-
-    if (!usuarioLogado) return;
+    if (!nomeUsuario) return;
 
     const username = document.getElementById("username");
     const usernameMobile = document.getElementById("username-mobile");
@@ -36,5 +35,3 @@ overlay.addEventListener('click', () => {
     mobileMenu.classList.remove('active');
     overlay.classList.remove('active');
 });
-
-
