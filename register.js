@@ -1,37 +1,36 @@
 document.getElementById("btn").addEventListener("click", registrar);
 
-function registrar() {
+async function registrar() {
   const usuario = document.getElementById("usuario").value.trim();
   const senha = document.getElementById("senha").value;
   const confirmarSenha = document.getElementById("confirmar-senha").value;
 
-  // Verifica campos vazios
   if (!usuario || !senha || !confirmarSenha) {
     alert("Preencha todos os campos");
     return;
   }
 
-  // Verifica se as senhas coincidem
   if (senha !== confirmarSenha) {
     alert("As senhas não coincidem");
     return;
   }
 
-  const usuarios = JSON.parse(localStorage.getItem("usuarios")) || {};
+  const { error } = await window.supabase
+    .from("usuarios")
+    .insert({
+      nome: usuario,
+      senha: senha
+    });
 
-  // Verifica se usuário já existe
-  if (usuarios[usuario]) {
-    alert("Usuário já existe");
+  if (error) {
+    if (error.code === "23505") {
+      alert("Usuário já existe");
+    } else {
+      console.error(error);
+      alert("Erro ao criar conta");
+    }
     return;
   }
-
-  // Salva o usuário
-  usuarios[usuario] = {
-    senha: senha,
-    notas: {}
-  };
-
-  localStorage.setItem("usuarios", JSON.stringify(usuarios));
 
   alert("Conta criada com sucesso!");
   window.location.href = "login.html";
