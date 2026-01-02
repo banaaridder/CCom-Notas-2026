@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
         btnSalvar.addEventListener("click", salvarNotas);
     }
 carregarNotasDoUsuario();
+    calcularTudo();
 
  //   carregarNotas();
 });
@@ -558,6 +559,7 @@ function mascaraTempo(input) {
 
     input.value = valor;
 }
+
 
 
 
