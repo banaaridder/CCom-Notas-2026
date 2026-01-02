@@ -8,11 +8,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const usernameMobile = document.getElementById("username-mobile");
 
     if (username) {
-        username.textContent = usuarioLogado;
+        username.textContent = nomeUsuario;
     }
 
     if (usernameMobile) {
-        usernameMobile.textContent = usuarioLogado;
+        usernameMobile.textContent = nomeUsuario;
     }
 });
 
@@ -36,4 +36,5 @@ overlay.addEventListener('click', () => {
     mobileMenu.classList.remove('active');
     overlay.classList.remove('active');
 });
+
 
