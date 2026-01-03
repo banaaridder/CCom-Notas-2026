@@ -540,17 +540,15 @@ function calcularTudo() {
     let soma = 0;
     let count = 0;
 
-    /* =========================
-       MATÉRIAS TEÓRICAS
-    ========================= */
+    // matérias de gaivota (como já existe)
+   const materias = ["tec", "fund", "ciber", "empre", "pt", "racio", "didat"];
 
-    const materias = ["tec", "fund", "ciber", "empre", "pt", "racio", "didat"];
 
     materias.forEach(m => {
         const media = calcularMateria(m);
         const span = document.getElementById(`media-${m}`);
 
-        if (media !== null && !isNaN(media)) {
+        if (media !== null) {
             span.textContent = media.toFixed(3);
             soma += media;
             count++;
@@ -559,77 +557,38 @@ function calcularTudo() {
         }
     });
 
-    /* =========================
-       MATÉRIAS SIMPLES
-    ========================= */
-
+    // 🔹 matérias simples (automático)
     document.querySelectorAll('[data-tipo="simples"]').forEach(materia => {
         const media = calcularMateriaSimples(materia);
-
-        if (media !== null && !isNaN(media)) {
+        if (media !== null) {
             soma += media;
             count++;
         }
     });
 
-    /* =========================
-       TIRO
-    ========================= */
-
+        // TIRO
     const mediaTiro = calcularTiro();
-    if (mediaTiro !== null && !isNaN(mediaTiro)) {
+    if (mediaTiro !== null) {
         soma += mediaTiro;
         count++;
-    }
+}
 
-    /* =========================
-       TFM
-    ========================= */
-
+    // TFM
     const mediaTFM = calcularTFM();
-    if (mediaTFM !== null && !isNaN(mediaTFM)) {
+    if (mediaTFM !== null) {
         soma += mediaTFM;
         count++;
     }
 
-    /* =========================
-       MÉDIA GERAL
-    ========================= */
+    const mediaFinal = count > 0 ? soma / count : null;
 
-    // cálculo normal
-    let mediaFinal = count > 0 ? soma / count : null;
+document.getElementById("media-geral").textContent =
+    mediaFinal !== null ? mediaFinal.toFixed(3) : "--";
 
-    // 🔥 fallback para carregamento inicial
-    if (mediaFinal === null) {
-        let somaSpan = 0;
-        let countSpan = 0;
+// salvar para uso em ranking
+window.mediaGeralAtual = mediaFinal;
 
-        document.querySelectorAll("span").forEach(span => {
-            const valor = parseFloat(
-                span.textContent.replace(",", ".")
-            );
-
-            if (!isNaN(valor)) {
-                somaSpan += valor;
-                countSpan++;
-            }
-        });
-
-        if (countSpan > 0) {
-            mediaFinal = somaSpan / countSpan;
-        }
-    }
-
-    /* =========================
-       OUTPUT FINAL
-    ========================= */
-
-    document.getElementById("media-geral").textContent =
-        mediaFinal !== null ? mediaFinal.toFixed(3) : "--";
-
-    window.mediaGeralAtual = mediaFinal;
 }
-
 
 
 function mascaraTempo(input) {
