@@ -109,6 +109,9 @@ const ppm = [
     { aa: 473, ac: 463, nota: 0 }
 ];
 
+let carregamentoConcluido = false;
+
+
 /* =========================================
    AUTO-SAVE INTELIGENTE + FEEDBACK VISUAL
 ========================================= */
@@ -348,6 +351,35 @@ function salvarNoRanking() {
 
 
 document.addEventListener("input", calcularTudo);
+
+
+async function carregarNotasUsuario() {
+
+    carregamentoConcluido = false;
+
+    // 🔹 busca dados do Supabase
+    const { data } = await window.supabaseClient
+        .from("notas")
+        .select("dados")
+        .eq("usuario_id", localStorage.getItem("usuarioLogado"))
+        .single();
+
+    if (data && data.dados) {
+        Object.entries(data.dados).forEach(([id, valor]) => {
+            const input = document.getElementById(id);
+            if (input) input.value = valor;
+        });
+    }
+
+    calcularTudo();
+
+    // 🔹 snapshot APÓS preencher os inputs
+    ultimoSnapshot = criarSnapshot();
+
+    // 🔹 agora sim libera auto-save
+    carregamentoConcluido = true;
+}
+
 
 
 /* =========================
