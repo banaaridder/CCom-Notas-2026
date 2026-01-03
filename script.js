@@ -1,4 +1,5 @@
-   /* =========================
+
+/* =========================
    TABELAS TFM
 ========================= */
 
@@ -108,229 +109,305 @@ const ppm = [
     { aa: 473, ac: 463, nota: 0 }
 ];
 
-/* =========================
-   VARIÁVEIS GLOBAIS
-========================= */
-
 let carregamentoConcluido = false;
+
+
+/* =========================================
+   AUTO-SAVE INTELIGENTE + FEEDBACK VISUAL
+========================================= */
+
+let autoSaveTimer = null;
 let ultimoSnapshot = "";
 const AUTO_SAVE_DELAY = 1500;
-let autoSaveTimer = null;
 
 /* =========================
    SNAPSHOT DOS INPUTS
 ========================= */
-
 function criarSnapshot() {
     const dados = {};
+
     document.querySelectorAll("input, select, textarea").forEach(el => {
         if (!el.id) return;
-        if (el.type === "checkbox") dados[el.id] = el.checked;
-        else dados[el.id] = el.value || "";
+
+        if (el.type === "checkbox") {
+            dados[el.id] = el.checked;
+        } else {
+            dados[el.id] = el.value;
+        }
     });
+
     return JSON.stringify(dados);
 }
 
-/* =========================
-   AUTO-SAVE
-========================= */
 
+/* =========================
+   AGENDAR AUTO-SAVE
+========================= */
 function agendarAutoSave() {
+    const btn = document.getElementById("btnSalvar");
+    const status = document.getElementById("status-save");
+    if (!btn || !status) return;
+
     const snapshotAtual = criarSnapshot();
+
     if (snapshotAtual === ultimoSnapshot) return;
 
-    const btn = document.getElementById("btnSalvar");
-    const status = document.getElementById("status-save");
-    if (btn && status) {
-        btn.className = "btn-salvar pendente";
-        status.textContent = "Alterações pendentes…";
-        status.style.color = "#00afef";
-    }
+    btn.className = "btn-salvar pendente";
+    status.textContent = "Alterações pendentes…";
+    status.style.color = "#00afef";
 
     clearTimeout(autoSaveTimer);
-    autoSaveTimer = setTimeout(() => salvarNotas(snapshotAtual), AUTO_SAVE_DELAY);
+
+    autoSaveTimer = setTimeout(() => {
+        salvarNotas(snapshotAtual);
+    }, AUTO_SAVE_DELAY);
 }
 
+
+
 /* =========================
-   FUNÇÃO SALVAR NOTAS (iOS-FRIENDLY)
+   EVENTOS
 ========================= */
 
-async function salvarNotas(snapshotAtual, retries = 2) {
-    if (!snapshotAtual || !carregamentoConcluido) return;
+
+
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+    document.getElementById("btnSalvar").addEventListener("click", () => {
+        salvarNotas(criarSnapshot());
+    });
+
+    // 🔥 carrega dados
+    await carregarNotasDoUsuario();
+
+    // 🔥 calcula após carregar
+    calcularTudo();
+
+    // 🔥 auto-save ao digitar
+    document.addEventListener("input", () => {
+        if (!carregamentoConcluido) return;
+        calcularTudo();
+        agendarAutoSave();
+    });
+});
+
+
+
+/* =========================
+   SALVAR / CARREGAR NOTAS
+========================= */
+
+/* =========================
+   SALVAR / CARREGAR NOTAS (iOS Friendly)
+========================= */
+
+async function salvarNotas(snapshotAtual) {
+    if (!snapshotAtual) {
+        console.warn("Snapshot inválido, salvamento ignorado");
+        return;
+    }
+
+    if (!carregamentoConcluido) return;
 
     const btn = document.getElementById("btnSalvar");
     const status = document.getElementById("status-save");
 
-    if(btn) btn.className = "btn-salvar salvando";
-    if(status) {
-        status.textContent = "Salvando…";
-        status.style.color = "#4fc3f7";
-    }
+    btn.className = "btn-salvar salvando";
+    status.textContent = "Salvando…";
+    status.style.color = "#4fc3f7";
 
     calcularTudo();
 
     const usuarioId = localStorage.getItem("usuarioLogado");
     if (!usuarioId) {
-        if(btn) btn.className = "btn-salvar erro";
-        if(status) {
-            status.textContent = "Usuário não logado";
-            status.style.color = "#e74c3c";
-        }
+        status.textContent = "Usuário não logado";
+        btn.className = "btn-salvar erro";
         return;
     }
 
+    // garantir JSON válido
     let dadosParaSalvar;
-    try { 
-        dadosParaSalvar = JSON.parse(snapshotAtual); 
-    } catch { 
-        if(btn) btn.className = "btn-salvar erro";
-        if(status) {
-            status.textContent = "Erro ao salvar";
-            status.style.color = "#e74c3c";
-        }
+    try {
+        dadosParaSalvar = JSON.parse(snapshotAtual);
+    } catch (e) {
+        console.error("Erro ao parsear snapshot", e);
+        btn.className = "btn-salvar erro";
+        status.textContent = "Erro ao salvar";
+        status.style.color = "#e74c3c";
         return;
     }
 
     try {
         const { error } = await window.supabaseClient
             .from("notas")
-            .upsert({
-                usuario_id: usuarioId,
-                dados: dadosParaSalvar,
-                media_geral: window.mediaGeralAtual ?? null
-            }, { onConflict: "usuario_id" });
+            .upsert(
+                {
+                    usuario_id: usuarioId,
+                    dados: dadosParaSalvar,
+                    media_geral: window.mediaGeralAtual ?? null
+                },
+                { onConflict: "usuario_id" }
+            );
 
         if (error) throw error;
 
         ultimoSnapshot = snapshotAtual;
-        if(btn) btn.className = "btn-salvar salvo";
-        if(status) {
-            status.textContent = "Salvo!";
-            status.style.color = "#2ecc71";
-        }
 
-        await salvarRanking(usuarioId, window.mediaGeralAtual);
+        btn.className = "btn-salvar salvo";
+        status.textContent = "Salvo!";
+        status.style.color = "#2ecc71";
+
+        // também salva no ranking de forma segura
+        await salvarNoRanking(usuarioId, window.mediaGeralAtual);
 
     } catch (err) {
-        console.warn("Erro ao salvar no Supabase:", err);
-        if (retries > 0) setTimeout(() => salvarNotas(snapshotAtual, retries - 1), 1000);
-        else {
-            if(btn) btn.className = "btn-salvar erro";
-            if(status) {
-                status.textContent = "Erro ao salvar";
-                status.style.color = "#e74c3c";
-            }
-        }
+        console.error("Erro ao salvar no Supabase ou ranking:", err);
+        btn.className = "btn-salvar erro";
+        status.textContent = "Erro ao salvar";
+        status.style.color = "#e74c3c";
     }
 
-    setTimeout(() => { if(btn) btn.className = "btn-salvar"; }, 2000);
+    setTimeout(() => {
+        btn.className = "btn-salvar";
+    }, 2000);
 }
 
-/* =========================
-   SALVAR RANKING
-========================= */
 
-async function salvarRanking(usuarioId, mediaGeral) {
-    if (!usuarioId || mediaGeral == null) return;
+
+
+/* =========================
+   SALVAR RANKING COM LOCALFORAGE
+========================= */
+async function salvarNoRanking(usuarioLogado, mediaGeral) {
+    if (!usuarioLogado || mediaGeral === null) return;
+
+    let ranking = [];
+    try {
+        ranking = (await localforage.getItem("ranking")) || [];
+    } catch (e) {
+        console.warn("Não foi possível carregar ranking do localForage:", e);
+        ranking = [];
+    }
+
+    // remove entrada antiga do usuário
+    ranking = ranking.filter(u => u.usuario !== usuarioLogado);
+
+    // adiciona nova
+    ranking.push({
+        usuario: usuarioLogado,
+        media: Number(mediaGeral.toFixed(3))
+    });
+
+    // ordena do maior para o menor
+    ranking.sort((a, b) => b.media - a.media);
 
     try {
-        let { data, error } = await window.supabaseClient
-            .from("ranking")
-            .select("*")
-            .eq("usuario_id", usuarioId);
-
-        if (error) throw error;
-
-        if (data.length > 0) {
-            await window.supabaseClient
-                .from("ranking")
-                .update({ media: mediaGeral })
-                .eq("usuario_id", usuarioId);
-        } else {
-            await window.supabaseClient
-                .from("ranking")
-                .insert({ usuario_id: usuarioId, media: mediaGeral });
-        }
-    } catch (err) {
-        console.warn("Não foi possível salvar ranking:", err);
+        await localforage.setItem("ranking", ranking);
+    } catch (e) {
+        console.warn("Não foi possível salvar ranking no localForage:", e);
     }
 }
 
-/* =========================
-   CARREGAR NOTAS
-========================= */
 
 async function carregarNotasDoUsuario() {
+
     carregamentoConcluido = false;
 
-    const usuarioId = localStorage.getItem("usuarioLogado");
-    if (!usuarioId) return;
+    // 🔹 busca dados do Supabase
+    const { data } = await window.supabaseClient
+        .from("notas")
+        .select("dados")
+        .eq("usuario_id", localStorage.getItem("usuarioLogado"))
+        .single();
 
-    try {
-        const { data, error } = await window.supabaseClient
-            .from("notas")
-            .select("dados")
-            .eq("usuario_id", usuarioId)
-            .single();
-
-        if (!error && data?.dados) {
-            Object.entries(data.dados).forEach(([id, valor]) => {
-                const input = document.getElementById(id);
-                if (input) input.value = valor;
-            });
-        }
-    } catch (err) {
-        console.warn("Erro ao carregar notas:", err);
+    if (data && data.dados) {
+        Object.entries(data.dados).forEach(([id, valor]) => {
+            const input = document.getElementById(id);
+            if (input) input.value = valor;
+        });
     }
 
     calcularTudo();
+
+    // 🔹 snapshot APÓS preencher os inputs
     ultimoSnapshot = criarSnapshot();
+
+    // 🔹 agora sim libera auto-save
     carregamentoConcluido = true;
 }
+
+
 
 /* =========================
    UTILIDADES
 ========================= */
 
+// mm:ss → segundos
 function tempoParaSegundos(tempo) {
     if (!tempo || !tempo.includes(":")) return null;
     const [m, s] = tempo.split(":").map(Number);
     return isNaN(m) || isNaN(s) ? null : m * 60 + s;
 }
 
+// média AA (1) + AC (2)
 function mediaAAAC(notaAA, notaAC) {
     if (notaAA == null && notaAC == null) return null;
     return ((notaAA ?? 0) * 1 + (notaAC ?? 0) * 2) / 3;
 }
 
+// nota por tempo (quanto menor melhor)
 function notaPorTempo(segundos, tabela, tipo) {
     if (segundos == null) return null;
-    for (const item of tabela) if (segundos <= item[tipo]) return item.nota;
+    for (const item of tabela) {
+        if (segundos <= item[tipo]) return item.nota;
+    }
     return 0;
 }
 
+// nota por quantidade (quanto maior melhor)
 function notaPorQuantidade(valor, tabela, tipo) {
     if (valor == null || valor === "") return null;
-    for (const item of tabela) if (valor >= item[tipo]) return item.nota;
+    for (const item of tabela) {
+        if (valor >= item[tipo]) return item.nota;
+    }
     return 0;
 }
 
 /* =========================
-   CÁLCULOS DAS MATÉRIAS
+   MATÉRIAS TEÓRICAS
 ========================= */
 
 function calcularMateria(prefixo) {
     let provas;
+
+    // Lista de matérias que só têm AA e AC
     const materiasSimples = ["fund", "empre", "pt", "racio", "didat"];
 
-    if (materiasSimples.includes(prefixo)) provas = [{ id: "aa", peso: 1 }, { id: "ac", peso: 2 }];
-    else provas = [{ id: "aa1", peso: 1 }, { id: "aa2", peso: 1 }, { id: "ac", peso: 2 }];
+    if (materiasSimples.includes(prefixo)) {
+        provas = [
+            { id: "aa", peso: 1 },
+            { id: "ac", peso: 2 }
+        ];
+    } else {
+        // Outras matérias têm AA1, AA2 e AC
+        provas = [
+            { id: "aa1", peso: 1 },
+            { id: "aa2", peso: 1 },
+            { id: "ac", peso: 2 }
+        ];
+    }
 
-    let soma = 0, pesoTotal = 0;
+    let soma = 0;
+    let pesoTotal = 0;
 
     provas.forEach(p => {
-        const acertos = Number(document.getElementById(`acertos-${prefixo}-${p.id}`)?.value);
-        const total = Number(document.getElementById(`total-${prefixo}-${p.id}`)?.value);
+        const acertos = Number(
+            document.getElementById(`acertos-${prefixo}-${p.id}`)?.value
+        );
+        const total = Number(
+            document.getElementById(`total-${prefixo}-${p.id}`)?.value
+        );
 
         if (!isNaN(acertos) && !isNaN(total) && total > 0) {
             const nota = (acertos / total) * 10;
@@ -342,24 +419,19 @@ function calcularMateria(prefixo) {
     return pesoTotal > 0 ? soma / pesoTotal : null;
 }
 
-function calcularMateriaSimples(container) {
-    const input = container.querySelector("input");
-    const span = container.querySelector(".media-materia");
 
-    const nota = parseFloat(input.value);
-    if (!isNaN(nota)) { span.textContent = nota.toFixed(2); return nota; }
-    span.textContent = "--"; return null;
-}
 
 /* =========================
    TFM
 ========================= */
 
 function calcularProvaTempo(idAA, idAC, tabela, spanId) {
-    const aa = tempoParaSegundos(document.getElementById(idAA)?.value);
-    const ac = tempoParaSegundos(document.getElementById(idAC)?.value);
+    const aa = tempoParaSegundos(document.getElementById(idAA).value);
+    const ac = tempoParaSegundos(document.getElementById(idAC).value);
+
     const notaAA = notaPorTempo(aa, tabela, "aa");
     const notaAC = notaPorTempo(ac, tabela, "ac");
+
     const media = mediaAAAC(notaAA, notaAC);
     document.getElementById(spanId).textContent = media?.toFixed(2) ?? "--";
     return media;
@@ -368,68 +440,124 @@ function calcularProvaTempo(idAA, idAC, tabela, spanId) {
 function calcularProvaQtd(idAA, idAC, tabela, spanId) {
     const aa = Number(document.getElementById(idAA).value);
     const ac = Number(document.getElementById(idAC).value);
+
     const notaAA = notaPorQuantidade(aa, tabela, "aa");
     const notaAC = notaPorQuantidade(ac, tabela, "ac");
+
     const media = mediaAAAC(notaAA, notaAC);
     document.getElementById(spanId).textContent = media?.toFixed(2) ?? "--";
     return media;
 }
 
 function calcularTFM() {
+    let somaGeral = 0;
+    let pesoGeral = 0;
+
     const provas = [
-        { nome: "corrida", aa: "corrida-aa", ac: "corrida-ac", tabela: corrida, tipo: "tempo" },
-        { nome: "flexao", aa: "flexao-aa", ac: "flexao-ac", tabela: flexao, tipo: "quantidade" },
-        { nome: "barra", aa: "barra-aa", ac: "barra-ac", tabela: barra, tipo: "quantidade" },
-        { nome: "natacao", aa: "natacao-aa", ac: "natacao-ac", tabela: natacao, tipo: "tempo" },
-        { nome: "corda", aa: "corda-aa", ac: "corda-ac", tabela: corda, tipo: "quantidade" },
-        { nome: "ppm", aa: "ppm-aa", ac: "ppm-ac", tabela: ppm, tipo: "tempo" }
+        {
+            nome: "corrida",
+            aa: "corrida-aa",
+            ac: "corrida-ac",
+            tabela: corrida,
+            tipo: "tempo"
+        },
+        {
+            nome: "flexao",
+            aa: "flexao-aa",
+            ac: "flexao-ac",
+            tabela: flexao,
+            tipo: "quantidade"
+        },
+        {
+            nome: "barra",
+            aa: "barra-aa",
+            ac: "barra-ac",
+            tabela: barra,
+            tipo: "quantidade"
+        },
+        {
+            nome: "natacao",
+            aa: "natacao-aa",
+            ac: "natacao-ac",
+            tabela: natacao,
+            tipo: "tempo"
+        },
+        {
+            nome: "corda",
+            aa: "corda-aa",
+            ac: "corda-ac",
+            tabela: corda,
+            tipo: "quantidade"
+        },
+        {
+            nome: "ppm",
+            aa: "ppm-aa",
+            ac: "ppm-ac",
+            tabela: ppm,
+            tipo: "tempo"
+        }
     ];
 
-    let somaGeral = 0, pesoGeral = 0;
-
     provas.forEach(p => {
-        let soma = 0, pesos = 0;
+        let soma = 0;
+        let pesos = 0;
 
-        ["aa", "ac"].forEach(key => {
-            const valorInput = document.getElementById(p[key])?.value;
-            if (!valorInput) return;
+        // AA
+        const aaValor = document.getElementById(p.aa)?.value;
+        if (aaValor) {
+            const valor = p.tipo === "tempo"
+                ? tempoParaSegundos(aaValor)
+                : parseFloat(aaValor);
 
-            const valor = p.tipo === "tempo" ? tempoParaSegundos(valorInput) : parseFloat(valorInput);
-            if (valor == null) return;
+            if (valor !== null) {
+                const nota = p.tipo === "tempo"
+                    ? notaPorTempo(valor, p.tabela, "aa")
+                    : notaPorQuantidade(valor, p.tabela, "aa");
 
-            const nota = p.tipo === "tempo" ? notaPorTempo(valor, p.tabela, key) : notaPorQuantidade(valor, p.tabela, key);
-            soma += nota * (key === "aa" ? 1 : 2);
-            pesos += (key === "aa" ? 1 : 2);
-        });
+                soma += nota * 1;
+                pesos += 1;
+            }
+        }
+
+        // AC
+        const acValor = document.getElementById(p.ac)?.value;
+        if (acValor) {
+            const valor = p.tipo === "tempo"
+                ? tempoParaSegundos(acValor)
+                : parseFloat(acValor);
+
+            if (valor !== null) {
+                const nota = p.tipo === "tempo"
+                    ? notaPorTempo(valor, p.tabela, "ac")
+                    : notaPorQuantidade(valor, p.tabela, "ac");
+
+                soma += nota * 2;
+                pesos += 2;
+            }
+        }
 
         const spanNota = document.getElementById(`nota-${p.nome}`);
-        const media = pesos > 0 ? soma / pesos : null;
-        if (spanNota) spanNota.textContent = media?.toFixed(2) ?? "--";
 
-        if (media != null) { somaGeral += media; pesoGeral += 1; }
+        if (pesos > 0) {
+            const mediaModalidade = soma / pesos;
+            spanNota.textContent = mediaModalidade.toFixed(3);
+
+            somaGeral += mediaModalidade;
+            pesoGeral++;
+        } else {
+            spanNota.textContent = "--";
+        }
     });
 
-    const mediaGeral = pesoGeral > 0 ? somaGeral / pesoGeral : null;
-    const spanMediaGeral = document.getElementById("media-geral");
-    if (spanMediaGeral) spanMediaGeral.textContent = mediaGeral?.toFixed(2) ?? "--";
+    if (pesoGeral === 0) {
+        document.getElementById("media-tfm").textContent = "--";
+        return null;
+    }
 
-    window.mediaGeralAtual = mediaGeral;
-    return mediaGeral;
+    const mediaTFM = somaGeral / pesoGeral;
+    document.getElementById("media-tfm").textContent = mediaTFM.toFixed(3);
+    return mediaTFM;
 }
-
-/* =========================
-   EVENTOS
-========================= */
-
-document.addEventListener("DOMContentLoaded", async () => {
-    await carregarNotasDoUsuario();
-
-    document.querySelectorAll("input").forEach(input => {
-        input.addEventListener("input", agendarAutoSave);
-    });
-
-    document.getElementById("btnSalvar")?.addEventListener("click", () => salvarNotas(criarSnapshot()));
-});
 
 
 
@@ -556,8 +684,6 @@ function mascaraTempo(input) {
 
     input.value = valor;
 }
-
-
 
 
 
