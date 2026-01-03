@@ -31,6 +31,7 @@ async function carregarNotasDoUsuario() {
   if (error && error.code !== "PGRST116") {
     console.error("Erro ao carregar notas:", error);
     return;
+      calcularTudo();
   }
 
   if (!data) return;
@@ -601,6 +602,7 @@ function mascaraTempo(input) {
 
     input.value = valor;
 }
+
 
 
 
