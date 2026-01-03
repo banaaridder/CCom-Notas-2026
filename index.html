@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="header.css">
     <link rel="icon" type="image/png" href="assets/favicon.png">
-    <script src="script.js"></script>
+     <script src="script.js"></script>
     <script src="auth.js"></script>
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -315,26 +315,29 @@
 </div>
     </div>
 
-        <div class="media-geral">
-        Média Geral: <span id="media-geral">--</span>
-    </div>
-<button id="btnSalvar" type="button">Salvar Notas</button>
+<div class="media-geral">
+    <h3>Média Geral</h3>
 
-    <div class="logo-com">
-        <img src="assets/COM VAZADO.png">
-         <h2 id="nome">Code By: AL Davi Costa</h2>
-    </div>
+    <span id="media-geral">--</span>
+
+    <button id="btnSalvar" type="button">
+        <span id="btnSalvarText">Salvar</span>
+    </button>
+
+    <small id="status-save">Tudo salvo</small>
+</div>
+
+
 
 </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase.js"></script>
    <script src="header.js"></script>
-    
+   
 
 
 
 
 </body>
-
 </html>

@@ -1,3 +1,8 @@
+let autoSaveTimer = null;
+let ultimoSnapshot = "";
+const AUTO_SAVE_DELAY = 1500;
+
+
 /* =========================
    TABELAS TFM
 ========================= */
@@ -128,6 +133,115 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // 🔥 2️⃣ calcula tudo depois de carregar
     calcularTudo();
+});
+
+function criarSnapshot() {
+    const dados = {};
+    document.querySelectorAll("input").forEach(input => {
+        if (input.id) dados[input.id] = input.value;
+    });
+    return JSON.stringify(dados);
+}
+
+
+function agendarAutoSave() {
+    const btn = document.getElementById("btnSalvar");
+    const status = document.getElementById("status-save");
+
+    const snapshotAtual = criarSnapshot();
+
+    if (snapshotAtual === ultimoSnapshot) return;
+
+    btn.className = "pendente";
+    status.textContent = "Alterações pendentes…";
+    status.style.color = "#00afef";
+
+    clearTimeout(autoSaveTimer);
+
+    autoSaveTimer = setTimeout(() => {
+        salvarNotasAuto(snapshotAtual);
+    }, AUTO_SAVE_DELAY);
+}
+
+
+async function salvarNotasSilencioso() {
+    const status = document.getElementById("status-save");
+    if (status) status.textContent = "Salvando...";
+
+    calcularTudo(); // garante média atualizada
+
+    const usuarioId = localStorage.getItem("usuarioLogado");
+    if (!usuarioId) {
+        if (status) status.textContent = "Não logado";
+        return;
+    }
+
+    const notas = {};
+    document.querySelectorAll("input").forEach(input => {
+        if (input.id) {
+            notas[input.id] = input.value;
+        }
+    });
+
+    try {
+        await window.supabaseClient
+            .from("notas")
+            .upsert({
+                usuario_id: usuarioId,
+                dados: notas,
+                media_geral: window.mediaGeralAtual
+            });
+
+        if (status) status.textContent = "Salvo automaticamente ✔️";
+    } catch (err) {
+        console.error(err);
+        if (status) status.textContent = "Erro ao salvar";
+    }
+}
+
+async function salvarNotasAuto(snapshotAtual) {
+    const btn = document.getElementById("btnSalvar");
+    const status = document.getElementById("status-save");
+
+    btn.className = "salvando";
+    status.textContent = "Salvando…";
+    status.style.color = "#4fc3f7";
+
+    calcularTudo();
+
+    const usuarioId = localStorage.getItem("usuarioLogado");
+    if (!usuarioId) return;
+
+    try {
+        await window.supabaseClient
+            .from("notas")
+            .upsert({
+                usuario_id: usuarioId,
+                dados: JSON.parse(snapshotAtual),
+                media_geral: window.mediaGeralAtual
+            });
+
+        ultimoSnapshot = snapshotAtual;
+
+        btn.className = "salvo";
+        status.textContent = "Salvo automaticamente ✔️";
+        status.style.color = "#2ecc71";
+
+        setTimeout(() => {
+            btn.className = "";
+        }, 2000);
+
+    } catch (err) {
+        console.error(err);
+        btn.className = "erro";
+        status.textContent = "Erro ao salvar";
+        status.style.color = "#e74c3c";
+    }
+}
+
+document.getElementById("btnSalvar").addEventListener("click", () => {
+    const snapshot = criarSnapshot();
+    salvarNotasAuto(snapshot);
 });
 
 

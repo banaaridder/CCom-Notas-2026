@@ -7,4 +7,3 @@ window.supabaseClient = supabase.createClient(
 );
 
 console.log("Supabase OK:", window.supabaseClient);
-
