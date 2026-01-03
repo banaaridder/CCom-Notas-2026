@@ -164,6 +164,12 @@ input::placeholder {
     color: rgb(0,175,239);
 }
 
+#btnSalvarText{
+    color: #0f0f0f;
+    font-size: 20px;
+    margin-bottom: 0;
+}
+
 /* Botão dentro do card */
 .media-geral button {
     width: 100%;
@@ -172,8 +178,9 @@ input::placeholder {
     border: none;
     border-radius: 6px;
     font-weight: bold;
+    font-size: 10px;
     cursor: pointer;
-    color: #000;
+    color: white;
     transition: 0.2s;
 }
 
@@ -219,6 +226,7 @@ button:hover {
 
 #btnSalvar{
     max-height: fit-content;
+    
 }
 
 /* =========================
@@ -317,6 +325,7 @@ button:hover {
 #btnSalvar.pendente {
     background: rgb(0,175,239);
     animation: pulse 1.2s infinite;
+    color: white;
 }
 
 /* salvando */

@@ -310,18 +310,14 @@ async function salvarNotas() {
 
     if (insertError) {
       console.error(insertError);
-      alert("Erro ao salvar notas");
       return;
     }
   }
 
   if (error) {
     console.error(error);
-    alert("Erro ao salvar notas");
     return;
   }
-
-  alert("Notas salvas com sucesso!");
 }
 
 
