@@ -194,21 +194,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
 
-/* =========================
-   SALVAR / CARREGAR NOTAS
-========================= */
-
-/* =========================
-   SALVAR / CARREGAR NOTAS (iOS Friendly)
-========================= */
-
-async function salvarNotas(snapshotAtual) {
-    if (!snapshotAtual) {
-        console.warn("Snapshot inválido, salvamento ignorado");
-        return;
-    }
-
-    if (!carregamentoConcluido) return;
+async function salvarNotas(snapshotAtual, retries = 2) {
+    if (!snapshotAtual || !carregamentoConcluido) return;
 
     const btn = document.getElementById("btnSalvar");
     const status = document.getElementById("status-save");
@@ -226,12 +213,10 @@ async function salvarNotas(snapshotAtual) {
         return;
     }
 
-    // garantir JSON válido
     let dadosParaSalvar;
     try {
         dadosParaSalvar = JSON.parse(snapshotAtual);
-    } catch (e) {
-        console.error("Erro ao parsear snapshot", e);
+    } catch {
         btn.className = "btn-salvar erro";
         status.textContent = "Erro ao salvar";
         status.style.color = "#e74c3c";
@@ -242,30 +227,27 @@ async function salvarNotas(snapshotAtual) {
         const { error } = await window.supabaseClient
             .from("notas")
             .upsert(
-                {
-                    usuario_id: usuarioId,
-                    dados: dadosParaSalvar,
-                    media_geral: window.mediaGeralAtual ?? null
-                },
+                { usuario_id: usuarioId, dados: dadosParaSalvar, media_geral: window.mediaGeralAtual ?? null },
                 { onConflict: "usuario_id" }
             );
 
         if (error) throw error;
 
-        ultimoSnapshot = snapshotAtual;
-
         btn.className = "btn-salvar salvo";
         status.textContent = "Salvo!";
         status.style.color = "#2ecc71";
 
-        // também salva no ranking de forma segura
-        await salvarNoRanking(usuarioId, window.mediaGeralAtual);
-
     } catch (err) {
-        console.error("Erro ao salvar no Supabase ou ranking:", err);
-        btn.className = "btn-salvar erro";
-        status.textContent = "Erro ao salvar";
-        status.style.color = "#e74c3c";
+        console.warn("Erro ao salvar no Supabase:", err);
+
+        if (retries > 0) {
+            console.log("Tentando salvar novamente...");
+            setTimeout(() => salvarNotas(snapshotAtual, retries - 1), 1000);
+        } else {
+            btn.className = "btn-salvar erro";
+            status.textContent = "Erro ao salvar";
+            status.style.color = "#e74c3c";
+        }
     }
 
     setTimeout(() => {
@@ -684,6 +666,7 @@ function mascaraTempo(input) {
 
     input.value = valor;
 }
+
 
 
 
