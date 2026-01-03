@@ -295,7 +295,47 @@ function calcularTudo() {
     ====================== */
 
     document.querySelectorAll('[data-tipo="simples"]').forEach(container => {
-        const
+        const media = calcularMateriaSimples(container);
+        if (media !== null && !isNaN(media)) {
+            soma += media;
+            count++;
+        }
+    });
+
+    /* ======================
+       TIRO
+    ====================== */
+
+    const mediaTiro = calcularTiro();
+    if (mediaTiro !== null && !isNaN(mediaTiro)) {
+        soma += mediaTiro;
+        count++;
+    }
+
+    /* ======================
+       TFM
+    ====================== */
+
+    const mediaTFM = calcularTFM();
+    if (mediaTFM !== null && !isNaN(mediaTFM)) {
+        soma += mediaTFM;
+        count++;
+    }
+
+    /* ======================
+       MÉDIA GERAL
+    ====================== */
+
+    const mediaFinal = count > 0 ? soma / count : 0;
+
+    const spanGeral = document.getElementById("media-geral");
+    if (spanGeral) {
+        spanGeral.textContent = count > 0 ? mediaFinal.toFixed(2) : "--";
+    }
+
+    // 🔥 ESSENCIAL PARA AUTO-SAVE / SUPABASE
+    window.mediaGeralAtual = count > 0 ? mediaFinal : null;
+}
 
 
 /* =========================
@@ -317,5 +357,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 });
+
 
 
