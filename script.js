@@ -156,55 +156,7 @@ function agendarAutoSave() {
     }, AUTO_SAVE_DELAY);
 }
 
-/* =========================
-   SALVAR NOTAS (AUTO)
-========================= */
-async function salvarNotasAuto(snapshotAtual) {
-    const btn = document.getElementById("btnSalvar");
-    const status = document.getElementById("status-save");
 
-    btn.className = "btn-salvar salvando";
-    status.textContent = "Salvando…";
-    status.style.color = "#4fc3f7";
-
-    // garante cálculo atualizado
-    if (typeof calcularTudo === "function") {
-        calcularTudo();
-    }
-
-    const usuarioId = localStorage.getItem("usuarioLogado");
-    if (!usuarioId) {
-        status.textContent = "Usuário não logado";
-        btn.className = "erro";
-        return;
-    }
-
-    try {
-        await window.supabaseClient
-            .from("notas")
-            .upsert({
-                usuario_id: usuarioId,
-                dados: JSON.parse(snapshotAtual),
-                media_geral: window.mediaGeralAtual ?? null
-            });
-
-        ultimoSnapshot = snapshotAtual;
-
-        btn.className = "btn-salvar salvo";
-        status.textContent = "Salvo!";
-        status.style.color = "#2ecc71";
-
-        setTimeout(() => {
-            btn.className = "btn-salvar";
-        }, 2000);
-
-    } catch (err) {
-        console.error(err);
-        btn.className = "btn-salvar erro";
-        status.textContent = "Erro ao salvar";
-        status.style.color = "#e74c3c";
-    }
-}
 
 /* =========================
    EVENTOS
@@ -240,10 +192,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 ========================= */
 
 async function salvarNotas(snapshotAtual) {
-    const btn = document.getElementById("btnSalvar");
-    const status = document.getElementById("status-save");
+    if (!snapshotAtual) {
+        console.warn("Snapshot inválido, salvamento ignorado");
+        return;
+    }
 
     if (!carregamentoConcluido) return;
+
+    const btn = document.getElementById("btnSalvar");
+    const status = document.getElementById("status-save");
 
     btn.className = "btn-salvar salvando";
     status.textContent = "Salvando…";
@@ -254,17 +211,20 @@ async function salvarNotas(snapshotAtual) {
     const usuarioId = localStorage.getItem("usuarioLogado");
     if (!usuarioId) {
         status.textContent = "Usuário não logado";
-        btn.className = "erro";
+        btn.className = "btn-salvar erro";
         return;
     }
 
     const { error } = await window.supabaseClient
         .from("notas")
-        .upsert({
-            usuario_id: usuarioId,
-            dados: JSON.parse(snapshotAtual),
-            media_geral: window.mediaGeralAtual
-        }, { onConflict: "usuario_id" });
+        .upsert(
+            {
+                usuario_id: usuarioId,
+                dados: JSON.parse(snapshotAtual),
+                media_geral: window.mediaGeralAtual ?? null
+            },
+            { onConflict: "usuario_id" }
+        );
 
     if (error) {
         console.error(error);
@@ -309,10 +269,6 @@ function salvarNoRanking() {
 
     localStorage.setItem("ranking", JSON.stringify(ranking));
 }
-
-
-
-document.addEventListener("input", calcularTudo);
 
 
 async function carregarNotasDoUsuario() {
