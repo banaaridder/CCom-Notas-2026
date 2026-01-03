@@ -12,7 +12,6 @@ carregarNotasDoUsuario();
  //   carregarNotas();
 });
 
-
 btnSalvar.addEventListener("click", e => {
   e.preventDefault();   // 🔥 ESSENCIAL NO iOS
   salvarNotas();
@@ -47,7 +46,6 @@ async function carregarNotasDoUsuario() {
   // 🔹 Atualiza média global se existir
   if (data.media_geral !== null) {
     window.mediaGeralAtual = data.media_geral;
-    calcularTudo();
   }
 }
 
@@ -117,7 +115,6 @@ async function salvarNotas() {
   }
 
   alert("Notas salvas com sucesso!");
-  
 }
 
 
@@ -604,15 +601,3 @@ function mascaraTempo(input) {
 
     input.value = valor;
 }
-
-
-
-
-
-
-
-
-
-
-
-
