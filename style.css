@@ -174,7 +174,7 @@ button:hover {
 }
 
 #btnSalvar{
-    height: auto;
+    max-height: fit-content;
 }
 
 /* =========================
@@ -239,3 +239,4 @@ button:hover {
         transform: translateY(0);
     }
 }
+
