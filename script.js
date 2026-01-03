@@ -260,7 +260,14 @@ function salvarNoRanking() {
 
     if (!usuarioLogado || window.mediaGeralAtual === null) return;
 
-    let ranking = JSON.parse(localStorage.getItem("ranking")) || [];
+    let ranking = [];
+try {
+    ranking = JSON.parse(localStorage.getItem("ranking")) || [];
+} catch (e) {
+    console.warn("localStorage indisponível no iOS ou modo privado");
+    ranking = [];
+}
+
 
     // remove entrada antiga do usuário
     ranking = ranking.filter(u => u.usuario !== usuarioLogado);
@@ -274,7 +281,12 @@ function salvarNoRanking() {
     // ordena do maior para o menor
     ranking.sort((a, b) => b.media - a.media);
 
+    try {
     localStorage.setItem("ranking", JSON.stringify(ranking));
+} catch (e) {
+    console.warn("Não foi possível salvar o ranking no localStorage (iOS Private Mode?)");
+}
+
 }
 
 
