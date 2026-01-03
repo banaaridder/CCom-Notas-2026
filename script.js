@@ -7,9 +7,11 @@ document.addEventListener("DOMContentLoaded", () => {
         btnSalvar.addEventListener("click", salvarNotas);
     }
 carregarNotasDoUsuario();
+    calcularTudo();
 
  //   carregarNotas();
 });
+
 
 btnSalvar.addEventListener("click", e => {
   e.preventDefault();   // 🔥 ESSENCIAL NO iOS
