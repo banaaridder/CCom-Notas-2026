@@ -125,13 +125,20 @@ const AUTO_SAVE_DELAY = 1500;
 ========================= */
 function criarSnapshot() {
     const dados = {};
-    document.querySelectorAll("input").forEach(input => {
-        if (input.id) {
-            dados[input.id] = input.value;
+
+    document.querySelectorAll("input, select, textarea").forEach(el => {
+        if (!el.id) return;
+
+        if (el.type === "checkbox") {
+            dados[el.id] = el.checked;
+        } else {
+            dados[el.id] = el.value;
         }
     });
+
     return JSON.stringify(dados);
 }
+
 
 /* =========================
    AGENDAR AUTO-SAVE
@@ -645,3 +652,4 @@ function mascaraTempo(input) {
 
     input.value = valor;
 }
+
