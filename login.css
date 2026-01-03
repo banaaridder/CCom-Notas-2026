@@ -131,3 +131,115 @@ body {
         transform: translateY(0);
     }
 }
+
+/* =========================
+   BOTÕES FEEDBACK (LOGIN / REGISTER)
+========================= */
+.btn-feedback {
+    position: relative;
+    width: 100%;
+    height: 44px;
+
+    background: rgb(0,175,239); /* azul claro */
+    border: none;
+    border-radius: 6px;
+
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+    transition: background 0.3s, box-shadow 0.3s, transform 0.15s;
+}
+
+/* texto */
+.btn-feedback .btn-text {
+    transition: opacity 0.2s;
+}
+
+/* spinner */
+.btn-feedback .btn-spinner {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+
+    border: 3px solid rgba(0,0,0,0.3);
+    border-top-color: #000;
+    border-radius: 50%;
+
+    animation: spin 0.8s linear infinite;
+    opacity: 0;
+}
+
+/* check */
+.btn-feedback .btn-check,
+.btn-feedback .btn-error {
+    position: absolute;
+    font-size: 20px;
+    font-weight: bold;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.btn-feedback .btn-check { color: #000; }
+.btn-feedback .btn-error { color: #000; }
+
+/* =========================
+   ESTADOS
+========================= */
+.btn-feedback.salvando {
+    background: #4fc3f7;
+}
+
+.btn-feedback.salvando .btn-text {
+    opacity: 0;
+}
+
+.btn-feedback.salvando .btn-spinner {
+    opacity: 1;
+}
+
+.btn-feedback.salvo {
+    background: #2ecc71;
+    box-shadow: 0 0 14px rgba(46,204,113,0.9);
+}
+
+.btn-feedback.salvo .btn-text {
+    opacity: 0;
+}
+
+.btn-feedback.salvo .btn-check {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.btn-feedback.erro {
+    background: #e74c3c;
+    box-shadow: 0 0 14px rgba(231,76,60,0.9);
+}
+
+.btn-feedback.erro .btn-text {
+    opacity: 0;
+}
+
+.btn-feedback.erro .btn-error {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* clique */
+.btn-feedback:active {
+    transform: scale(0.96);
+}
+
+/* =========================
+   ANIMAÇÃO
+========================= */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}

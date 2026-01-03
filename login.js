@@ -24,3 +24,23 @@ async function login() {
 
   window.location.href = "index.html";
 }
+
+document.getElementById("btnLogin").addEventListener("click", async () => {
+    const btn = document.getElementById("btnLogin");
+
+    btn.className = "btn-feedback salvando";
+
+    try {
+        await login(); // sua função existente
+
+        btn.className = "btn-feedback salvo";
+
+        setTimeout(() => {
+            window.location.href = "index.html";
+        }, 700);
+
+    } catch (err) {
+        console.error(err);
+        btn.className = "btn-feedback erro";
+    }
+});

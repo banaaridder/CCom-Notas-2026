@@ -31,3 +31,23 @@ async function registrar() {
   alert("Conta criada com sucesso!");
   window.location.href = "login.html";
 }
+
+document.getElementById("btn").addEventListener("click", async () => {
+    const btn = document.getElementById("btn");
+
+    btn.className = "btn-feedback salvando";
+
+    try {
+        await registrar(); // sua função existente
+
+        btn.className = "btn-feedback salvo";
+
+        setTimeout(() => {
+            window.location.href = "login.html";
+        }, 900);
+
+    } catch (err) {
+        console.error(err);
+        btn.className = "btn-feedback erro";
+    }
+});

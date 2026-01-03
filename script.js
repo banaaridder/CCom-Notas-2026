@@ -145,7 +145,7 @@ function agendarAutoSave() {
 
     if (snapshotAtual === ultimoSnapshot) return;
 
-    btn.className = "pendente";
+    btn.className = "btn-salvar pendente";
     status.textContent = "Alterações pendentes…";
     status.style.color = "#00afef";
 
@@ -163,7 +163,7 @@ async function salvarNotasAuto(snapshotAtual) {
     const btn = document.getElementById("btnSalvar");
     const status = document.getElementById("status-save");
 
-    btn.className = "salvando";
+    btn.className = "btn-salvar salvando";
     status.textContent = "Salvando…";
     status.style.color = "#4fc3f7";
 
@@ -190,17 +190,17 @@ async function salvarNotasAuto(snapshotAtual) {
 
         ultimoSnapshot = snapshotAtual;
 
-        btn.className = "salvo";
-        status.textContent = "Salvo automaticamente ✔️";
+        btn.className = "btn-salvar salvo";
+        status.textContent = "Salvo!";
         status.style.color = "#2ecc71";
 
         setTimeout(() => {
-            btn.className = "";
+            btn.className = "btn-salvar";
         }, 2000);
 
     } catch (err) {
         console.error(err);
-        btn.className = "erro";
+        btn.className = "btn-salvar erro";
         status.textContent = "Erro ao salvar";
         status.style.color = "#e74c3c";
     }
@@ -727,4 +727,3 @@ function mascaraTempo(input) {
 
     input.value = valor;
 }
-
