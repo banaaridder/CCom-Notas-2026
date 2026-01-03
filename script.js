@@ -159,7 +159,7 @@ function agendarAutoSave() {
     clearTimeout(autoSaveTimer);
 
     autoSaveTimer = setTimeout(() => {
-        salvarNotasAuto(snapshotAtual);
+        salvarNotas(snapshotAtual);
     }, AUTO_SAVE_DELAY);
 }
 
@@ -174,16 +174,22 @@ function agendarAutoSave() {
 
 document.addEventListener("DOMContentLoaded", async () => {
 
-     document.getElementById("btnSalvar").addEventListener("click", () => {
+    document.getElementById("btnSalvar").addEventListener("click", () => {
         salvarNotas(criarSnapshot());
     });
-   
 
-    // 🔥 1️⃣ carrega notas
+    // 🔥 carrega dados
     await carregarNotasDoUsuario();
 
-    // 🔥 2️⃣ calcula tudo depois de carregar
+    // 🔥 calcula após carregar
     calcularTudo();
+
+    // 🔥 auto-save ao digitar
+    document.addEventListener("input", () => {
+        if (!carregamentoConcluido) return;
+        calcularTudo();
+        agendarAutoSave();
+    });
 });
 
 
@@ -646,6 +652,7 @@ function mascaraTempo(input) {
 
     input.value = valor;
 }
+
 
 
 
