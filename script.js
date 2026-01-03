@@ -678,6 +678,7 @@ function calcularTudo() {
         } else {
             span.textContent = "--";
         }
+   
     });
 
     // 🔹 matérias simples (automático)
@@ -708,8 +709,8 @@ function calcularTudo() {
 document.getElementById("media-geral").textContent =
     mediaFinal !== null ? mediaFinal.toFixed(3) : "--";
 
-// salvar para uso em ranking
-window.mediaGeralAtual = mediaFinal;
+       // 🔥 ESSENCIAL PARA O AUTO-SAVE
+    window.mediaGeralAtual = mediaGeral;
 
 }
 
@@ -727,3 +728,4 @@ function mascaraTempo(input) {
 
     input.value = valor;
 }
+
