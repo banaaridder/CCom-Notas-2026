@@ -704,12 +704,16 @@ function calcularTudo() {
         count++;
     }
 
-    const mediaFinal = count > 0 ? soma / count : null;
+    // 🔥 CALCULE A MÉDIA EM UMA VARIÁVEL
+    const mediaGeral = total > 0 ? soma / total : 0;
 
-document.getElementById("media-geral").textContent =
-    mediaFinal !== null ? mediaFinal.toFixed(3) : "--";
+    // 🔹 Atualiza o DOM
+    const spanMedia = document.getElementById("media-geral");
+    if (spanMedia) {
+        spanMedia.textContent = mediaGeral.toFixed(2);
+    }
 
-       // 🔥 ESSENCIAL PARA O AUTO-SAVE
+    // 🔹 EXPÕE PARA AUTO-SAVE / RANKING
     window.mediaGeralAtual = mediaGeral;
 
 }
@@ -728,4 +732,5 @@ function mascaraTempo(input) {
 
     input.value = valor;
 }
+
 
