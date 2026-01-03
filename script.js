@@ -198,6 +198,10 @@ document.addEventListener("DOMContentLoaded", async () => {
    SALVAR / CARREGAR NOTAS
 ========================= */
 
+/* =========================
+   SALVAR / CARREGAR NOTAS (iOS Friendly)
+========================= */
+
 async function salvarNotas(snapshotAtual) {
     if (!snapshotAtual) {
         console.warn("Snapshot inválido, salvamento ignorado");
@@ -222,30 +226,47 @@ async function salvarNotas(snapshotAtual) {
         return;
     }
 
-    const { error } = await window.supabaseClient
-        .from("notas")
-        .upsert(
-            {
-                usuario_id: usuarioId,
-                dados: JSON.parse(snapshotAtual),
-                media_geral: window.mediaGeralAtual ?? null
-            },
-            { onConflict: "usuario_id" }
-        );
-
-    if (error) {
-        console.error(error);
+    // garantir JSON válido
+    let dadosParaSalvar;
+    try {
+        dadosParaSalvar = JSON.parse(snapshotAtual);
+    } catch (e) {
+        console.error("Erro ao parsear snapshot", e);
         btn.className = "btn-salvar erro";
         status.textContent = "Erro ao salvar";
         status.style.color = "#e74c3c";
         return;
     }
 
-    ultimoSnapshot = snapshotAtual;
+    try {
+        const { error } = await window.supabaseClient
+            .from("notas")
+            .upsert(
+                {
+                    usuario_id: usuarioId,
+                    dados: dadosParaSalvar,
+                    media_geral: window.mediaGeralAtual ?? null
+                },
+                { onConflict: "usuario_id" }
+            );
 
-    btn.className = "btn-salvar salvo";
-    status.textContent = "Salvo!";
-    status.style.color = "#2ecc71";
+        if (error) throw error;
+
+        ultimoSnapshot = snapshotAtual;
+
+        btn.className = "btn-salvar salvo";
+        status.textContent = "Salvo!";
+        status.style.color = "#2ecc71";
+
+        // também salva no ranking de forma segura
+        await salvarNoRanking(usuarioId, window.mediaGeralAtual);
+
+    } catch (err) {
+        console.error("Erro ao salvar no Supabase ou ranking:", err);
+        btn.className = "btn-salvar erro";
+        status.textContent = "Erro ao salvar";
+        status.style.color = "#e74c3c";
+    }
 
     setTimeout(() => {
         btn.className = "btn-salvar";
@@ -255,19 +276,19 @@ async function salvarNotas(snapshotAtual) {
 
 
 
-function salvarNoRanking() {
-    const usuarioLogado = localStorage.getItem("usuarioLogado");
-
-    if (!usuarioLogado || window.mediaGeralAtual === null) return;
+/* =========================
+   SALVAR RANKING COM LOCALFORAGE
+========================= */
+async function salvarNoRanking(usuarioLogado, mediaGeral) {
+    if (!usuarioLogado || mediaGeral === null) return;
 
     let ranking = [];
-try {
-    ranking = JSON.parse(localStorage.getItem("ranking")) || [];
-} catch (e) {
-    console.warn("localStorage indisponível no iOS ou modo privado");
-    ranking = [];
-}
-
+    try {
+        ranking = (await localforage.getItem("ranking")) || [];
+    } catch (e) {
+        console.warn("Não foi possível carregar ranking do localForage:", e);
+        ranking = [];
+    }
 
     // remove entrada antiga do usuário
     ranking = ranking.filter(u => u.usuario !== usuarioLogado);
@@ -275,18 +296,17 @@ try {
     // adiciona nova
     ranking.push({
         usuario: usuarioLogado,
-        media: Number(window.mediaGeralAtual.toFixed(3))
+        media: Number(mediaGeral.toFixed(3))
     });
 
     // ordena do maior para o menor
     ranking.sort((a, b) => b.media - a.media);
 
     try {
-    localStorage.setItem("ranking", JSON.stringify(ranking));
-} catch (e) {
-    console.warn("Não foi possível salvar o ranking no localStorage (iOS Private Mode?)");
-}
-
+        await localforage.setItem("ranking", ranking);
+    } catch (e) {
+        console.warn("Não foi possível salvar ranking no localForage:", e);
+    }
 }
 
 
