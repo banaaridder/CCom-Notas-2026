@@ -1,21 +1,19 @@
 document.addEventListener("DOMContentLoaded", () => {
-  document.addEventListener("input", calcularTudo);
+    
+    document.addEventListener("input", calcularTudo);
 
-  const btnSalvar = document.getElementById("btnSalvar");
-  if (btnSalvar) {
-    btnSalvar.addEventListener("click", async e => {
-      e.preventDefault(); // iOS fix
-      btnSalvar.disabled = true;
-      btnSalvar.textContent = "Salvando...";
+    const btnSalvar = document.getElementById("btnSalvar");
+    if (btnSalvar) {
+        btnSalvar.addEventListener("click", salvarNotas);
+    }
+carregarNotasDoUsuario();
 
-      await salvarNotas();
+ //   carregarNotas();
+});
 
-      btnSalvar.disabled = false;
-      btnSalvar.textContent = "Salvar Notas";
-    });
-  }
-
-  carregarNotasDoUsuario();
+btnSalvar.addEventListener("click", e => {
+  e.preventDefault();   // 🔥 ESSENCIAL NO iOS
+  salvarNotas();
 });
 
 
