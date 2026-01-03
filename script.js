@@ -481,11 +481,11 @@ function calcularTudo() {
     let soma = 0;
     let count = 0;
 
-    /* =========================
-       1️⃣ FORÇAR CÁLCULO INDIVIDUAL
-    ========================= */
-
     const materias = ["tec", "fund", "ciber", "empre", "pt", "racio", "didat"];
+
+    /* =========================
+       MATÉRIAS TEÓRICAS
+    ========================= */
 
     materias.forEach(m => {
         const media = calcularMateria(m);
@@ -493,36 +493,72 @@ function calcularTudo() {
 
         if (media !== null && !isNaN(media)) {
             span.textContent = media.toFixed(3);
+            soma += media;
+            count++;
+        } else {
+            span.textContent = "--";
         }
     });
 
-    document.querySelectorAll('[data-tipo="simples"]').forEach(m => {
-        calcularMateriaSimples(m);
-    });
-
-    calcularTiro();
-    calcularTFM();
-
     /* =========================
-       2️⃣ MÉDIA GERAL (PELOS SPANS)
+       MATÉRIAS SIMPLES
     ========================= */
 
-    document.querySelectorAll("span").forEach(span => {
-        const valor = parseFloat(
-            span.textContent.replace(",", ".")
-        );
-
-        if (!isNaN(valor)) {
-            soma += valor;
+    document.querySelectorAll('[data-tipo="simples"]').forEach(materia => {
+        const media = calcularMateriaSimples(materia);
+        if (media !== null && !isNaN(media)) {
+            soma += media;
             count++;
         }
     });
 
     /* =========================
-       3️⃣ RESULTADO FINAL
+       TIRO
     ========================= */
 
-    const mediaFinal = count > 0 ? soma / count : null;
+    const mediaTiro = calcularTiro();
+    if (mediaTiro !== null && !isNaN(mediaTiro)) {
+        soma += mediaTiro;
+        count++;
+    }
+
+    /* =========================
+       TFM
+    ========================= */
+
+    const mediaTFM = calcularTFM();
+    if (mediaTFM !== null && !isNaN(mediaTFM)) {
+        soma += mediaTFM;
+        count++;
+    }
+
+    /* =========================
+       MÉDIA GERAL
+    ========================= */
+
+    let mediaFinal = null;
+
+    // 🔹 cálculo normal
+    if (count > 0) {
+        mediaFinal = soma / count;
+    } 
+    // 🔥 fallback para carregamento inicial
+    else {
+        let somaSpan = 0;
+        let countSpan = 0;
+
+        document.querySelectorAll("span").forEach(span => {
+            const valor = parseFloat(span.textContent.replace(",", "."));
+            if (!isNaN(valor)) {
+                somaSpan += valor;
+                countSpan++;
+            }
+        });
+
+        if (countSpan > 0) {
+            mediaFinal = somaSpan / countSpan;
+        }
+    }
 
     document.getElementById("media-geral").textContent =
         mediaFinal !== null ? mediaFinal.toFixed(3) : "--";
