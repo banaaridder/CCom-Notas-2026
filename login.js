@@ -12,6 +12,7 @@ async function loginComFeedback(btn) {
 
     // Reset visual
     mensagemErro.textContent = "";
+    mensagemErro.style.opacity = 1;
     usuarioInput.classList.remove("input-erro");
     senhaInput.classList.remove("input-erro");
     btn.className = "btn-feedback salvando";
@@ -26,7 +27,7 @@ async function loginComFeedback(btn) {
     if (erro) {
         mensagemErro.textContent = "Preencha todos os campos";
         btn.className = "btn-feedback erro";
-        resetErro(btn, [usuarioInput, senhaInput], mensagemErro);
+        resetErroFade(btn, [usuarioInput, senhaInput], mensagemErro, 1000);
         return;
     }
 
@@ -40,14 +41,14 @@ async function loginComFeedback(btn) {
     if (error || !data) {
         mensagemErro.textContent = "Usuário não encontrado";
         btn.className = "btn-feedback erro";
-        resetErro(btn, [usuarioInput, senhaInput], mensagemErro);
+        resetErroFade(btn, [usuarioInput, senhaInput], mensagemErro, 1000);
         return;
     }
 
     if (data.senha !== senha) {
         mensagemErro.textContent = "Senha incorreta";
         btn.className = "btn-feedback erro";
-        resetErro(btn, [senhaInput], mensagemErro);
+        resetErroFade(btn, [senhaInput], mensagemErro, 1000);
         return;
     }
 
@@ -61,11 +62,19 @@ async function loginComFeedback(btn) {
     }, 700);
 }
 
-// Função para resetar botão e inputs após erro
-function resetErro(btn, inputs = [], mensagem, tempo = 2000) {
+// Função para resetar botão e inputs com fade
+function resetErroFade(btn, inputs = [], mensagem, tempo = 1000) {
     setTimeout(() => {
+        mensagem.style.transition = "opacity 0.5s";
+        mensagem.style.opacity = 0;
         btn.className = "btn-feedback";
+
         inputs.forEach(input => input.classList.remove("input-erro"));
-        mensagem.textContent = "";
+
+        // Limpa mensagem após animação
+        setTimeout(() => {
+            mensagem.textContent = "";
+            mensagem.style.opacity = 1;
+        }, 500);
     }, tempo);
 }

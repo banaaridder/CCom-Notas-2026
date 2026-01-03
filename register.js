@@ -13,6 +13,7 @@ async function registrarComFeedback(btn) {
 
     // Reset visual
     mensagemErro.textContent = "";
+    mensagemErro.style.opacity = 1;
     usuarioInput.classList.remove("input-erro");
     senhaInput.classList.remove("input-erro");
     confirmarInput.classList.remove("input-erro");
@@ -30,7 +31,7 @@ async function registrarComFeedback(btn) {
     if (erro) {
         mensagemErro.textContent = "Preencha todos os campos";
         btn.className = "btn-feedback erro";
-        resetErro(btn, [usuarioInput, senhaInput, confirmarInput], mensagemErro);
+        resetErroFade(btn, [usuarioInput, senhaInput, confirmarInput], mensagemErro, 1000);
         return;
     }
 
@@ -40,7 +41,7 @@ async function registrarComFeedback(btn) {
         senhaInput.classList.add("input-erro");
         confirmarInput.classList.add("input-erro");
         btn.className = "btn-feedback erro";
-        resetErro(btn, [senhaInput, confirmarInput], mensagemErro);
+        resetErroFade(btn, [senhaInput, confirmarInput], mensagemErro, 1000);
         return;
     }
 
@@ -55,7 +56,7 @@ async function registrarComFeedback(btn) {
         mensagemErro.textContent = "Nome de usuário já existe";
         usuarioInput.classList.add("input-erro");
         btn.className = "btn-feedback erro";
-        resetErro(btn, [usuarioInput], mensagemErro);
+        resetErroFade(btn, [usuarioInput], mensagemErro, 1000);
         return;
     }
 
@@ -67,7 +68,7 @@ async function registrarComFeedback(btn) {
     if (error) {
         mensagemErro.textContent = "Erro ao criar conta";
         btn.className = "btn-feedback erro";
-        resetErro(btn, [usuarioInput, senhaInput, confirmarInput], mensagemErro);
+        resetErroFade(btn, [usuarioInput, senhaInput, confirmarInput], mensagemErro, 1000);
         return;
     }
 
@@ -78,11 +79,18 @@ async function registrarComFeedback(btn) {
     }, 900);
 }
 
-// Função de reset após erro
-function resetErro(btn, inputs = [], mensagem, tempo = 2000) {
+// Função de reset com fade
+function resetErroFade(btn, inputs = [], mensagem, tempo = 1000) {
     setTimeout(() => {
+        mensagem.style.transition = "opacity 0.5s";
+        mensagem.style.opacity = 0;
         btn.className = "btn-feedback";
+
         inputs.forEach(input => input.classList.remove("input-erro"));
-        mensagem.textContent = "";
+
+        setTimeout(() => {
+            mensagem.textContent = "";
+            mensagem.style.opacity = 1;
+        }, 500);
     }, tempo);
 }
