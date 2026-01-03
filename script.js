@@ -274,31 +274,42 @@ function calcularMateria(prefixo) {
         ? [{ id: "aa", peso: 1 }, { id: "ac", peso: 2 }]
         : [{ id: "aa1", peso: 1 }, { id: "aa2", peso: 1 }, { id: "ac", peso: 2 }];
 
-    let s = 0, p = 0;
+    let soma = 0;
+    let peso = 0;
+    let camposPreenchidos = true;
 
-    provas.forEach(pr => {
-        const a = +document.getElementById(`acertos-${prefixo}-${pr.id}`)?.value;
-        const t = +document.getElementById(`total-${prefixo}-${pr.id}`)?.value;
-        if (a >= 0 && t > 0) {
-            s += ((a / t) * 10) * pr.peso;
-            p += pr.peso;
+    provas.forEach(p => {
+        const acertos = document.getElementById(`acertos-${prefixo}-${p.id}`)?.value;
+        const total = document.getElementById(`total-${prefixo}-${p.id}`)?.value;
+
+        if (!acertos || !total || Number(total) <= 0) {
+            camposPreenchidos = false;
+            return;
         }
+
+        const nota = (Number(acertos) / Number(total)) * 10;
+        soma += nota * p.peso;
+        peso += p.peso;
     });
 
-    return p ? s / p : null;
+    if (!camposPreenchidos || peso === 0) return null;
+    return soma / peso;
 }
 
 function calcularTudo() {
     let soma = 0, count = 0;
 
-    ["fund","empre","pt","racio","didat","tec","ciber"].forEach(m => {
-        const media = calcularMateria(m);
-        const span = document.getElementById(`media-${m}`);
-        if (media != null) {
-            span.textContent = media.toFixed(3);
-            soma += media; count++;
-        } else span.textContent = "--";
-    });
+["fund","empre","pt","racio","didat","tec","ciber"].forEach(m => {
+    const media = calcularMateria(m);
+    const span = document.getElementById(`media-${m}`);
+
+    if (media != null) {
+        span.textContent = media.toFixed(3);
+        soma += media;
+        count++;
+    } else span.textContent = "--";
+});
+
 
     document.querySelectorAll('[data-tipo="simples"]').forEach(c => {
         const m = calcularMateriaSimples(c);
@@ -312,8 +323,8 @@ function calcularTudo() {
     if (tfm != null) { soma += tfm; count++; }
 
     const final = count ? soma / count : null;
-    document.getElementById("media-geral").textContent = final ? final.toFixed(2) : "--";
-    window.mediaGeralAtual = final;
+    document.getElementById("media-geral").textContent = final ? final.toFixed(3) : "--";
+    window.mediaGeralAtual = count > 0 ? soma / count : null;
 }
 
 /* =========================
@@ -332,3 +343,4 @@ document.addEventListener("DOMContentLoaded", async () => {
         salvarNotas(criarSnapshot())
     );
 });
+
