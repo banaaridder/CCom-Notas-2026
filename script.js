@@ -705,16 +705,16 @@ function calcularTudo() {
     }
 
     // 🔥 CALCULE A MÉDIA EM UMA VARIÁVEL
-    const mediaGeral = total > 0 ? soma / total : 0;
+    const mediaFinal = total > 0 ? soma / total : 0;
 
     // 🔹 Atualiza o DOM
     const spanMedia = document.getElementById("media-geral");
     if (spanMedia) {
-        spanMedia.textContent = mediaGeral.toFixed(2);
+        spanMedia.textContent = mediaFinal.toFixed(2);
     }
 
     // 🔹 EXPÕE PARA AUTO-SAVE / RANKING
-    window.mediaGeralAtual = mediaGeral;
+    window.mediaGeralAtual = mediaFinal;
 
 }
 
@@ -732,5 +732,6 @@ function mascaraTempo(input) {
 
     input.value = valor;
 }
+
 
 
