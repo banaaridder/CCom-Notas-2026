@@ -27,7 +27,7 @@ async function salvarNotas() {
     }
   });
 
-  const { error } = await window.supabaseClient
+const { error } = await window.supabaseClient
     .from("notas")
     .upsert({
       usuario_id: usuarioId,
@@ -43,6 +43,25 @@ async function salvarNotas() {
   }
 }
 
+
+function carregarNotas() {
+    const usuario = localStorage.getItem("usuarioLogado");
+    if (!usuario) return;
+
+    const usuarios = JSON.parse(localStorage.getItem("usuarios")) || {};
+    if (!usuarios[usuario] || !usuarios[usuario].notas) return;
+
+    const notas = usuarios[usuario].notas;
+
+    Object.keys(notas).forEach(id => {
+        const input = document.getElementById(id);
+        if (input) {
+            input.value = notas[id];
+        }
+    });
+
+    calcularTudo();
+}
 
 function salvarNoRanking() {
     const usuarioLogado = localStorage.getItem("usuarioLogado");
