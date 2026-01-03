@@ -1,20 +1,21 @@
 document.addEventListener("DOMContentLoaded", () => {
-    
-    document.addEventListener("input", calcularTudo);
+  document.addEventListener("input", calcularTudo);
 
-    const btnSalvar = document.getElementById("btnSalvar");
-    if (btnSalvar) {
-        btnSalvar.addEventListener("click", salvarNotas);
-    }
-carregarNotasDoUsuario();
-    calcularTudo();
+  const btnSalvar = document.getElementById("btnSalvar");
+  if (btnSalvar) {
+    btnSalvar.addEventListener("click", async e => {
+      e.preventDefault(); // iOS fix
+      btnSalvar.disabled = true;
+      btnSalvar.textContent = "Salvando...";
 
- //   carregarNotas();
-});
+      await salvarNotas();
 
-btnSalvar.addEventListener("click", e => {
-  e.preventDefault();   // 🔥 ESSENCIAL NO iOS
-  salvarNotas();
+      btnSalvar.disabled = false;
+      btnSalvar.textContent = "Salvar Notas";
+    });
+  }
+
+  carregarNotasDoUsuario();
 });
 
 
@@ -31,7 +32,6 @@ async function carregarNotasDoUsuario() {
   if (error && error.code !== "PGRST116") {
     console.error("Erro ao carregar notas:", error);
     return;
-      calcularTudo();
   }
 
   if (!data) return;
@@ -47,6 +47,7 @@ async function carregarNotasDoUsuario() {
   // 🔹 Atualiza média global se existir
   if (data.media_geral !== null) {
     window.mediaGeralAtual = data.media_geral;
+    calcularTudo();
   }
 }
 
@@ -116,6 +117,7 @@ async function salvarNotas() {
   }
 
   alert("Notas salvas com sucesso!");
+  
 }
 
 
@@ -602,7 +604,6 @@ function mascaraTempo(input) {
 
     input.value = valor;
 }
-
 
 
 
