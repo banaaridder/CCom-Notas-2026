@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
         btnSalvar.addEventListener("click", salvarNotas);
     }
 
- //   carregarNotas();
+    carregarNotas();
 });
 
 /* =========================
@@ -84,6 +84,7 @@ function salvarNoRanking() {
 
     localStorage.setItem("ranking", JSON.stringify(ranking));
 }
+
 
 
 
