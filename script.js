@@ -108,9 +108,9 @@ const ppm = [
     { aa: 473, ac: 463, nota: 0 }
 ];
 
-/* =========================================
+/* =========================
    AUTO SAVE
-========================================= */
+========================= */
 
 let autoSaveTimer = null;
 let ultimoSnapshot = "";
@@ -119,51 +119,44 @@ const AUTO_SAVE_DELAY = 1500;
 /* =========================
    SNAPSHOT
 ========================= */
+
 function criarSnapshot() {
     const dados = {};
-    document.querySelectorAll("input").forEach(input => {
-        if (input.id) dados[input.id] = input.value;
+    document.querySelectorAll("input").forEach(i => {
+        if (i.id) dados[i.id] = i.value;
     });
     return JSON.stringify(dados);
 }
 
-/* =========================
-   AUTO SAVE
-========================= */
 function agendarAutoSave() {
-    const snapshot = criarSnapshot();
-    if (snapshot === ultimoSnapshot) return;
+    const snap = criarSnapshot();
+    if (snap === ultimoSnapshot) return;
 
     clearTimeout(autoSaveTimer);
-    autoSaveTimer = setTimeout(() => {
-        salvarNotasAuto(snapshot);
-    }, AUTO_SAVE_DELAY);
+    autoSaveTimer = setTimeout(() => salvarNotas(snap), AUTO_SAVE_DELAY);
 }
 
-async function salvarNotasAuto(snapshot) {
+async function salvarNotas(snapshot) {
     calcularTudo();
 
     const usuarioId = localStorage.getItem("usuarioLogado");
     if (!usuarioId) return;
 
     await window.supabaseClient
-  .from("notas")
-  .upsert(
-    {
-      usuario_id: usuarioId,
-      dados: JSON.parse(snapshot),
-      media_geral: window.mediaGeralAtual
-    },
-    { onConflict: "usuario_id" }
-  );
-
+        .from("notas")
+        .upsert({
+            usuario_id: usuarioId,
+            dados: JSON.parse(snapshot),
+            media_geral: window.mediaGeralAtual
+        }, { onConflict: "usuario_id" });
 
     ultimoSnapshot = snapshot;
 }
 
 /* =========================
-   CARREGAR NOTAS
+   CARREGAR
 ========================= */
+
 async function carregarNotasDoUsuario() {
     const usuarioId = localStorage.getItem("usuarioLogado");
     if (!usuarioId) return;
@@ -175,9 +168,9 @@ async function carregarNotasDoUsuario() {
         .single();
 
     if (data?.dados) {
-        Object.entries(data.dados).forEach(([id, valor]) => {
-            const input = document.getElementById(id);
-            if (input) input.value = valor;
+        Object.entries(data.dados).forEach(([id, v]) => {
+            const el = document.getElementById(id);
+            if (el) el.value = v;
         });
     }
 
@@ -188,40 +181,53 @@ async function carregarNotasDoUsuario() {
 /* =========================
    UTILIDADES
 ========================= */
-function tempoParaSegundos(t) {
+
+const tempoParaSegundos = t => {
     if (!t || !t.includes(":")) return null;
     const [m, s] = t.split(":").map(Number);
     return m * 60 + s;
-}
+};
 
-function mediaAAAC(a, c) {
-    if (a == null && c == null) return null;
-    return ((a ?? 0) + (c ?? 0) * 2) / 3;
-}
+const mediaAAAC = (a, c) =>
+    a == null && c == null ? null : ((a ?? 0) + (c ?? 0) * 2) / 3;
 
-function notaPorTempo(seg, tabela, tipo) {
+const notaPorTempo = (seg, tab, tipo) => {
     if (seg == null) return null;
-    for (const i of tabela) {
-        if (seg <= i[tipo]) return i.nota;
-    }
+    for (const i of tab) if (seg <= i[tipo]) return i.nota;
     return 0;
-}
+};
 
-function notaPorQuantidade(v, tabela, tipo) {
+const notaPorQuantidade = (v, tab, tipo) => {
     if (v == null) return null;
-    for (const i of tabela) {
-        if (v >= i[tipo]) return i.nota;
-    }
+    for (const i of tab) if (v >= i[tipo]) return i.nota;
     return 0;
+};
+
+/* =========================
+   MATÉRIAS SIMPLES
+========================= */
+
+function calcularMateriaSimples(container) {
+    const acertos = +container.querySelector('[data-acertos]')?.value;
+    const total = +container.querySelector('[data-total]')?.value;
+    const span = container.querySelector(".media-materia");
+
+    if (!acertos || !total) {
+        if (span) span.textContent = "--";
+        return null;
+    }
+
+    const media = (acertos / total) * 10;
+    if (span) span.textContent = media.toFixed(3);
+    return media;
 }
 
 /* =========================
-   CÁLCULOS
+   CÁLCULOS PRINCIPAIS
 ========================= */
 
 function calcularTFM() {
-    let soma = 0;
-    let count = 0;
+    let soma = 0, c = 0;
 
     [
         ["corrida", corrida, "tempo"],
@@ -230,25 +236,20 @@ function calcularTFM() {
         ["natacao", natacao, "tempo"],
         ["corda", corda, "quantidade"],
         ["ppm", ppm, "tempo"]
-    ].forEach(([nome, tabela, tipo]) => {
-        const aa = document.getElementById(`${nome}-aa`)?.value;
-        const ac = document.getElementById(`${nome}-ac`)?.value;
+    ].forEach(([n, t, tipo]) => {
+        const aa = document.getElementById(`${n}-aa`)?.value;
+        const ac = document.getElementById(`${n}-ac`)?.value;
 
-        const nAA = aa ? (tipo === "tempo" ? notaPorTempo(tempoParaSegundos(aa), tabela, "aa") : notaPorQuantidade(+aa, tabela, "aa")) : null;
-        const nAC = ac ? (tipo === "tempo" ? notaPorTempo(tempoParaSegundos(ac), tabela, "ac") : notaPorQuantidade(+ac, tabela, "ac")) : null;
+        const nAA = aa ? (tipo === "tempo" ? notaPorTempo(tempoParaSegundos(aa), t, "aa") : notaPorQuantidade(+aa, t, "aa")) : null;
+        const nAC = ac ? (tipo === "tempo" ? notaPorTempo(tempoParaSegundos(ac), t, "ac") : notaPorQuantidade(+ac, t, "ac")) : null;
 
-        const media = mediaAAAC(nAA, nAC);
-        document.getElementById(`nota-${nome}`).textContent = media?.toFixed(3) ?? "--";
+        const m = mediaAAAC(nAA, nAC);
+        document.getElementById(`nota-${n}`).textContent = m?.toFixed(3) ?? "--";
 
-        if (media != null) {
-            soma += media;
-            count++;
-        }
+        if (m != null) { soma += m; c++; }
     });
 
-    const final = count > 0 ? soma / count : null;
-    document.getElementById("media-tfm").textContent = final?.toFixed(3) ?? "--";
-    return final;
+    return c ? soma / c : null;
 }
 
 function calcularTiro() {
@@ -256,134 +257,64 @@ function calcularTiro() {
     const b = +document.getElementById("tiro-ac1")?.value;
     const c = +document.getElementById("tiro-ac2")?.value;
 
-    let soma = 0, peso = 0;
-    if (!isNaN(a)) { soma += a; peso++; }
-    if (!isNaN(b)) { soma += b * 2; peso += 2; }
-    if (!isNaN(c)) { soma += c * 2; peso += 2; }
+    let s = 0, p = 0;
+    if (!isNaN(a)) { s += a; p++; }
+    if (!isNaN(b)) { s += b * 2; p += 2; }
+    if (!isNaN(c)) { s += c * 2; p += 2; }
 
-    if (!peso) return null;
-    const m = soma / peso;
+    if (!p) return null;
+    const m = s / p;
     document.getElementById("media-tiro").textContent = m.toFixed(3);
     return m;
 }
 
-/* =========================
-   MATÉRIAS TEÓRICAS
-========================= */
-
 function calcularMateria(prefixo) {
-    let provas;
+    const simples = ["fund", "empre", "pt", "racio", "didat"];
+    const provas = simples.includes(prefixo)
+        ? [{ id: "aa", peso: 1 }, { id: "ac", peso: 2 }]
+        : [{ id: "aa1", peso: 1 }, { id: "aa2", peso: 1 }, { id: "ac", peso: 2 }];
 
-    // matérias que só têm AA e AC
-    const materiasSimples = ["fund", "empre", "pt", "racio", "didat"];
+    let s = 0, p = 0;
 
-    if (materiasSimples.includes(prefixo)) {
-        provas = [
-            { id: "aa", peso: 1 },
-            { id: "ac", peso: 2 }
-        ];
-    } else {
-        // matérias com AA1, AA2 e AC
-        provas = [
-            { id: "aa1", peso: 1 },
-            { id: "aa2", peso: 1 },
-            { id: "ac", peso: 2 }
-        ];
-    }
-
-    let soma = 0;
-    let pesoTotal = 0;
-
-    provas.forEach(p => {
-        const acertos = Number(
-            document.getElementById(`acertos-${prefixo}-${p.id}`)?.value
-        );
-        const total = Number(
-            document.getElementById(`total-${prefixo}-${p.id}`)?.value
-        );
-
-        if (!isNaN(acertos) && !isNaN(total) && total > 0) {
-            const nota = (acertos / total) * 10;
-            soma += nota * p.peso;
-            pesoTotal += p.peso;
+    provas.forEach(pr => {
+        const a = +document.getElementById(`acertos-${prefixo}-${pr.id}`)?.value;
+        const t = +document.getElementById(`total-${prefixo}-${pr.id}`)?.value;
+        if (a >= 0 && t > 0) {
+            s += ((a / t) * 10) * pr.peso;
+            p += pr.peso;
         }
     });
 
-    return pesoTotal > 0 ? soma / pesoTotal : null;
+    return p ? s / p : null;
 }
-
-
 
 function calcularTudo() {
-    let soma = 0;
-    let count = 0;
+    let soma = 0, count = 0;
 
-    /* ======================
-       MATÉRIAS COM PROVAS
-    ====================== */
-
-    const materiasComProva = ["fund", "empre", "pt", "racio", "didat", "tec", "ciber"];
-
-    materiasComProva.forEach(m => {
+    ["fund","empre","pt","racio","didat","tec","ciber"].forEach(m => {
         const media = calcularMateria(m);
         const span = document.getElementById(`media-${m}`);
-
-        if (media !== null && !isNaN(media)) {
+        if (media != null) {
             span.textContent = media.toFixed(3);
-            soma += media;
-            count++;
-        } else if (span) {
-            span.textContent = "--";
-        }
+            soma += media; count++;
+        } else span.textContent = "--";
     });
 
-    /* ======================
-       MATÉRIAS SIMPLES
-    ====================== */
-
-    document.querySelectorAll('[data-tipo="simples"]').forEach(container => {
-        const media = calcularMateriaSimples(container);
-        if (media !== null && !isNaN(media)) {
-            soma += media;
-            count++;
-        }
+    document.querySelectorAll('[data-tipo="simples"]').forEach(c => {
+        const m = calcularMateriaSimples(c);
+        if (m != null) { soma += m; count++; }
     });
 
-    /* ======================
-       TIRO
-    ====================== */
+    const tiro = calcularTiro();
+    if (tiro != null) { soma += tiro; count++; }
 
-    const mediaTiro = calcularTiro();
-    if (mediaTiro !== null && !isNaN(mediaTiro)) {
-        soma += mediaTiro;
-        count++;
-    }
+    const tfm = calcularTFM();
+    if (tfm != null) { soma += tfm; count++; }
 
-    /* ======================
-       TFM
-    ====================== */
-
-    const mediaTFM = calcularTFM();
-    if (mediaTFM !== null && !isNaN(mediaTFM)) {
-        soma += mediaTFM;
-        count++;
-    }
-
-    /* ======================
-       MÉDIA GERAL
-    ====================== */
-
-    const mediaFinal = count > 0 ? soma / count : 0;
-
-    const spanGeral = document.getElementById("media-geral");
-    if (spanGeral) {
-        spanGeral.textContent = count > 0 ? mediaFinal.toFixed(2) : "--";
-    }
-
-    // 🔥 ESSENCIAL PARA AUTO-SAVE / SUPABASE
-    window.mediaGeralAtual = count > 0 ? mediaFinal : null;
+    const final = count ? soma / count : null;
+    document.getElementById("media-geral").textContent = final ? final.toFixed(2) : "--";
+    window.mediaGeralAtual = final;
 }
-
 
 /* =========================
    EVENTOS
@@ -397,14 +328,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         agendarAutoSave();
     });
 
-    const btn = document.getElementById("btnSalvar");
-    if (btn) {
-        btn.addEventListener("click", () => {
-            salvarNotasAuto(criarSnapshot());
-        });
-    }
+    document.getElementById("btnSalvar")?.addEventListener("click", () =>
+        salvarNotas(criarSnapshot())
+    );
 });
-
-
-
-
