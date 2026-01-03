@@ -353,7 +353,7 @@ function salvarNoRanking() {
 document.addEventListener("input", calcularTudo);
 
 
-async function carregarNotasUsuario() {
+async function carregarNotasDoUsuario() {
 
     carregamentoConcluido = false;
 
@@ -727,3 +727,4 @@ function mascaraTempo(input) {
 
     input.value = valor;
 }
+
