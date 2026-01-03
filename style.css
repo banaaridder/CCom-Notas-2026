@@ -173,6 +173,10 @@ button:hover {
     opacity: 0.9;
 }
 
+#btnSalvar{
+    height: auto;
+}
+
 /* =========================
    LOGO FUNDO
 ========================= */
