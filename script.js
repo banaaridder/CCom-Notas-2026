@@ -12,6 +12,11 @@ carregarNotasDoUsuario();
  //   carregarNotas();
 });
 
+btnSalvar.addEventListener("click", e => {
+  e.preventDefault();   // 🔥 ESSENCIAL NO iOS
+  salvarNotas();
+});
+
 
 async function carregarNotasDoUsuario() {
   const usuarioId = localStorage.getItem("usuarioLogado");
@@ -596,7 +601,6 @@ function mascaraTempo(input) {
 
     input.value = valor;
 }
-
 
 
 
