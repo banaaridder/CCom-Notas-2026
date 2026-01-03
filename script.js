@@ -177,7 +177,7 @@ document.addEventListener("DOMContentLoaded", async () => {
      document.getElementById("btnSalvar").addEventListener("click", () => {
         salvarNotas(criarSnapshot());
     });
-    }
+   
 
     // 🔥 1️⃣ carrega notas
     await carregarNotasDoUsuario();
@@ -646,5 +646,6 @@ function mascaraTempo(input) {
 
     input.value = valor;
 }
+
 
 
