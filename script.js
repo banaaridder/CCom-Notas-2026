@@ -174,15 +174,9 @@ function agendarAutoSave() {
 
 document.addEventListener("DOMContentLoaded", async () => {
 
-    // recalcula ao digitar
-    document.addEventListener("input", calcularTudo);
-
-    const btnSalvar = document.getElementById("btnSalvar");
-    if (btnSalvar) {
-        btnSalvar.addEventListener("click", e => {
-            e.preventDefault(); // iOS
-            salvarNotas();
-        });
+     document.getElementById("btnSalvar").addEventListener("click", () => {
+        salvarNotas(criarSnapshot());
+    });
     }
 
     // 🔥 1️⃣ carrega notas
@@ -652,4 +646,5 @@ function mascaraTempo(input) {
 
     input.value = valor;
 }
+
 
