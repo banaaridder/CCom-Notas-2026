@@ -1,53 +1,75 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const btn = document.getElementById("btn");
-  btn.addEventListener("click", registrar);
+    const btn = document.getElementById("btn");
+    btn.addEventListener("click", async () => {
+        await registrarComFeedback(btn);
+    });
 });
 
-async function registrar() {
-  const usuario = document.getElementById("usuario").value.trim();
-  const senha = document.getElementById("senha").value;
-  const confirmarSenha = document.getElementById("confirmar-senha").value;
+async function registrarComFeedback(btn) {
+    const usuarioInput = document.getElementById("usuario");
+    const senhaInput = document.getElementById("senha");
+    const confirmarInput = document.getElementById("confirmar-senha");
+    const mensagemErro = document.getElementById("mensagem-erro");
 
-  if (!usuario || !senha || !confirmarSenha) {
-    alert("Preencha todos os campos");
-    return;
-  }
-
-  if (senha !== confirmarSenha) {
-    alert("As senhas não coincidem");
-    return;
-  }
-
-  const { error } = await window.supabaseClient
-    .from("usuarios")
-    .insert({ nome: usuario, senha });
-
-  if (error) {
-    console.error(error);
-    alert("Erro ao criar conta");
-    return;
-  }
-
-  alert("Conta criada com sucesso!");
-  window.location.href = "login.html";
-}
-
-document.getElementById("btn").addEventListener("click", async () => {
-    const btn = document.getElementById("btn");
-
+    // Reset visual
+    mensagemErro.textContent = "";
+    usuarioInput.classList.remove("input-erro");
+    senhaInput.classList.remove("input-erro");
+    confirmarInput.classList.remove("input-erro");
     btn.className = "btn-feedback salvando";
 
-    try {
-        await registrar(); // sua função existente
+    const usuario = usuarioInput.value.trim();
+    const senha = senhaInput.value;
+    const confirmarSenha = confirmarInput.value;
 
-        btn.className = "btn-feedback salvo";
-
-        setTimeout(() => {
-            window.location.href = "login.html";
-        }, 900);
-
-    } catch (err) {
-        console.error(err);
+    // Validação campos vazios
+    let erro = false;
+    if (!usuario) { usuarioInput.classList.add("input-erro"); erro = true; }
+    if (!senha) { senhaInput.classList.add("input-erro"); erro = true; }
+    if (!confirmarSenha) { confirmarInput.classList.add("input-erro"); erro = true; }
+    if (erro) {
+        mensagemErro.textContent = "Preencha todos os campos";
         btn.className = "btn-feedback erro";
+        return;
     }
-});
+
+    // Verificar se senhas coincidem
+    if (senha !== confirmarSenha) {
+        mensagemErro.textContent = "As senhas não coincidem";
+        senhaInput.classList.add("input-erro");
+        confirmarInput.classList.add("input-erro");
+        btn.className = "btn-feedback erro";
+        return;
+    }
+
+    // Verificar se usuário já existe
+    const { data } = await window.supabaseClient
+        .from("usuarios")
+        .select("*")
+        .eq("nome", usuario)
+        .single();
+
+    if (data) {
+        mensagemErro.textContent = "Nome de usuário já existe";
+        usuarioInput.classList.add("input-erro");
+        btn.className = "btn-feedback erro";
+        return;
+    }
+
+    // Criar usuário
+    const { error } = await window.supabaseClient
+        .from("usuarios")
+        .insert({ nome: usuario, senha });
+
+    if (error) {
+        mensagemErro.textContent = "Erro ao criar conta";
+        btn.className = "btn-feedback erro";
+        return;
+    }
+
+    // Conta criada com sucesso
+    btn.className = "btn-feedback salvo";
+    setTimeout(() => {
+        window.location.href = "login.html";
+    }, 900);
+}

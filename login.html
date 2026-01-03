@@ -15,14 +15,15 @@
     <input type="text" id="usuario" placeholder="Nome de Guerra">
     <input type="password" id="senha" placeholder="Senha">
 
-<button id="btnLogin" type="button" class="btn-feedback">
-    <span class="btn-text">Entrar</span>
-    <span class="btn-spinner"></span>
-    <span class="btn-check">✓</span>
-    <span class="btn-error">✕</span>
-</button>
+    <!-- Mensagem de erro -->
+    <p id="mensagem-erro" class="mensagem-erro"></p>
 
-
+    <button id="btnLogin" type="button" class="btn-feedback">
+        <span class="btn-text">Entrar</span>
+        <span class="btn-spinner"></span>
+        <span class="btn-check">✓</span>
+        <span class="btn-error">✕</span>
+    </button>
 
     <p class="link">
         Não tem conta?
@@ -35,7 +36,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase.js"></script>
 <script src="login.js"></script>
-
 
 </body>
 </html>

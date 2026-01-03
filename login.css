@@ -243,3 +243,21 @@ body {
 @keyframes spin {
     to { transform: rotate(360deg); }
 }
+
+/* =========================
+   MENSAGEM DE ERRO
+========================= */
+.mensagem-erro {
+    color: #e74c3c;
+    font-size: 13px;
+    margin-bottom: 8px;
+    text-align: center;
+    min-height: 18px; /* evita pular layout */
+}
+
+/* =========================
+   INPUTS COM ERRO
+========================= */
+.input-erro {
+    border-color: #e74c3c !important;
+}
