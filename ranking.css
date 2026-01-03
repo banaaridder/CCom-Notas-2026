@@ -1,67 +1,136 @@
+/* =========================
+   RESET
+========================= */
 * {
-    overflow-x: hidden; /* bloqueia scroll horizontal */
-
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
-
-
 
 body {
     font-family: 'Inter', Arial, sans-serif;
     background: radial-gradient(circle at top, #1b383a 0%, #0d0d0d 100%);
     color: #e6e6e6;
     min-height: 100vh;
-    transition: background 0.3s ease;
 }
 
-.layout {
-    display: flex;
-    gap: 24px;
-    padding: 20px;
-    flex-wrap: wrap;
-}
-
-.materia {
+/* =========================
+   CARD RANKING
+========================= */
+.materia.ranking {
+    max-width: 720px;
+    margin: 40px auto;
     background: linear-gradient(180deg, #111, #0b0b0b);
-    border: 1px solid #ffffff10;
-    border-radius: 8px;
-    padding: 18px;
-    margin-bottom: 22px;
-    box-shadow: 0 8px 20px #00000080;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    width: 100%;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.8);
+    animation: fadeIn 0.4s ease forwards;
 }
 
+.materia.ranking h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: rgb(0,175,239);
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 1px;
+}
+
+/* =========================
+   TABELA
+========================= */
 .ranking table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 10px;
+    font-family: 'Share Tech Mono', monospace;
 }
 
-.ranking th, .ranking td {
-    padding: 10px;
-    border-bottom: 1px solid #333;
+.ranking thead th {
+    padding: 12px 8px;
+    color: rgb(0,175,239);
+    border-bottom: 1px solid rgba(0,175,239,0.4);
+}
+
+.ranking tbody td {
+    padding: 12px 8px;
     text-align: center;
+    border-bottom: 1px solid #222;
 }
 
-.ranking th {
-    color: rgb(0, 175, 239);;
-}
-
-.ranking tr:nth-child(1) {
-    background: #113233;
+/* =========================
+   DESTAQUE TOP 3
+========================= */
+.ranking tbody tr:nth-child(1) {
+    background: linear-gradient(90deg, #2d2a00, #3f3a00);
     font-weight: bold;
+    color: #ffd700;
 }
 
+.ranking tbody tr:nth-child(2) {
+    background: linear-gradient(90deg, #2a2a2a, #3a3a3a);
+    font-weight: bold;
+    color: #cfd8dc;
+}
+
+.ranking tbody tr:nth-child(3) {
+    background: linear-gradient(90deg, #2a1a10, #3b2417);
+    font-weight: bold;
+    color: #ffb74d;
+}
+
+/* Medalhas */
+.ranking tbody tr:nth-child(1) td:first-child::before {
+    content: "🥇 ";
+}
+.ranking tbody tr:nth-child(2) td:first-child::before {
+    content: "🥈 ";
+}
+.ranking tbody tr:nth-child(3) td:first-child::before {
+    content: "🥉 ";
+}
+
+/* =========================
+   HOVER
+========================= */
+.ranking tbody tr:hover {
+    background: rgba(0,175,239,0.12);
+}
+
+/* =========================
+   RESPONSIVO
+========================= */
 @media (max-width: 600px) {
-    header {
-        flex-direction: column;
-        align-items: center;
+    .materia.ranking {
+        margin: 20px 12px;
+        padding: 18px;
     }
 
-    .materias {
-        flex: 1 1 100%;
+    .ranking thead {
+        display: none;
+    }
+
+    .ranking tbody tr {
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr;
+        padding: 10px 0;
+    }
+
+    .ranking tbody td {
+        border: none;
+        padding: 6px;
+    }
+}
+
+/* =========================
+   ANIMAÇÃO
+========================= */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
