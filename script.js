@@ -1,7 +1,3 @@
-let autoSaveTimer = null;
-let ultimoSnapshot = "";
-const AUTO_SAVE_DELAY = 1500;
-
 
 /* =========================
    TABELAS TFM
@@ -113,6 +109,129 @@ const ppm = [
     { aa: 473, ac: 463, nota: 0 }
 ];
 
+/* =========================================
+   AUTO-SAVE INTELIGENTE + FEEDBACK VISUAL
+========================================= */
+
+let autoSaveTimer = null;
+let ultimoSnapshot = "";
+const AUTO_SAVE_DELAY = 1500;
+
+/* =========================
+   SNAPSHOT DOS INPUTS
+========================= */
+function criarSnapshot() {
+    const dados = {};
+    document.querySelectorAll("input").forEach(input => {
+        if (input.id) {
+            dados[input.id] = input.value;
+        }
+    });
+    return JSON.stringify(dados);
+}
+
+/* =========================
+   AGENDAR AUTO-SAVE
+========================= */
+function agendarAutoSave() {
+    const btn = document.getElementById("btnSalvar");
+    const status = document.getElementById("status-save");
+    if (!btn || !status) return;
+
+    const snapshotAtual = criarSnapshot();
+
+    if (snapshotAtual === ultimoSnapshot) return;
+
+    btn.className = "pendente";
+    status.textContent = "Alterações pendentes…";
+    status.style.color = "#00afef";
+
+    clearTimeout(autoSaveTimer);
+
+    autoSaveTimer = setTimeout(() => {
+        salvarNotasAuto(snapshotAtual);
+    }, AUTO_SAVE_DELAY);
+}
+
+/* =========================
+   SALVAR NOTAS (AUTO)
+========================= */
+async function salvarNotasAuto(snapshotAtual) {
+    const btn = document.getElementById("btnSalvar");
+    const status = document.getElementById("status-save");
+
+    btn.className = "salvando";
+    status.textContent = "Salvando…";
+    status.style.color = "#4fc3f7";
+
+    // garante cálculo atualizado
+    if (typeof calcularTudo === "function") {
+        calcularTudo();
+    }
+
+    const usuarioId = localStorage.getItem("usuarioLogado");
+    if (!usuarioId) {
+        status.textContent = "Usuário não logado";
+        btn.className = "erro";
+        return;
+    }
+
+    try {
+        await window.supabaseClient
+            .from("notas")
+            .upsert({
+                usuario_id: usuarioId,
+                dados: JSON.parse(snapshotAtual),
+                media_geral: window.mediaGeralAtual ?? null
+            });
+
+        ultimoSnapshot = snapshotAtual;
+
+        btn.className = "salvo";
+        status.textContent = "Salvo automaticamente ✔️";
+        status.style.color = "#2ecc71";
+
+        setTimeout(() => {
+            btn.className = "";
+        }, 2000);
+
+    } catch (err) {
+        console.error(err);
+        btn.className = "erro";
+        status.textContent = "Erro ao salvar";
+        status.style.color = "#e74c3c";
+    }
+}
+
+/* =========================
+   EVENTOS
+========================= */
+document.addEventListener("DOMContentLoaded", () => {
+
+    // botão salvar manual (mesma lógica do auto)
+    const btn = document.getElementById("btnSalvar");
+    if (btn) {
+        btn.addEventListener("click", () => {
+            const snapshot = criarSnapshot();
+            salvarNotasAuto(snapshot);
+        });
+    }
+
+    // input = recalcula + agenda auto-save
+    document.addEventListener("input", () => {
+        if (typeof calcularTudo === "function") {
+            calcularTudo();
+        }
+        agendarAutoSave();
+    });
+
+    // snapshot inicial (ESSENCIAL)
+    setTimeout(() => {
+        ultimoSnapshot = criarSnapshot();
+    }, 500);
+});
+
+
 
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -135,134 +254,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     calcularTudo();
 });
 
-function criarSnapshot() {
-    const dados = {};
-    document.querySelectorAll("input").forEach(input => {
-        if (input.id) dados[input.id] = input.value;
-    });
-    return JSON.stringify(dados);
-}
-
-
-function agendarAutoSave() {
-    const btn = document.getElementById("btnSalvar");
-    const status = document.getElementById("status-save");
-
-    const snapshotAtual = criarSnapshot();
-
-    if (snapshotAtual === ultimoSnapshot) return;
-
-    btn.className = "pendente";
-    status.textContent = "Alterações pendentes…";
-    status.style.color = "#00afef";
-
-    clearTimeout(autoSaveTimer);
-
-    autoSaveTimer = setTimeout(() => {
-        salvarNotasAuto(snapshotAtual);
-    }, AUTO_SAVE_DELAY);
-}
-
-
-async function salvarNotasSilencioso() {
-    const status = document.getElementById("status-save");
-    if (status) status.textContent = "Salvando...";
-
-    calcularTudo(); // garante média atualizada
-
-    const usuarioId = localStorage.getItem("usuarioLogado");
-    if (!usuarioId) {
-        if (status) status.textContent = "Não logado";
-        return;
-    }
-
-    const notas = {};
-    document.querySelectorAll("input").forEach(input => {
-        if (input.id) {
-            notas[input.id] = input.value;
-        }
-    });
-
-    try {
-        await window.supabaseClient
-            .from("notas")
-            .upsert({
-                usuario_id: usuarioId,
-                dados: notas,
-                media_geral: window.mediaGeralAtual
-            });
-
-        if (status) status.textContent = "Salvo automaticamente ✔️";
-    } catch (err) {
-        console.error(err);
-        if (status) status.textContent = "Erro ao salvar";
-    }
-}
-
-async function salvarNotasAuto(snapshotAtual) {
-    const btn = document.getElementById("btnSalvar");
-    const status = document.getElementById("status-save");
-
-    btn.className = "salvando";
-    status.textContent = "Salvando…";
-    status.style.color = "#4fc3f7";
-
-    calcularTudo();
-
-    const usuarioId = localStorage.getItem("usuarioLogado");
-    if (!usuarioId) return;
-
-    try {
-        await window.supabaseClient
-            .from("notas")
-            .upsert({
-                usuario_id: usuarioId,
-                dados: JSON.parse(snapshotAtual),
-                media_geral: window.mediaGeralAtual
-            });
-
-        ultimoSnapshot = snapshotAtual;
-
-        btn.className = "salvo";
-        status.textContent = "Salvo automaticamente ✔️";
-        status.style.color = "#2ecc71";
-
-        setTimeout(() => {
-            btn.className = "";
-        }, 2000);
-
-    } catch (err) {
-        console.error(err);
-        btn.className = "erro";
-        status.textContent = "Erro ao salvar";
-        status.style.color = "#e74c3c";
-    }
-}
-
-document.getElementById("btnSalvar").addEventListener("click", () => {
-    const snapshot = criarSnapshot();
-    salvarNotasAuto(snapshot);
-});
-
-
-async function carregarNotasDoUsuario() {
-  const usuarioId = localStorage.getItem("usuarioLogado");
-  if (!usuarioId) return;
-
-  const { data, error } = await window.supabaseClient
-    .from("notas")
-    .select("dados")
-    .eq("usuario_id", usuarioId)
-    .single();
-
-  if (error && error.code !== "PGRST116") return;
-  if (!data) return;
-
-  Object.entries(data.dados).forEach(([id, valor]) => {
-    const input = document.getElementById(id);
-    if (input) input.value = valor;
-  });
-}
 
 
 btnSalvar.addEventListener("click", async () => {
