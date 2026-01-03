@@ -147,12 +147,16 @@ async function salvarNotasAuto(snapshot) {
     if (!usuarioId) return;
 
     await window.supabaseClient
-        .from("notas")
-        .upsert({
-            usuario_id: usuarioId,
-            dados: JSON.parse(snapshot),
-            media_geral: window.mediaGeralAtual
-        });
+  .from("notas")
+  .upsert(
+    {
+      usuario_id: usuarioId,
+      dados: JSON.parse(snapshot),
+      media_geral: window.mediaGeralAtual
+    },
+    { onConflict: "usuario_id" }
+  );
+
 
     ultimoSnapshot = snapshot;
 }
@@ -274,7 +278,7 @@ function calcularTudo() {
     if (tiro != null) { soma += tiro; count++; }
 
     const media = count > 0 ? soma / count : 0;
-    document.getElementById("media-geral").textContent = media.toFixed(2);
+    document.getElementById("media-geral").textContent = media.toFixed(3);
     window.mediaGeralAtual = media;
 }
 
@@ -297,3 +301,4 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 });
+
