@@ -1,12 +1,62 @@
 document.addEventListener("DOMContentLoaded", () => {
+    
     document.addEventListener("input", calcularTudo);
 
     const btnSalvar = document.getElementById("btnSalvar");
     if (btnSalvar) {
         btnSalvar.addEventListener("click", salvarNotas);
     }
+carregarNotasDoUsuario();
+    calcularTudo();
 
-    carregarNotas();
+ //   carregarNotas();
+});
+
+btnSalvar.addEventListener("click", e => {
+  e.preventDefault();   // 🔥 ESSENCIAL NO iOS
+  salvarNotas();
+});
+
+
+async function carregarNotasDoUsuario() {
+  const usuarioId = localStorage.getItem("usuarioLogado");
+  if (!usuarioId) return;
+
+  const { data, error } = await window.supabaseClient
+    .from("notas")
+    .select("dados, media_geral")
+    .eq("usuario_id", usuarioId)
+    .single(); // 👈 garante 1 registro por usuário
+
+  if (error && error.code !== "PGRST116") {
+    console.error("Erro ao carregar notas:", error);
+    return;
+  }
+
+  if (!data) return;
+
+  // 🔹 Preencher inputs
+  Object.entries(data.dados).forEach(([id, valor]) => {
+    const input = document.getElementById(id);
+    if (input) {
+      input.value = valor;
+    }
+  });
+
+  // 🔹 Atualiza média global se existir
+  if (data.media_geral !== null) {
+    window.mediaGeralAtual = data.media_geral;
+  }
+}
+
+btnSalvar.addEventListener("click", async () => {
+  btnSalvar.disabled = true;
+  btnSalvar.textContent = "Salvando...";
+
+  await salvarNotas();
+
+  btnSalvar.disabled = false;
+  btnSalvar.textContent = "Salvar Notas";
 });
 
 /* =========================
@@ -14,12 +64,16 @@ document.addEventListener("DOMContentLoaded", () => {
 ========================= */
 
 async function salvarNotas() {
+    calcularTudo();
+
   const usuarioId = localStorage.getItem("usuarioLogado");
+
   if (!usuarioId) {
     alert("Usuário não logado");
     return;
   }
 
+  // 🔹 coleta TODOS os inputs da página
   const notas = {};
   document.querySelectorAll("input").forEach(input => {
     if (input.id) {
@@ -27,41 +81,44 @@ async function salvarNotas() {
     }
   });
 
-const { error } = await window.supabaseClient
+  // 🔹 tenta ATUALIZAR primeiro
+  const { data, error } = await window.supabaseClient
     .from("notas")
-    .upsert({
-      usuario_id: usuarioId,
+    .update({
       dados: notas,
       media_geral: window.mediaGeralAtual
-    });
+    })
+    .eq("usuario_id", usuarioId)
+    .select(); // 👈 importante para saber se atualizou
+
+  // 🔹 se não existia registro → INSERT
+  if (!error && data.length === 0) {
+    const { error: insertError } = await window.supabaseClient
+      .from("notas")
+      .insert({
+        usuario_id: usuarioId,
+        dados: notas,
+        media_geral: window.mediaGeralAtual
+      });
+
+    if (insertError) {
+      console.error(insertError);
+      alert("Erro ao salvar notas");
+      return;
+    }
+  }
 
   if (error) {
     console.error(error);
     alert("Erro ao salvar notas");
-  } else {
-    alert("Notas salvas com sucesso!");
+    return;
   }
+
+  alert("Notas salvas com sucesso!");
 }
 
 
-function carregarNotas() {
-    const usuario = localStorage.getItem("usuarioLogado");
-    if (!usuario) return;
 
-    const usuarios = JSON.parse(localStorage.getItem("usuarios")) || {};
-    if (!usuarios[usuario] || !usuarios[usuario].notas) return;
-
-    const notas = usuarios[usuario].notas;
-
-    Object.keys(notas).forEach(id => {
-        const input = document.getElementById(id);
-        if (input) {
-            input.value = notas[id];
-        }
-    });
-
-    calcularTudo();
-}
 
 function salvarNoRanking() {
     const usuarioLogado = localStorage.getItem("usuarioLogado");
@@ -84,7 +141,6 @@ function salvarNoRanking() {
 
     localStorage.setItem("ranking", JSON.stringify(ranking));
 }
-
 
 
 
@@ -545,5 +601,3 @@ function mascaraTempo(input) {
 
     input.value = valor;
 }
-
-
