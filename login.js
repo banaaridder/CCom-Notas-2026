@@ -26,6 +26,7 @@ async function loginComFeedback(btn) {
     if (erro) {
         mensagemErro.textContent = "Preencha todos os campos";
         btn.className = "btn-feedback erro";
+        resetErro(btn, [usuarioInput, senhaInput], mensagemErro);
         return;
     }
 
@@ -39,12 +40,14 @@ async function loginComFeedback(btn) {
     if (error || !data) {
         mensagemErro.textContent = "Usuário não encontrado";
         btn.className = "btn-feedback erro";
+        resetErro(btn, [usuarioInput, senhaInput], mensagemErro);
         return;
     }
 
     if (data.senha !== senha) {
         mensagemErro.textContent = "Senha incorreta";
         btn.className = "btn-feedback erro";
+        resetErro(btn, [senhaInput], mensagemErro);
         return;
     }
 
@@ -56,4 +59,13 @@ async function loginComFeedback(btn) {
     setTimeout(() => {
         window.location.href = "index.html";
     }, 700);
+}
+
+// Função para resetar botão e inputs após erro
+function resetErro(btn, inputs = [], mensagem, tempo = 2000) {
+    setTimeout(() => {
+        btn.className = "btn-feedback";
+        inputs.forEach(input => input.classList.remove("input-erro"));
+        mensagem.textContent = "";
+    }, tempo);
 }

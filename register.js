@@ -30,6 +30,7 @@ async function registrarComFeedback(btn) {
     if (erro) {
         mensagemErro.textContent = "Preencha todos os campos";
         btn.className = "btn-feedback erro";
+        resetErro(btn, [usuarioInput, senhaInput, confirmarInput], mensagemErro);
         return;
     }
 
@@ -39,6 +40,7 @@ async function registrarComFeedback(btn) {
         senhaInput.classList.add("input-erro");
         confirmarInput.classList.add("input-erro");
         btn.className = "btn-feedback erro";
+        resetErro(btn, [senhaInput, confirmarInput], mensagemErro);
         return;
     }
 
@@ -53,6 +55,7 @@ async function registrarComFeedback(btn) {
         mensagemErro.textContent = "Nome de usuário já existe";
         usuarioInput.classList.add("input-erro");
         btn.className = "btn-feedback erro";
+        resetErro(btn, [usuarioInput], mensagemErro);
         return;
     }
 
@@ -64,6 +67,7 @@ async function registrarComFeedback(btn) {
     if (error) {
         mensagemErro.textContent = "Erro ao criar conta";
         btn.className = "btn-feedback erro";
+        resetErro(btn, [usuarioInput, senhaInput, confirmarInput], mensagemErro);
         return;
     }
 
@@ -72,4 +76,13 @@ async function registrarComFeedback(btn) {
     setTimeout(() => {
         window.location.href = "login.html";
     }, 900);
+}
+
+// Função de reset após erro
+function resetErro(btn, inputs = [], mensagem, tempo = 2000) {
+    setTimeout(() => {
+        btn.className = "btn-feedback";
+        inputs.forEach(input => input.classList.remove("input-erro"));
+        mensagem.textContent = "";
+    }, tempo);
 }
