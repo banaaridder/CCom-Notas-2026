@@ -110,23 +110,24 @@ const ppm = [
 
 
 
-document.addEventListener("DOMContentLoaded", () => {
-    
+document.addEventListener("DOMContentLoaded", async () => {
+
+    // recalcula ao digitar
     document.addEventListener("input", calcularTudo);
 
     const btnSalvar = document.getElementById("btnSalvar");
     if (btnSalvar) {
-        btnSalvar.addEventListener("click", salvarNotas);
+        btnSalvar.addEventListener("click", e => {
+            e.preventDefault(); // iOS
+            salvarNotas();
+        });
     }
-carregarNotasDoUsuario();
+
+    // 🔥 1️⃣ carrega notas
+    await carregarNotasDoUsuario();
+
+    // 🔥 2️⃣ calcula tudo depois de carregar
     calcularTudo();
-
- //   carregarNotas();
-});
-
-btnSalvar.addEventListener("click", e => {
-  e.preventDefault();   // 🔥 ESSENCIAL NO iOS
-  salvarNotas();
 });
 
 
@@ -136,30 +137,19 @@ async function carregarNotasDoUsuario() {
 
   const { data, error } = await window.supabaseClient
     .from("notas")
-    .select("dados, media_geral")
+    .select("dados")
     .eq("usuario_id", usuarioId)
-    .single(); // 👈 garante 1 registro por usuário
+    .single();
 
-  if (error && error.code !== "PGRST116") {
-    console.error("Erro ao carregar notas:", error);
-    return;
-  }
-
+  if (error && error.code !== "PGRST116") return;
   if (!data) return;
 
-  // 🔹 Preencher inputs
   Object.entries(data.dados).forEach(([id, valor]) => {
     const input = document.getElementById(id);
-    if (input) {
-      input.value = valor;
-    }
+    if (input) input.value = valor;
   });
-
-  // 🔹 Atualiza média global se existir
-  if (data.media_geral !== null) {
-    window.mediaGeralAtual = data.media_geral;
-  }
 }
+
 
 btnSalvar.addEventListener("click", async () => {
   btnSalvar.disabled = true;
