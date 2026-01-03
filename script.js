@@ -271,16 +271,32 @@ function calcularTudo() {
     let soma = 0;
     let count = 0;
 
-    const tfm = calcularTFM();
-    if (tfm != null) { soma += tfm; count++; }
+    /* ======================
+       MATÉRIAS COM PROVAS
+    ====================== */
 
-    const tiro = calcularTiro();
-    if (tiro != null) { soma += tiro; count++; }
+    const materiasComProva = ["fund", "empre", "pt", "racio", "didat", "tec", "ciber"];
 
-    const media = count > 0 ? soma / count : 0;
-    document.getElementById("media-geral").textContent = media.toFixed(3);
-    window.mediaGeralAtual = media;
-}
+    materiasComProva.forEach(m => {
+        const media = calcularMateria(m);
+        const span = document.getElementById(`media-${m}`);
+
+        if (media !== null && !isNaN(media)) {
+            span.textContent = media.toFixed(3);
+            soma += media;
+            count++;
+        } else if (span) {
+            span.textContent = "--";
+        }
+    });
+
+    /* ======================
+       MATÉRIAS SIMPLES
+    ====================== */
+
+    document.querySelectorAll('[data-tipo="simples"]').forEach(container => {
+        const
+
 
 /* =========================
    EVENTOS
@@ -301,4 +317,5 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 });
+
 
