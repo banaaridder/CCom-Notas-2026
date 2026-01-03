@@ -209,30 +209,6 @@ async function salvarNotasAuto(snapshotAtual) {
 /* =========================
    EVENTOS
 ========================= */
-document.addEventListener("DOMContentLoaded", () => {
-
-    // botão salvar manual (mesma lógica do auto)
-    const btn = document.getElementById("btnSalvar");
-    if (btn) {
-        btn.addEventListener("click", () => {
-            const snapshot = criarSnapshot();
-            salvarNotasAuto(snapshot);
-        });
-    }
-
-    // input = recalcula + agenda auto-save
-    document.addEventListener("input", () => {
-        if (typeof calcularTudo === "function") {
-            calcularTudo();
-        }
-        agendarAutoSave();
-    });
-
-    // snapshot inicial (ESSENCIAL)
-    setTimeout(() => {
-        ultimoSnapshot = criarSnapshot();
-    }, 500);
-});
 
 
 
@@ -259,68 +235,54 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
 
-btnSalvar.addEventListener("click", async () => {
-  btnSalvar.disabled = true;
-  btnSalvar.textContent = "Salvando...";
-
-  await salvarNotas();
-
-  btnSalvar.disabled = false;
-  btnSalvar.textContent = "Salvar Notas";
-});
-
 /* =========================
    SALVAR / CARREGAR NOTAS
 ========================= */
 
-async function salvarNotas() {
+async function salvarNotas(snapshotAtual) {
+    const btn = document.getElementById("btnSalvar");
+    const status = document.getElementById("status-save");
+
+    if (!carregamentoConcluido) return;
+
+    btn.className = "btn-salvar salvando";
+    status.textContent = "Salvando…";
+    status.style.color = "#4fc3f7";
+
     calcularTudo();
 
-  const usuarioId = localStorage.getItem("usuarioLogado");
-
-  if (!usuarioId) {
-    alert("Usuário não logado");
-    return;
-  }
-
-  // 🔹 coleta TODOS os inputs da página
-  const notas = {};
-  document.querySelectorAll("input").forEach(input => {
-    if (input.id) {
-      notas[input.id] = input.value;
+    const usuarioId = localStorage.getItem("usuarioLogado");
+    if (!usuarioId) {
+        status.textContent = "Usuário não logado";
+        btn.className = "erro";
+        return;
     }
-  });
 
-  // 🔹 tenta ATUALIZAR primeiro
-  const { data, error } = await window.supabaseClient
-    .from("notas")
-    .update({
-      dados: notas,
-      media_geral: window.mediaGeralAtual
-    })
-    .eq("usuario_id", usuarioId)
-    .select(); // 👈 importante para saber se atualizou
+    const { error } = await window.supabaseClient
+        .from("notas")
+        .upsert({
+            usuario_id: usuarioId,
+            dados: JSON.parse(snapshotAtual),
+            media_geral: window.mediaGeralAtual
+        }, { onConflict: "usuario_id" });
 
-  // 🔹 se não existia registro → INSERT
-  if (!error && data.length === 0) {
-    const { error: insertError } = await window.supabaseClient
-      .from("notas")
-      .insert({
-        usuario_id: usuarioId,
-        dados: notas,
-        media_geral: window.mediaGeralAtual
-      });
-
-    if (insertError) {
-      console.error(insertError);
-      return;
+    if (error) {
+        console.error(error);
+        btn.className = "btn-salvar erro";
+        status.textContent = "Erro ao salvar";
+        status.style.color = "#e74c3c";
+        return;
     }
-  }
 
-  if (error) {
-    console.error(error);
-    return;
-  }
+    ultimoSnapshot = snapshotAtual;
+
+    btn.className = "btn-salvar salvo";
+    status.textContent = "Salvo!";
+    status.style.color = "#2ecc71";
+
+    setTimeout(() => {
+        btn.className = "btn-salvar";
+    }, 2000);
 }
 
 
