@@ -1,251 +1,35 @@
 /* =========================
-   RESET BÁSICO
+   VARIÁVEIS GLOBAIS
+========================= */
+:root {
+    --bg-main: #0d0d0d;
+    --bg-card: #111;
+    --bg-card-2: #0b0b0b;
+    --primary: rgb(0,175,239);
+    --border-soft: rgba(255,255,255,0.08);
+    --text-main: #e6e6e6;
+    --text-muted: #9aa0a6;
+    --shadow-soft: 0 8px 22px rgba(0,0,0,0.7);
+}
+
+/* =========================
+   RESET
 ========================= */
 * {
-    overflow-x: hidden; /* bloqueia scroll horizontal */
-
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
-
+html, body {
+    overflow-x: hidden;
+}
 
 body {
     font-family: 'Inter', Arial, sans-serif;
-    background: radial-gradient(circle at top, #1b383a 0%, #0d0d0d 100%);
-    color: #e6e6e6;
+    background: radial-gradient(circle at top, #1b383a 0%, var(--bg-main) 100%);
+    color: var(--text-main);
     min-height: 100vh;
-    transition: background 0.3s ease;
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-
-/* =========================
-   HEADER
-========================= */
-
-header {
-    display: grid;
-    grid-template-columns: auto 1fr auto; /* imagens nas extremidades, texto central */
-    align-items: center;
-    width: 100%;
-    background: linear-gradient(90deg, #0d0d0d, rgba(34, 69, 82, 0.2), #0d0d0d);
-    padding: 16px 20px;
-    border-bottom: 1px solid rgba(0, 175, 239, 0.2);
-    box-sizing: border-box;
-    position: relative;
-    z-index: 10;
-}
-
-header img {
-    width: 40px;
-    height: auto;
-}
-
-header h1 {
-    text-align: center;
-    font-family: 'Orbitron', Arial, sans-serif;
-    color: rgb(0, 175, 239);
-    letter-spacing: 2px;
-    font-size: clamp(22px, 3vw, 30px);
-}
-
-header a{
-    color: rgb(0, 175, 239);
-    text-decoration: none;
-}
-
-/* =========================
-   LOGO-COM
-========================= */
-.logo-com {
-    position: absolute;
-    right: 4vw;
-    top: 50vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: fit-content;
-    z-index: -1;
-}
-
-.logo-com img {
-    width: 650px;
-    height: auto;
-}
-
-.logo-com h2 {
-    color: rgba(255, 255, 255, 0.39);
-    font-size: 20px;
-    font-family: 'Share Tech Mono', monospace;
-    text-align: center;
-    margin-top: 6px;
-}
-
-/* =========================
-   RESPONSIVO LOGO-COM
-========================= */
-@media (max-width: 900px) {
-    .logo-com {
-        position: relative;
-        top: auto;
-        right: auto;
-        margin-top: 20px;
-    }
-}
-
-@media (max-width: 600px) {
-    .logo-com {
-        width: 100%;
-        margin-top: 15px;
-    }
-}
-
-
-
-
-
-/* =========================
-   LAYOUT PRINCIPAL
-========================= */
-.layout {
-    display: flex;
-    gap: 24px;
-    padding: 20px;
-    flex-wrap: wrap;
-}
-
-.materias {
-    flex: 3 1 600px;
-    min-width: 300px;
-     max-width: 800px;
-}
-
-/* =========================
-   MEDIA-GERAL RESPONSIVO E FLUIDO
-========================= */
-.media-geral {
-    flex: 1 1 250px;
-    min-width: 220px;
-    max-width: 220px;
-    max-height: fit-content;
-    background: linear-gradient(180deg, #142b2c, #0d0d0d);
-    border: 1px solid rgba(0, 175, 239, 0.5);
-    border-radius: 8px;
-    padding: 24px;
-    text-align: center;
-    box-shadow: 0 0 25px rgba(0, 175, 239, 0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    animation: fadeIn 0.5s ease forwards;
-
-    
-}
-
-/* Sticky lateral em telas grandes */
-@media (min-width: 901px) {
-    .media-geral {
-        position: sticky;
-       
-        align-self: flex-start;
-    }
-}
-
-/* Painel no topo para tablets */
-@media (max-width: 900px) and (min-width: 601px) {
-   .layout {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .materias{
-        width: 90%;
-    }
-    
-    .media-geral {
-        position: relative;
-        width: 100%;
-        margin-bottom: 20px;
-        
-    }
-}
-
-/* Painel abaixo das matérias em celulares */
-@media (max-width: 600px) {
-    .layout {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .materias {
-        flex: 1 1 100%;
-    }
-
-    .media-geral {
-        width: 100%;
-        position: relative;
-        margin-top: 20px;
-    }
-}
-
-.media-geral:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 0 35px rgba(0, 175, 239, 0.3);
-}
-
-.media-geral span {
-    display: block;
-    margin-top: 10px;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: clamp(24px, 4vw, 32px);
-    color: rgb(0, 175, 239);
-}
-
-/* =========================
-   CARDS DE MATÉRIA
-========================= */
-.materia {
-    background: linear-gradient(180deg, #111, #0b0b0b);
-    border: 1px solid #ffffff10;
-    border-left: 4px solid rgb(0, 175, 239);
-    border-radius: 8px;
-    padding: 18px;
-    margin-bottom: 22px;
-    box-shadow: 0 8px 20px #00000080;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    
-}
-
-.materia:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 25px #000000a0;
-}
-
-.materia h2 {
-    font-family: 'Orbitron', Arial, sans-serif;
-    font-size: clamp(16px, 2.2vw, 20px);
-    color: #ffffff;
-    border-bottom: 1px solid rgba(0, 175, 239, 0.3);
-    padding-bottom: 6px;
-    margin-bottom: 10px;
-}
-
-/* =========================
-   LINHAS DE PROVA
-========================= */
-.prova, .prova-tfm {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 12px;
-    align-items: center;
-    padding: 6px 0;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: clamp(12px, 1.5vw, 14px);
 }
 
 /* =========================
@@ -254,23 +38,80 @@ header a{
 input {
     width: 100%;
     padding: 10px;
-    margin: 6px 0;
-    background: #111;
-    border: 1px solid #2c2c2c;
-    color: rgb(255, 255, 255);
+    background: #0f0f0f;
+    border: 1px solid #2a2a2a;
     border-radius: 6px;
-    font-size: 15px;
+    color: white;
+    font-size: 14px;
 }
 
 input:focus {
     outline: none;
-    border-color: rgb(0, 175, 239);
-    box-shadow: 0 0 6px rgb(0, 175, 239, 0.6);
-    background: #000;
+    border-color: var(--primary);
+    box-shadow: 0 0 6px rgba(0,175,239,0.6);
 }
 
 input::placeholder {
-    color: #888;
+    color: #777;
+}
+
+/* =========================
+   LAYOUT PRINCIPAL
+========================= */
+.layout {
+    display: flex;
+    gap: 28px;
+    padding: 24px;
+    max-width: 1400px;
+    margin: auto;
+}
+
+.materias {
+    flex: 3;
+    max-width: 850px;
+}
+
+/* =========================
+   CARD PADRÃO
+========================= */
+.materia {
+    background: linear-gradient(180deg, var(--bg-card), var(--bg-card-2));
+    border: 1px solid var(--border-soft);
+    border-left: 4px solid var(--primary);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-soft);
+    animation: fadeIn 0.4s ease forwards;
+}
+
+.materia:hover {
+    transform: translateY(-2px);
+}
+
+/* =========================
+   TÍTULO DAS MATÉRIAS
+========================= */
+.materia h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 18px;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(0,175,239,0.3);
+}
+
+/* =========================
+   LINHAS DE PROVA
+========================= */
+.prova,
+.prova-tfm {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 6px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
 }
 
 /* =========================
@@ -278,75 +119,119 @@ input::placeholder {
 ========================= */
 .resultado {
     text-align: right;
-    margin-top: 10px;
+    margin-top: 12px;
     font-family: 'Share Tech Mono', monospace;
-    font-size: clamp(13px, 1.5vw, 15px);
 }
 
 .resultado span {
-    color: rgb(0, 175, 239);
-    font-size: clamp(14px, 2vw, 18px);
+    color: var(--primary);
+    font-size: 16px;
+}
+
+/* =========================
+   MÉDIA GERAL (DESTAQUE)
+========================= */
+.media-geral {
+    flex: 1;
+    min-width: 240px;
+    max-width: 260px;
+    height: fit-content;
+    background: linear-gradient(180deg, #132b2c, #0d0d0d);
+    border: 1px solid rgba(0,175,239,0.5);
+    border-radius: 12px;
+    padding: 26px 20px;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(0,175,239,0.25);
+    position: sticky;
+    top: 110px;
+}
+
+.media-geral span {
+    display: block;
+    margin-top: 14px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 34px;
+    color: var(--primary);
+}
+
+/* =========================
+   BOTÃO
+========================= */
+button {
+    margin-top: 12px;
+    padding: 12px 18px;
+    background: var(--primary);
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #000;
+    transition: 0.2s;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+/* =========================
+   LOGO FUNDO
+========================= */
+.logo-com {
+    position: absolute;
+    right: 4vw;
+    top: 50vh;
+    transform: translateY(-50%);
+    opacity: 0.08;
+    z-index: -1;
+    text-align: center;
+}
+
+.logo-com img {
+    width: 520px;
 }
 
 /* =========================
    RESPONSIVO
 ========================= */
-
-
-@media (max-width: 600px) {
-    header {
+@media (max-width: 900px) {
+    .layout {
         flex-direction: column;
         align-items: center;
     }
 
     .materias {
-        flex: 1 1 100%;
+        width: 100%;
     }
 
-    .prova, .prova-tfm {
+    .media-geral {
+        position: relative;
+        width: 100%;
+        max-width: none;
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    .prova,
+    .prova-tfm {
         grid-template-columns: 1fr;
-        gap: 8px;
     }
 
     input {
-       
-        max-width: 150px;
+        max-width: 180px;
     }
 }
 
 /* =========================
-   ANIMAÇÕES LEVES
+   ANIMAÇÕES
 ========================= */
 @keyframes fadeIn {
-    0% { opacity: 0; transform: translateY(10px);}
-    100% { opacity: 1; transform: translateY(0);}
-}
-
-.materia, .media-geral {
-    animation: fadeIn 0.5s ease forwards;
-}
-
-
-
-button { 
-    padding: 20px;
-    width: fit-content;
-    height: fit-content;
-    padding: 12px;
-    margin-top: 12px;
-    background: rgb(0, 175, 239);;
-    color: #000;
-    font-weight: bold;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: 0.2s;
-    text-decoration: none;
-}
-
-.username {
-    font-weight: 600;
-    color: rgb(0,175,239);
-    margin-right: 50px;
-    text-decoration:underline;
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
