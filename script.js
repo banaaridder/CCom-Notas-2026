@@ -110,13 +110,6 @@ const ppm = [
 ];
 
 let carregamentoConcluido = false;
-
-
-/* =========================================
-   AUTO-SAVE INTELIGENTE + FEEDBACK VISUAL
-========================================= */
-
-let autoSaveTimer = null;
 let ultimoSnapshot = "";
 const AUTO_SAVE_DELAY = 1500;
 
@@ -125,75 +118,37 @@ const AUTO_SAVE_DELAY = 1500;
 ========================= */
 function criarSnapshot() {
     const dados = {};
-
     document.querySelectorAll("input, select, textarea").forEach(el => {
         if (!el.id) return;
-
-        if (el.type === "checkbox") {
-            dados[el.id] = el.checked;
-        } else {
-            dados[el.id] = el.value;
-        }
+        if (el.type === "checkbox") dados[el.id] = el.checked;
+        else dados[el.id] = el.value;
     });
-
     return JSON.stringify(dados);
 }
 
-
 /* =========================
-   AGENDAR AUTO-SAVE
+   AUTO-SAVE
 ========================= */
+let autoSaveTimer = null;
 function agendarAutoSave() {
-    const btn = document.getElementById("btnSalvar");
-    const status = document.getElementById("status-save");
-    if (!btn || !status) return;
-
     const snapshotAtual = criarSnapshot();
-
     if (snapshotAtual === ultimoSnapshot) return;
 
-    btn.className = "btn-salvar pendente";
-    status.textContent = "Alterações pendentes…";
-    status.style.color = "#00afef";
+    const btn = document.getElementById("btnSalvar");
+    const status = document.getElementById("status-save");
+    if (btn && status) {
+        btn.className = "btn-salvar pendente";
+        status.textContent = "Alterações pendentes…";
+        status.style.color = "#00afef";
+    }
 
     clearTimeout(autoSaveTimer);
-
-    autoSaveTimer = setTimeout(() => {
-        salvarNotas(snapshotAtual);
-    }, AUTO_SAVE_DELAY);
+    autoSaveTimer = setTimeout(() => salvarNotas(snapshotAtual), AUTO_SAVE_DELAY);
 }
 
-
-
 /* =========================
-   EVENTOS
+   FUNÇÃO SALVAR NOTAS (iOS-FRIENDLY)
 ========================= */
-
-
-
-
-document.addEventListener("DOMContentLoaded", async () => {
-
-    document.getElementById("btnSalvar").addEventListener("click", () => {
-        salvarNotas(criarSnapshot());
-    });
-
-    // 🔥 carrega dados
-    await carregarNotasDoUsuario();
-
-    // 🔥 calcula após carregar
-    calcularTudo();
-
-    // 🔥 auto-save ao digitar
-    document.addEventListener("input", () => {
-        if (!carregamentoConcluido) return;
-        calcularTudo();
-        agendarAutoSave();
-    });
-});
-
-
-
 async function salvarNotas(snapshotAtual, retries = 2) {
     if (!snapshotAtual || !carregamentoConcluido) return;
 
@@ -208,15 +163,15 @@ async function salvarNotas(snapshotAtual, retries = 2) {
 
     const usuarioId = localStorage.getItem("usuarioLogado");
     if (!usuarioId) {
-        status.textContent = "Usuário não logado";
         btn.className = "btn-salvar erro";
+        status.textContent = "Usuário não logado";
+        status.style.color = "#e74c3c";
         return;
     }
 
     let dadosParaSalvar;
-    try {
-        dadosParaSalvar = JSON.parse(snapshotAtual);
-    } catch {
+    try { dadosParaSalvar = JSON.parse(snapshotAtual); } 
+    catch { 
         btn.className = "btn-salvar erro";
         status.textContent = "Erro ao salvar";
         status.style.color = "#e74c3c";
@@ -224,24 +179,30 @@ async function salvarNotas(snapshotAtual, retries = 2) {
     }
 
     try {
+        // upsert direto no Supabase
         const { error } = await window.supabaseClient
             .from("notas")
-            .upsert(
-                { usuario_id: usuarioId, dados: dadosParaSalvar, media_geral: window.mediaGeralAtual ?? null },
-                { onConflict: "usuario_id" }
-            );
+            .upsert({
+                usuario_id: usuarioId,
+                dados: dadosParaSalvar,
+                media_geral: window.mediaGeralAtual ?? null
+            }, { onConflict: "usuario_id" });
 
         if (error) throw error;
 
+        // sucesso
+        ultimoSnapshot = snapshotAtual;
         btn.className = "btn-salvar salvo";
         status.textContent = "Salvo!";
         status.style.color = "#2ecc71";
+
+        // salvar ranking também no Supabase
+        await salvarRanking(usuarioId, window.mediaGeralAtual);
 
     } catch (err) {
         console.warn("Erro ao salvar no Supabase:", err);
 
         if (retries > 0) {
-            console.log("Tentando salvar novamente...");
             setTimeout(() => salvarNotas(snapshotAtual, retries - 1), 1000);
         } else {
             btn.className = "btn-salvar erro";
@@ -250,75 +211,89 @@ async function salvarNotas(snapshotAtual, retries = 2) {
         }
     }
 
-    setTimeout(() => {
-        btn.className = "btn-salvar";
-    }, 2000);
+    setTimeout(() => { if(btn) btn.className = "btn-salvar"; }, 2000);
 }
-
-
-
 
 /* =========================
-   SALVAR RANKING COM LOCALFORAGE
+   SALVAR RANKING (iOS-FRIENDLY)
 ========================= */
-async function salvarNoRanking(usuarioLogado, mediaGeral) {
-    if (!usuarioLogado || mediaGeral === null) return;
-
-    let ranking = [];
-    try {
-        ranking = (await localforage.getItem("ranking")) || [];
-    } catch (e) {
-        console.warn("Não foi possível carregar ranking do localForage:", e);
-        ranking = [];
-    }
-
-    // remove entrada antiga do usuário
-    ranking = ranking.filter(u => u.usuario !== usuarioLogado);
-
-    // adiciona nova
-    ranking.push({
-        usuario: usuarioLogado,
-        media: Number(mediaGeral.toFixed(3))
-    });
-
-    // ordena do maior para o menor
-    ranking.sort((a, b) => b.media - a.media);
+async function salvarRanking(usuarioId, mediaGeral) {
+    if (!usuarioId || mediaGeral == null) return;
 
     try {
-        await localforage.setItem("ranking", ranking);
-    } catch (e) {
-        console.warn("Não foi possível salvar ranking no localForage:", e);
+        // busca ranking existente
+        let { data, error } = await window.supabaseClient
+            .from("ranking")
+            .select("*")
+            .eq("usuario_id", usuarioId);
+
+        if (error) throw error;
+
+        if (data.length > 0) {
+            // atualiza
+            await window.supabaseClient
+                .from("ranking")
+                .update({ media: mediaGeral })
+                .eq("usuario_id", usuarioId);
+        } else {
+            // insere
+            await window.supabaseClient
+                .from("ranking")
+                .insert({ usuario_id: usuarioId, media: mediaGeral });
+        }
+    } catch (err) {
+        console.warn("Não foi possível salvar ranking:", err);
     }
 }
 
-
+/* =========================
+   CARREGAR NOTAS
+========================= */
 async function carregarNotasDoUsuario() {
-
     carregamentoConcluido = false;
 
-    // 🔹 busca dados do Supabase
-    const { data } = await window.supabaseClient
-        .from("notas")
-        .select("dados")
-        .eq("usuario_id", localStorage.getItem("usuarioLogado"))
-        .single();
+    const usuarioId = localStorage.getItem("usuarioLogado");
+    if (!usuarioId) return;
 
-    if (data && data.dados) {
-        Object.entries(data.dados).forEach(([id, valor]) => {
-            const input = document.getElementById(id);
-            if (input) input.value = valor;
-        });
+    try {
+        const { data, error } = await window.supabaseClient
+            .from("notas")
+            .select("dados")
+            .eq("usuario_id", usuarioId)
+            .single();
+
+        if (!error && data?.dados) {
+            Object.entries(data.dados).forEach(([id, valor]) => {
+                const input = document.getElementById(id);
+                if (input) input.value = valor;
+            });
+        }
+
+    } catch (err) {
+        console.warn("Erro ao carregar notas:", err);
     }
 
     calcularTudo();
-
-    // 🔹 snapshot APÓS preencher os inputs
     ultimoSnapshot = criarSnapshot();
-
-    // 🔹 agora sim libera auto-save
     carregamentoConcluido = true;
 }
 
+/* =========================
+   EVENTOS
+========================= */
+document.addEventListener("DOMContentLoaded", async () => {
+    const btn = document.getElementById("btnSalvar");
+    if (btn) btn.addEventListener("click", () => salvarNotas(criarSnapshot()));
+
+    await carregarNotasDoUsuario();
+
+    // auto-save ao digitar
+    document.addEventListener("input", () => {
+        if (!carregamentoConcluido) return;
+        calcularTudo();
+        agendarAutoSave();
+    });
+});
 
 
 /* =========================
@@ -666,6 +641,7 @@ function mascaraTempo(input) {
 
     input.value = valor;
 }
+
 
 
 
