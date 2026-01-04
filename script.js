@@ -1,3 +1,12 @@
+window.onerror = function (msg, src, line, col, err) {
+    alert(
+        "ERRO JS:\n" +
+        msg +
+        "\nLinha: " + line +
+        "\nArquivo: " + src
+    );
+};
+
 /* =========================
    DETECÇÃO iOS (CRÍTICO)
 ========================= */
@@ -381,6 +390,7 @@ function calcularTudo() {
 
     window.mediaGeralAtual = mediaFinal;
 }
+
 
 
 
