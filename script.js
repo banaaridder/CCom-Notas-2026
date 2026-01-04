@@ -159,7 +159,16 @@ document.addEventListener("DOMContentLoaded", async () => {
    SALVAR NOTAS (iOS SAFE)
 ========================= */
 async function salvarNotas(snapshotAtual) {
+   if (!window.supabaseClient) {
+    console.error("SupabaseClient não carregado");
+    btn.className = "btn-salvar erro";
+    status.textContent = "Erro interno (Supabase)";
+    status.style.color = "#e74c3c";
+    return;
+}
 
+
+   
     if (!snapshotAtual || !carregamentoConcluido) return;
 
     const btn = document.getElementById("btnSalvar");
@@ -211,6 +220,24 @@ async function salvarNotas(snapshotAtual) {
         status.style.color = "#e74c3c";
     }
 }
+
+function setUsuarioLogado(valor) {
+    window._usuarioLogadoIOS = valor;
+    try {
+        sessionStorage.setItem("usuarioLogado", valor);
+    } catch {}
+}
+
+function getUsuarioLogado() {
+    try {
+        return sessionStorage.getItem("usuarioLogado")
+            || window._usuarioLogadoIOS
+            || null;
+    } catch {
+        return window._usuarioLogadoIOS || null;
+    }
+}
+
 
 /* =========================
    CARREGAR NOTAS
@@ -378,4 +405,5 @@ function calcularTudo() {
 
     window.mediaGeralAtual = mediaFinal;
 }
+
 
