@@ -35,3 +35,12 @@ overlay.addEventListener('click', () => {
     mobileMenu.classList.remove('active');
     overlay.classList.remove('active');
 });
+
+menuToggle.addEventListener('click', () => {
+    // Alterna a classe 'active' no botão para disparar o CSS do X
+    menuToggle.classList.toggle('active');
+    
+    // Aqui você também pode abrir/fechar seu menu lateral
+    // const meuMenu = document.getElementById('navMenu');
+    // meuMenu.classList.toggle('open');
+});

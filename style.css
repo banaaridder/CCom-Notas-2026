@@ -277,6 +277,7 @@ button:hover {
         width: 100%;
         max-width: none;
         margin-bottom: 150px;
+        z-index: 100;
     }
 }
 
@@ -484,7 +485,7 @@ button:hover {
         backdrop-filter: blur(15px);
         -webkit-backdrop-filter: blur(15px);
         border: 1px solid rgba(0, 175, 239, 0.6);
-        z-index: 99999;
+        z-index: 100;
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
         
         display: flex;

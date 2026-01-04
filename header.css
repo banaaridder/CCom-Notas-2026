@@ -78,6 +78,8 @@ body {
     .logo-mobile {
         display: none;
     }
+
+    
 }
 /* =========================
    CENTRO
@@ -96,7 +98,7 @@ body {
 
 /* NAV CENTRAL */
 .nav-links {
-    margin-top: 8px;
+    margin-bottom: 8px;
     display: flex;
     justify-content: center;
     gap: 30px;
@@ -130,17 +132,42 @@ body {
 ========================= */
 
 .menu-toggle {
+    width: 30px;
+    height: 24px;
     display: none;
-    position: absolute;
-    right: 20px;
-
-    background: none;
+    flex-direction: column;
+    justify-content: space-between;
+    background: transparent;
     border: none;
-    color: rgb(0,175,239);
-    font-size: 28px;
     cursor: pointer;
-    z-index: 1200;
+    padding: 0;
+    z-index: 10001; /* Acima de tudo */
 }
+.menu-toggle span {
+    width: 90%;
+    height: 3px;
+    background-color: var(--primary);
+    border-radius: 10px;
+    transition: all 0.3s ease-in-out;
+}
+/* ----- ESTADO "X" (QUANDO ATIVO) ----- */
+
+/* Linha de cima inclina 45 graus e desce */
+.menu-toggle.active span:nth-child(1) {
+    transform: translateY(10.5px) rotate(45deg);
+}
+
+/* Linha do meio desaparece (fica invisível) */
+.menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+    transform: translateX(-20px);
+}
+
+/* Linha de baixo inclina -45 graus e sobe */
+.menu-toggle.active span:nth-child(3) {
+    transform: translateY(-10.5px) rotate(-45deg);
+}
+
 
 .username{
     cursor: auto;
@@ -234,7 +261,12 @@ body {
     }
 
     .menu-toggle {
-        display: block;
+        display: flex;
+        /* Adicione estas linhas abaixo */
+        position: absolute;
+        right: 20px; /* Alinha no canto direito */
+        top: 30%;
+        transform: translateY(-50%); /* Centraliza verticalmente no header */
     }
 }
 
