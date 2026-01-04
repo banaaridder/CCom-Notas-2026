@@ -244,8 +244,14 @@ async function carregarNotasDoUsuario() {
 /* =========================
    RANKING (iOS SAFE)
 ========================= */
+/* =========================
+   RANKING (FAIL SAFE)
+========================= */
 async function salvarNoRanking(usuarioLogado, mediaGeral) {
+
+    // ranking é opcional
     if (isIOS) return Promise.resolve();
+    if (typeof localforage === "undefined") return Promise.resolve();
     if (!usuarioLogado || mediaGeral == null) return Promise.resolve();
 
     let ranking = (await localforage.getItem("ranking")) || [];
@@ -419,3 +425,4 @@ function calcularTudo() {
 
     window.mediaGeralAtual = mediaFinal;
 }
+
