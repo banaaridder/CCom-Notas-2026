@@ -92,7 +92,7 @@ const ppm = [
 
 let carregamentoConcluido = false;
 
-(function () {
+function () {
     if (!/iPhone|iPad|iPod/i.test(navigator.userAgent)) return;
 
     const box = document.createElement("div");
@@ -409,4 +409,5 @@ function calcularTudo() {
 
     window.mediaGeralAtual = mediaFinal;
 }
+
 
