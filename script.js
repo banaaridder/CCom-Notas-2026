@@ -1,4 +1,6 @@
-
+window.onerror = function(msg, url, line) {
+    alert("Erro: " + msg + "\nLinha: " + line);
+};
 /* =========================
    TABELAS TFM
 ========================= */
@@ -652,6 +654,7 @@ function mascaraTempo(input) {
 
     input.value = valor;
 }
+
 
 
 
