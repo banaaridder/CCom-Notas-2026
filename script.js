@@ -1,8 +1,3 @@
-/* =========================
-   DETECÇÃO DE iOS
-========================= */
-const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-
 
 /* =========================
    TABELAS TFM
@@ -118,116 +113,168 @@ let carregamentoConcluido = false;
 
 
 /* =========================================
-   AUTO-SAVE
+   AUTO-SAVE INTELIGENTE + FEEDBACK VISUAL
 ========================================= */
 
 let autoSaveTimer = null;
 let ultimoSnapshot = "";
 const AUTO_SAVE_DELAY = 1500;
 
+/* =========================
+   SNAPSHOT DOS INPUTS
+========================= */
 function criarSnapshot() {
     const dados = {};
+
     document.querySelectorAll("input, select, textarea").forEach(el => {
         if (!el.id) return;
-        dados[el.id] = el.type === "checkbox" ? el.checked : el.value;
+
+        if (el.type === "checkbox") {
+            dados[el.id] = el.checked;
+        } else {
+            dados[el.id] = el.value;
+        }
     });
+
     return JSON.stringify(dados);
 }
 
+
+/* =========================
+   AGENDAR AUTO-SAVE
+========================= */
 function agendarAutoSave() {
-    if (!carregamentoConcluido) return;
+    const btn = document.getElementById("btnSalvar");
+    const status = document.getElementById("status-save");
+    if (!btn || !status) return;
+
+    const snapshotAtual = criarSnapshot();
+
+    if (snapshotAtual === ultimoSnapshot) return;
+
+    btn.className = "btn-salvar pendente";
+    status.textContent = "Alterações pendentes…";
+    status.style.color = "#00afef";
+
     clearTimeout(autoSaveTimer);
+
     autoSaveTimer = setTimeout(() => {
-        salvarNotas(criarSnapshot());
+        salvarNotas(snapshotAtual);
     }, AUTO_SAVE_DELAY);
 }
+
 
 
 /* =========================
    EVENTOS
 ========================= */
 
+
+
+
 document.addEventListener("DOMContentLoaded", async () => {
 
-    const btnSalvar = document.getElementById("btnSalvar");
+    document.getElementById("btnSalvar").addEventListener("click", () => {
+        salvarNotas(criarSnapshot());
+    });
 
-    if (btnSalvar) {
-        // iOS
-        btnSalvar.addEventListener("touchstart", e => {
-            e.preventDefault();
-            salvarNotas(criarSnapshot());
-        });
-
-        // Desktop / Android
-        btnSalvar.addEventListener("click", () => {
-            salvarNotas(criarSnapshot());
-        });
-    }
-
+    // 🔥 carrega dados
     await carregarNotasDoUsuario();
+
+    // 🔥 calcula após carregar
     calcularTudo();
 
-    ["input", "change", "blur"].forEach(evt => {
-        document.addEventListener(evt, () => {
-            if (!carregamentoConcluido) return;
-            calcularTudo();
-            agendarAutoSave();
-        }, true);
+    // 🔥 auto-save ao digitar
+    document.addEventListener("input", () => {
+        if (!carregamentoConcluido) return;
+        calcularTudo();
+        agendarAutoSave();
     });
 });
 
 
+
 /* =========================
-   SALVAR / CARREGAR
+   SALVAR / CARREGAR NOTAS
 ========================= */
 
 async function salvarNotas(snapshotAtual) {
-    if (!snapshotAtual || !carregamentoConcluido) return;
-
-    const usuarioId = localStorage.getItem("usuarioLogado");
-    if (!usuarioId) return;
-
-    let dados;
-    try {
-        dados = JSON.parse(snapshotAtual);
-    } catch {
+    if (!snapshotAtual) {
+        console.warn("Snapshot inválido, salvamento ignorado");
         return;
     }
 
+    if (!carregamentoConcluido) return;
+
+    const btn = document.getElementById("btnSalvar");
+    const status = document.getElementById("status-save");
+
+    btn.className = "btn-salvar salvando";
+    status.textContent = "Salvando…";
+    status.style.color = "#4fc3f7";
+
     calcularTudo();
 
-    await window.supabaseClient
+    const usuarioId = localStorage.getItem("usuarioLogado");
+    if (!usuarioId) {
+        status.textContent = "Usuário não logado";
+        btn.className = "btn-salvar erro";
+        return;
+    }
+
+    const { error } = await window.supabaseClient
         .from("notas")
-        .upsert({
-            usuario_id: usuarioId,
-            dados,
-            media_geral: window.mediaGeralAtual ?? null
-        }, { onConflict: "usuario_id" });
+        .upsert(
+            {
+                usuario_id: usuarioId,
+                dados: JSON.parse(snapshotAtual),
+                media_geral: window.mediaGeralAtual ?? null
+            },
+            { onConflict: "usuario_id" }
+        );
+
+    if (error) {
+        console.error(error);
+        btn.className = "btn-salvar erro";
+        status.textContent = "Erro ao salvar";
+        status.style.color = "#e74c3c";
+        return;
+    }
 
     ultimoSnapshot = snapshotAtual;
 
-    await salvarNoRanking(usuarioId, window.mediaGeralAtual);
+    btn.className = "btn-salvar salvo";
+    status.textContent = "Salvo!";
+    status.style.color = "#2ecc71";
+
+    setTimeout(() => {
+        btn.className = "btn-salvar";
+    }, 2000);
 }
 
 
-/* =========================
-   RANKING (iOS SAFE)
-========================= */
 
-async function salvarNoRanking(usuarioLogado, mediaGeral) {
-    if (isIOS) return;
-    if (!usuarioLogado || mediaGeral == null) return;
 
-    let ranking = (await localforage.getItem("ranking")) || [];
+function salvarNoRanking() {
+    const usuarioLogado = localStorage.getItem("usuarioLogado");
+
+    if (!usuarioLogado || window.mediaGeralAtual === null) return;
+
+    let ranking = JSON.parse(localStorage.getItem("ranking")) || [];
+
+    // remove entrada antiga do usuário
     ranking = ranking.filter(u => u.usuario !== usuarioLogado);
 
+    // adiciona nova
     ranking.push({
         usuario: usuarioLogado,
-        media: Number(mediaGeral.toFixed(3))
+        media: Number(window.mediaGeralAtual.toFixed(3))
     });
 
+    // ordena do maior para o menor
     ranking.sort((a, b) => b.media - a.media);
-    await localforage.setItem("ranking", ranking);
+
+    localStorage.setItem("ranking", JSON.stringify(ranking));
 }
 
 
