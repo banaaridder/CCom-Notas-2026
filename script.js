@@ -201,59 +201,77 @@ document.addEventListener("DOMContentLoaded", async () => {
 ========================= */
 
 async function salvarNotas(snapshotAtual) {
-    if (!snapshotAtual) {
-        console.warn("Snapshot inválido, salvamento ignorado");
-        return;
-    }
-
-    if (!carregamentoConcluido) return;
+    // 1. Validações Iniciais
+    if (!snapshotAtual || !carregamentoConcluido) return;
 
     const btn = document.getElementById("btnSalvar");
     const status = document.getElementById("status-save");
-
-    btn.className = "btn-salvar salvando";
-    status.textContent = "Salvando…";
-    status.style.color = "#4fc3f7";
-
-    calcularTudo();
-
     const usuarioId = localStorage.getItem("usuarioLogado");
+
     if (!usuarioId) {
-        status.textContent = "Usuário não logado";
-        btn.className = "btn-salvar erro";
+        if (status) status.textContent = "Erro: Usuário não logado";
         return;
     }
 
-    const { error } = await window.supabaseClient
-        .from("notas")
-        .upsert(
-            {
-                usuario_id: usuarioId,
-                dados: JSON.parse(snapshotAtual),
-                media_geral: window.mediaGeralAtual ?? null
-            },
-            { onConflict: "usuario_id" }
-        );
-
-    if (error) {
-        console.error(error);
-        btn.className = "btn-salvar erro";
-        status.textContent = "Erro ao salvar";
-        status.style.color = "#e74c3c";
-        return;
+    // Feedback visual de carregamento
+    btn.className = "btn-salvar salvando";
+    if (status) {
+        status.textContent = "Salvando...";
+        status.style.color = "#4fc3f7";
     }
 
-    ultimoSnapshot = snapshotAtual;
+    try {
+        // 2. Cálculo de segurança (Evita enviar NaN para o banco)
+        calcularTudo();
+        const mediaFinalValida = (isNaN(window.mediaGeralAtual) || window.mediaGeralAtual === null) 
+                                 ? 0 
+                                 : parseFloat(window.mediaGeralAtual.toFixed(3));
 
-    btn.className = "btn-salvar salvo";
-    status.textContent = "Salvo!";
-    status.style.color = "#2ecc71";
+        // 3. Limpeza do Objeto JSON (Crucial para o Safari/iOS)
+        // Transformamos em String e voltamos para Objeto para garantir que não existam referências ao DOM
+        const dadosLimpos = JSON.parse(snapshotAtual);
 
-    setTimeout(() => {
-        btn.className = "btn-salvar";
-    }, 2000);
+        // 4. Chamada ao Supabase com tratamento de erro específico
+        const { error } = await window.supabaseClient
+            .from("notas")
+            .upsert(
+                {
+                    usuario_id: usuarioId,
+                    dados: dadosLimpos,
+                    media_geral: mediaFinalValida
+                },
+                { onConflict: "usuario_id" }
+            );
+
+        if (error) throw error;
+
+        // 5. Sucesso
+        ultimoSnapshot = snapshotAtual;
+        btn.className = "btn-salvar salvo";
+        if (status) {
+            status.textContent = "Salvo com sucesso!";
+            status.style.color = "#2ecc71";
+        }
+
+        // Salva também no ranking local (opcional, já que está no banco)
+        salvarNoRanking();
+
+    } catch (err) {
+        // 6. Captura de erro visível para você saber o que houve no iPhone
+        console.error("Erro completo:", err);
+        btn.className = "btn-salvar erro";
+        if (status) {
+            status.textContent = "Erro ao salvar!";
+            status.style.color = "#e74c3c";
+        }
+        // Alerta apenas para debug em produção no iOS
+        alert("Erro no iOS: " + (err.message || "Conexão falhou"));
+    } finally {
+        setTimeout(() => {
+            btn.className = "btn-salvar";
+        }, 2000);
+    }
 }
-
 
 
 
@@ -654,6 +672,7 @@ function mascaraTempo(input) {
 
     input.value = valor;
 }
+
 
 
 
