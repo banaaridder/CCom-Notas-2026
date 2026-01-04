@@ -141,10 +141,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const btnSalvar = document.getElementById("btnSalvar");
 
-    btnSalvar.addEventListener("pointerup", async e => {
-        e.preventDefault();
-        await salvarNotas(criarSnapshot(), true);
-    });
+   btnSalvar.addEventListener("click", async () => {
+    await salvarNotas(criarSnapshot());
+});
 
     await carregarNotasDoUsuario();
     calcularTudo();
@@ -379,3 +378,4 @@ function calcularTudo() {
 
     window.mediaGeralAtual = mediaFinal;
 }
+
