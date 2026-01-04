@@ -676,4 +676,55 @@ function mascaraTempo(input) {
 
 
 
+document.addEventListener("DOMContentLoaded", () => {
+    const containerMedia = document.getElementById('container-media');
+    const anchor = document.getElementById('anchor-media');
+    const body = document.body;
 
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            // Verifica se é mobile (largura menor que 768px)
+            const isMobile = window.innerWidth <= 768;
+
+            if (isMobile) {
+                if (!entry.isIntersecting) {
+                    // Se a div original sumiu da tela, ativa a flutuante
+                    containerMedia.classList.add('fixed-mobile');
+                    body.classList.add('with-fixed-footer');
+                } else {
+                    // Se a div original apareceu (chegou no fim), volta ao normal
+                    containerMedia.classList.remove('fixed-mobile');
+                    body.classList.remove('with-fixed-footer');
+                }
+            } else {
+                // Prevenção para Desktop
+                containerMedia.classList.remove('fixed-mobile');
+                body.classList.remove('with-fixed-footer');
+            }
+        });
+    }, {
+        threshold: 0.1 // Dispara quando 10% do container original estiver visível
+    });
+
+    if (anchor) observer.observe(anchor);
+});
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        const isMobile = window.innerWidth <= 768;
+
+        if (isMobile) {
+            if (!entry.isIntersecting) {
+                containerMedia.classList.add('fixed-mobile');
+                document.body.classList.add('with-fixed-footer');
+            } else {
+                containerMedia.classList.remove('fixed-mobile');
+                document.body.classList.remove('with-fixed-footer');
+            }
+        } else {
+            // No Desktop, removemos qualquer traço de fixação mobile
+            containerMedia.classList.remove('fixed-mobile');
+            document.body.classList.remove('with-fixed-footer');
+        }
+    });
+}, { threshold: 0.1 });

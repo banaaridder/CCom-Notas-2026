@@ -8,6 +8,7 @@
      <script src="script.js"></script>
     <script src="auth.js"></script>
     
+    <meta name="theme-color" content="#1b383a">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
        <!-- Ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -20,6 +21,8 @@
 <body>
    <header class="header">
     <img src="assets/AL.png" class="logo">
+
+     <img src="assets/com.png" class="logo-mobile">
 
     <div class="center">
         <h1>COMUNICAÇÕES</h1>
@@ -320,26 +323,24 @@
 </div>
     </div>
 
-<div class="media-geral">
-    <h3>Média Geral</h3>
+</div>
 
-    <span id="media-geral">--</span>
+<div id="anchor-media">
+    <div class="media-geral" id="container-media">
+        <h3>Média Geral</h3>
+        <span id="media-geral">--</span>
 
-    <button id="btnSalvar" type="button" class="btn-salvar">
-    <span class="btn-text">Salvar</span>
+        <button id="btnSalvar" type="button" class="btn-salvar">
+            <span class="btn-text">Salvar</span>
+            <span class="btn-spinner"></span>
+            <span class="btn-check">✓</span>
+        </button>
 
-    <span class="btn-spinner"></span>
-
-    <span class="btn-check">✓</span>
-</button>
-
-
-    <small id="status-save">Tudo salvo</small>
+        <small id="status-save">Tudo salvo</small>
+    </div>
 </div>
 
 
-
-</div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase.js"></script>

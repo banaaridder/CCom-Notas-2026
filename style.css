@@ -22,8 +22,15 @@
 }
 
 html, body {
-    overflow-x: hidden;
+    overflow-x: hidden; /* Mantém apenas o bloqueio horizontal */
+    height: auto;       /* Garante que o corpo cresça com o conteúdo */
 }
+
+/* Na LAYOUT e MATERIAS */
+.layout, .materias, .materia {
+    overflow: visible; /* Mude de hidden para visible para evitar scrolls internos */
+}
+
 
 body {
     font-family: 'Inter', Arial, sans-serif;
@@ -60,19 +67,21 @@ input::placeholder {
 ========================= */
 .layout {
     display: flex;
-    gap: 28px;
+    justify-content: center;
+    gap: 40px; /* Espaço entre matérias e média */
     padding: 24px;
-    max-width: 1400px;
-    margin: auto;
-
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
 }
 
 .materias {
-
-    flex: 3;
-    max-width: 850px;
+    flex: 1;
+    width: 100%;
+    max-width: 800px; /* Largura fixa para não esticar demais */
+     overflow: hidden;
 }
-
 /* =========================
    CARD PADRÃO
 ========================= */
@@ -85,6 +94,7 @@ input::placeholder {
     margin-bottom: 24px;
     box-shadow: var(--shadow-soft);
     animation: fadeIn 0.4s ease forwards;
+     overflow: hidden;
 }
 
 .materia:hover {
@@ -135,8 +145,7 @@ input::placeholder {
 ========================= */
 .media-geral {
     flex: 1;
-    min-width: 240px;
-    max-width: 260px;
+    min-width: 300px;
     height: fit-content;
     background: linear-gradient(180deg, #132b2c, #0d0d0d);
     border: 1px solid rgba(0,175,239,0.5);
@@ -147,6 +156,7 @@ input::placeholder {
     position: sticky;
     top: 120px; /* distância do header */
     z-index: 10;
+
 }
 
 .media-geral h3 {
@@ -185,19 +195,25 @@ input::placeholder {
 @media (min-width: 901px) {
     .media-geral {
         position: fixed;
-        right: 24px;
+        right: 40px; 
         top: 120px;
-        width: 260px;
-        margin-right: 2vw;
+        width: 280px; /* Defina uma largura real, não 10px */
+        margin: 0;
+    }
+
+    .layout {
+        display: flex;
+        justify-content: flex-start;
+        padding-right: 340px; /* Abre espaço para a div fixa sem quebrar o layout */
+        max-width: 1200px;
+        margin: 0 auto;
     }
 
     .materias {
-        margin-right: 300px;
-        margin-left: 2vw;
+        flex: 1;
+        max-width: none; /* Deixa as matérias ocuparem o espaço restante */
     }
 }
-
-
 
 /* =========================
    BOTÃO
@@ -407,4 +423,88 @@ button:hover {
     0% { box-shadow: 0 0 0 0 rgba(0,175,239,0.7); }
     70% { box-shadow: 0 0 0 10px rgba(0,175,239,0); }
     100% { box-shadow: 0 0 0 0 rgba(0,175,239,0); }
+}
+
+/* 1. Container Âncora (Onde a div mora originalmente) */
+#anchor-media {
+    margin-left: 20px;
+    margin-right: 20px;
+    width: auto;
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+
+
+
+/* =========================
+   RESPONSIVO E FLUTUANTE
+========================= */
+
+/* Ajuste do layout geral para mobile */
+@media (max-width: 900px) {
+    .layout {
+        flex-direction: column;
+        align-items: center;
+        padding: 15px;
+    }
+
+    .materias {
+        width: 100%;
+        max-width: none;
+    }
+
+    /* Removemos as margens negativas antigas que quebravam o layout */
+    .media-geral {
+        margin-top: -100px;
+        position: relative;
+        width: 90%; 
+        max-width: 500px;
+    }
+}
+
+
+
+/* 2. O Estilo da Div Flutuante Centralizada (Apenas Mobile) */
+@media (max-width: 768px) {
+    /* Forçamos o reset de propriedades que vinham de seletores anteriores */
+    .media-geral.fixed-mobile {
+        position: fixed !important; /* !important garante que ignore o relative/sticky anterior */
+        bottom: 25px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        top: auto !important; /* anula o top: 120px do desktop */
+        
+        width: 90%;
+        max-width: 400px;
+        margin: 0 !important;
+        border-radius: 20px;
+        background: rgba(15, 15, 15, 0.95);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(0, 175, 239, 0.6);
+        z-index: 99999;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+        
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        padding: 15px;
+    }   
+
+    /* Deixar os textos menores na div flutuante para ficar elegante */
+    .media-geral.fixed-mobile h3 { font-size: 0.9rem; margin: 0; }
+    .media-geral.fixed-mobile span#media-geral { font-size: 1.8rem; margin: 2px 0; }
+    .media-geral.fixed-mobile .btn-salvar { height: 40px; }
+    
+    /* Espaço no fim da página para a div flutuante não cobrir o último input */
+    body.with-fixed-footer {
+        padding-bottom: 200px !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .prova, .prova-tfm { grid-template-columns: 1fr; }
+    input { max-width: none; } /* Deixa o input ocupar a largura do card no mobile */
 }
