@@ -7,21 +7,6 @@ const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent)
 /* =========================
    STORAGE BLINDADO
 ========================= */
-function setUsuarioLogado(valor) {
-    try {
-        localStorage.setItem("usuarioLogado", valor);
-    } catch {
-        window._usuarioLogadoIOS = valor;
-    }
-}
-
-function getUsuarioLogado() {
-    try {
-        return localStorage.getItem("usuarioLogado");
-    } catch {
-        return window._usuarioLogadoIOS || null;
-    }
-}
 
 /* =========================
    TABELAS TFM
@@ -159,13 +144,6 @@ document.addEventListener("DOMContentLoaded", async () => {
    SALVAR NOTAS (iOS SAFE)
 ========================= */
 async function salvarNotas(snapshotAtual) {
-   if (!window.supabaseClient) {
-    console.error("SupabaseClient não carregado");
-    btn.className = "btn-salvar erro";
-    status.textContent = "Erro interno (Supabase)";
-    status.style.color = "#e74c3c";
-    return;
-}
 
 
    
@@ -405,5 +383,6 @@ function calcularTudo() {
 
     window.mediaGeralAtual = mediaFinal;
 }
+
 
 
