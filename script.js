@@ -109,6 +109,12 @@ const ppm = [
     { aa: 473, ac: 463, nota: 0 }
 ];
 
+// =========================
+// DETECÇÃO DE iOS
+// =========================
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+
 let carregamentoConcluido = false;
 
 
@@ -174,9 +180,21 @@ function agendarAutoSave() {
 
 document.addEventListener("DOMContentLoaded", async () => {
 
-    document.getElementById("btnSalvar").addEventListener("click", () => {
+    const btnSalvar = document.getElementById("btnSalvar");
+
+if (btnSalvar) {
+    // iOS
+    btnSalvar.addEventListener("touchstart", e => {
+        e.preventDefault();
         salvarNotas(criarSnapshot());
     });
+
+    // Desktop / Android
+    btnSalvar.addEventListener("click", () => {
+        salvarNotas(criarSnapshot());
+    });
+}
+
 
     // 🔥 carrega dados
     await carregarNotasDoUsuario();
@@ -279,7 +297,13 @@ async function salvarNotas(snapshotAtual) {
 /* =========================
    SALVAR RANKING COM LOCALFORAGE
 ========================= */
+/* =========================
+   SALVAR RANKING (iOS SAFE)
+========================= */
 async function salvarNoRanking(usuarioLogado, mediaGeral) {
+    // ❌ iOS não usa localForage
+    if (isIOS) return;
+
     if (!usuarioLogado || mediaGeral === null) return;
 
     let ranking = [];
@@ -290,16 +314,13 @@ async function salvarNoRanking(usuarioLogado, mediaGeral) {
         ranking = [];
     }
 
-    // remove entrada antiga do usuário
     ranking = ranking.filter(u => u.usuario !== usuarioLogado);
 
-    // adiciona nova
     ranking.push({
         usuario: usuarioLogado,
         media: Number(mediaGeral.toFixed(3))
     });
 
-    // ordena do maior para o menor
     ranking.sort((a, b) => b.media - a.media);
 
     try {
