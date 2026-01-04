@@ -144,8 +144,6 @@ document.addEventListener("DOMContentLoaded", async () => {
    SALVAR NOTAS (iOS SAFE)
 ========================= */
 async function salvarNotas(snapshotAtual) {
-
-
    
     if (!snapshotAtual || !carregamentoConcluido) return;
 
@@ -198,24 +196,6 @@ async function salvarNotas(snapshotAtual) {
         status.style.color = "#e74c3c";
     }
 }
-
-function setUsuarioLogado(valor) {
-    window._usuarioLogadoIOS = valor;
-    try {
-        sessionStorage.setItem("usuarioLogado", valor);
-    } catch {}
-}
-
-function getUsuarioLogado() {
-    try {
-        return sessionStorage.getItem("usuarioLogado")
-            || window._usuarioLogadoIOS
-            || null;
-    } catch {
-        return window._usuarioLogadoIOS || null;
-    }
-}
-
 
 /* =========================
    CARREGAR NOTAS
@@ -383,6 +363,7 @@ function calcularTudo() {
 
     window.mediaGeralAtual = mediaFinal;
 }
+
 
 
 
