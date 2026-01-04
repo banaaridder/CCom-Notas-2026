@@ -92,6 +92,36 @@ const ppm = [
 
 let carregamentoConcluido = false;
 
+(function () {
+    if (!/iPhone|iPad|iPod/i.test(navigator.userAgent)) return;
+
+    const box = document.createElement("div");
+    box.style.cssText = `
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        max-height: 40%;
+        overflow: auto;
+        background: black;
+        color: lime;
+        font-size: 11px;
+        z-index: 99999;
+        padding: 6px;
+        font-family: monospace;
+    `;
+    document.body.appendChild(box);
+
+    const log = msg => {
+        box.innerHTML += `<div>${msg}</div>`;
+        box.scrollTop = box.scrollHeight;
+    };
+
+    console.log = (...a) => log(a.join(" "));
+    console.error = (...a) => log("❌ " + a.join(" "));
+})();
+
+
 /* =========================
    AUTO-SAVE
 ========================= */
@@ -379,3 +409,4 @@ function calcularTudo() {
 
     window.mediaGeralAtual = mediaFinal;
 }
+
