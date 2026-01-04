@@ -152,6 +152,50 @@ async function salvarNoRanking(usuarioLogado, mediaGeral) {
     await localforage.setItem("ranking", ranking);
 }
 
+/* =========================
+   MATÉRIAS TEÓRICAS
+========================= */
+function calcularMateria(prefixo) {
+    let provas;
+
+    // matérias que só têm AA e AC
+    const materiasSimples = ["fund", "empre", "pt", "racio", "didat"];
+
+    if (materiasSimples.includes(prefixo)) {
+        provas = [
+            { id: "aa", peso: 1 },
+            { id: "ac", peso: 2 }
+        ];
+    } else {
+        // matérias com AA1, AA2 e AC
+        provas = [
+            { id: "aa1", peso: 1 },
+            { id: "aa2", peso: 1 },
+            { id: "ac", peso: 2 }
+        ];
+    }
+
+    let soma = 0;
+    let pesoTotal = 0;
+
+    provas.forEach(p => {
+        const acertos = Number(
+            document.getElementById(`acertos-${prefixo}-${p.id}`)?.value
+        );
+        const total = Number(
+            document.getElementById(`total-${prefixo}-${p.id}`)?.value
+        );
+
+        if (!isNaN(acertos) && !isNaN(total) && total > 0) {
+            const nota = (acertos / total) * 10;
+            soma += nota * p.peso;
+            pesoTotal += p.peso;
+        }
+    });
+
+    return pesoTotal > 0 ? soma / pesoTotal : null;
+}
+
 
 /* =========================
    UTILIDADES
@@ -285,3 +329,4 @@ function calcularTudo() {
 
     window.mediaGeralAtual = mediaFinal;
 }
+
