@@ -117,8 +117,9 @@ body {
     z-index: 1200;
 }
 
-#username{
+.username{
     cursor: auto;
+    text-decoration: underline;
 }
 
 /* =========================
@@ -155,6 +156,12 @@ body {
     margin-top: 40px;
     color: #ff4d4d;
 }
+
+.logout-desktop i {
+    margin-left: 20px;
+}
+
+
 
 /* FECHAR */
 .close-menu {
