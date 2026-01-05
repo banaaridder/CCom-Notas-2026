@@ -219,7 +219,6 @@ input::placeholder {
    BOTÃO
 ========================= */
 button {
-    margin-top: 12px;
     padding: 12px 18px;
     background: var(--primary);
     border: none;

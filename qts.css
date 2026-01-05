@@ -1,12 +1,12 @@
-#calendario{
-
+#qts{
+    width:100%;
     height: 100%;
     background-color: white;
     border-radius: 12px;
 }
 
 @media (max-width: 728px){
-    #calendario{
+    #qts{
        width: 100%;
        height: auto;
     }
@@ -14,13 +14,13 @@
 }
 
 .box{
-    display:flex;
+    display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.box-calendario{
-    margin-top: 50px;
+.box-qts{
+   margin-top: 50px;
     width: 90%;
     display: flex;
     flex-direction: column;

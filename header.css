@@ -1,4 +1,18 @@
 /* =========================
+   VARIÁVEIS GLOBAIS
+========================= */
+:root {
+    --bg-main: #0d0d0d;
+    --bg-card: #111;
+    --bg-card-2: #0b0b0b;
+    --primary: rgb(0,175,239);
+    --border-soft: rgba(255,255,255,0.08);
+    --text-main: #e6e6e6;
+    --text-muted: #9aa0a6;
+    --shadow-soft: 0 8px 22px rgba(0,0,0,0.7);
+}
+
+/* =========================
    RESET
 ========================= */
 * {
@@ -94,11 +108,12 @@ body {
     color: rgb(0,175,239);
     letter-spacing: 2px;
     font-size: clamp(22px, 3vw, 30px);
+    margin-bottom: 10px;
 }
 
 /* NAV CENTRAL */
 .nav-links {
-    margin-bottom: 8px;
+
     display: flex;
     justify-content: center;
     gap: 30px;
@@ -146,9 +161,9 @@ body {
 .menu-toggle span {
     width: 90%;
     height: 3px;
-    background-color: var(--primary);
+    background-color: rgb(0, 175, 239); /* Cor azul padrão do seu site */
     border-radius: 10px;
-    transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;   
 }
 /* ----- ESTADO "X" (QUANDO ATIVO) ----- */
 
@@ -261,12 +276,11 @@ body {
     }
 
     .menu-toggle {
-        display: flex;
-        /* Adicione estas linhas abaixo */
+display: flex;
         position: absolute;
-        right: 20px; /* Alinha no canto direito */
-        top: 30%;
-        transform: translateY(-50%); /* Centraliza verticalmente no header */
+        right: 20px; 
+        top: 50%; /* <--- ALTERE DE 30% PARA 50% */
+        transform: translateY(-50%); /* Isso agora funcionará corretamente */
     }
 }
 
