@@ -1,3 +1,5 @@
+
+
 document.addEventListener('DOMContentLoaded', async () => {
     const usuarioId = localStorage.getItem("usuarioLogado");
 
@@ -61,6 +63,12 @@ async function salvarProgressoSupabase() {
 
 // FUNÇÃO PARA CARREGAR
 async function carregarProgressoSupabase(id) {
+
+    if (typeof supabase === 'undefined' || !supabase.from) {
+        console.error("Erro: A instância do Supabase não foi encontrada. Verifique o arquivo supabase.js");
+        return;
+    }
+    
     const { data, error } = await supabase
         .from('estados_campo')
         .select('checklist_data')
