@@ -1,0 +1,302 @@
+/* --- VARIÁVEIS DE CORES TÁTICAS --- */
+:root {
+    --primary-blue: #00afef;
+    --primary-glow: rgba(0, 175, 239, 0.4);
+    --military-green: #2ecc71;
+    --danger-red: #e74c3c;
+    --bg-dark: #0a0c10;
+    --card-bg: rgba(20, 25, 35, 0.85);
+    --border-color: rgba(0, 175, 239, 0.2);
+}
+
+/* --- ESTILO GERAL --- */
+body {
+    background-color: var(--bg-dark);
+    color: #e0e0e0;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+.ferramenta-calc {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(0, 175, 239, 0.3);
+    padding: 25px;
+    border-radius: 12px;
+    max-width: 450px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+.ferramenta-calc h2 {
+    color: #00afef;
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+}
+
+.instrucao {
+    font-size: 0.85rem;
+    color: #aaa;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.input-group input {
+    background: #000;
+    border: 1px solid #00afef;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    width: 150px;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+.btn-calc {
+    background: #00afef;
+    color: #000;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-calc:hover {
+    background: #008ec2;
+    transform: scale(1.05);
+}
+
+.resultado-antena {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(0, 175, 239, 0.2);
+}
+
+.res-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.res-item strong {
+    color: #2ecc71;
+}
+
+.obs {
+    font-size: 0.75rem;
+    color: #666;
+    margin-top: 15px;
+}
+
+
+
+.ferramenta-tecnica {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    padding: 25px;
+    border-radius: 15px;
+    max-width: 800px;
+    margin: 30px auto;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Detalhe decorativo no canto do card */
+.ferramenta-tecnica::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--primary-blue);
+    box-shadow: 0 0 15px var(--primary-glow);
+}
+
+h2 {
+    color: var(--primary-blue);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 1.25rem;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* --- TABS ESTILIZADAS --- */
+.tabs {
+    display: flex;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 5px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    gap: 5px;
+}
+
+.tab-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #888;
+    padding: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+}
+
+.tab-btn:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.tab-btn.active {
+    background: var(--primary-blue);
+    color: #000;
+    box-shadow: 0 0 15px var(--primary-glow);
+}
+
+/* --- TABELAS TÁTICAS --- */
+.tabela-scroll {
+    max-height: 450px;
+    overflow-y: auto;
+    border-radius: 8px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-blue) transparent;
+}
+
+.tabela-consulta {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.tabela-consulta th {
+    background: rgba(0, 175, 239, 0.1);
+    color: var(--primary-blue);
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    padding: 15px;
+    text-align: left;
+    position: sticky;
+    top: 0;
+    backdrop-filter: blur(10px);
+}
+
+.tabela-consulta td {
+    padding: 12px 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 0.9rem;
+}
+
+.tabela-consulta tr:hover td {
+    background: rgba(0, 175, 239, 0.05);
+}
+
+/* Estilo para o Código Morse */
+.tabela-consulta td:last-child {
+    font-family: 'Courier New', monospace;
+    color: var(--military-green);
+    font-weight: bold;
+    letter-spacing: 3px;
+    font-size: 1.1rem;
+}
+
+.separator {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--primary-blue);
+    font-weight: 800;
+    text-align: center !important;
+    letter-spacing: 5px;
+    font-size: 0.7rem !important;
+    padding: 10px !important;
+}
+
+/* --- SIMULADOR E CALCULADORA --- */
+.display-militar {
+    background: #050a05;
+    border: 1px solid #005500;
+    border-radius: 8px;
+    padding: 20px;
+    font-family: 'Courier New', Courier, monospace;
+    color: #00ff00;
+    text-shadow: 0 0 10px #00ff00;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+/* Efeito de scanline no display */
+.display-militar::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+                linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 180, 0.02));
+    background-size: 100% 2px, 3px 100%;
+    pointer-events: none;
+}
+
+.input-group input, #input-senha {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--border-color);
+    color: #fff;
+    padding: 12px;
+    border-radius: 6px;
+    outline: none;
+    transition: 0.3s;
+}
+
+.input-group input:focus, #input-senha:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 10px var(--primary-glow);
+}
+
+.btn-calc {
+    background: var(--primary-blue);
+    color: #000;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 6px;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-calc:hover {
+    filter: brightness(1.2);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px var(--primary-glow);
+}
+
+/* --- RESPONSIVIDADE --- */
+@media (max-width: 600px) {
+    .ferramenta-tecnica {
+        padding: 15px;
+        margin: 15px;
+    }
+    
+    .tab-btn {
+        padding: 10px 5px;
+        font-size: 0.7rem;
+    }
+
+    .tabela-consulta td {
+        padding: 10px 8px;
+        font-size: 0.8rem;
+    }
+}

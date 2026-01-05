@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <title>Campo CCom</title>
 
-    <!-- Ícones -->
+
+     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="header.css">
     <link rel="stylesheet" href="campo.css">
@@ -14,7 +15,7 @@
 </head>
 <body>
 <header class="header">
-    <img src="assets/AL.png" class="logo">
+    <img src="assets/com.png" class="logo">
 
      <img src="assets/com.png" class="logo-mobile">
 
@@ -38,8 +39,8 @@
         <i class="fas fa-right-from-bracket"></i>
         Sair
     </a>
-
-    <img src="assets/com.png" class="logo">
+    <img src="assets/AL.png" class="logo">
+    
 
     <!-- BOTÃO MOBILE -->
         <button class="menu-toggle" id="menuToggle">
@@ -67,10 +68,428 @@
 
 <div class="overlay"></div>
 
+
+<main class="campos-container">
+    
+<h2 class="titulo-pagina">Aprestamento</h2>
+
+<div class="card-aprestamento">
+    <div class="card-header">
+        <div class="card-info">
+            <h3>Aprestamento - SIEsp</h3>
+            <p>Conforme Anexo B da OI nº 003</p>
+        </div>
+        <i class="fas fa-chevron-down seta-expandir"></i>
+    </div>
+    
+    <div class="card-content">
+        <div class="kit-container open">
+            <div class="kit-header" onclick="toggleKit(this)">
+                <label class="checkbox-kit">
+                    <input type="checkbox" class="kit-master-check" disabled>
+                    <span class="kit-name">Mochila</span>
+                </label>
+                <i class="fas fa-plus"></i>
+            </div>
+            <div class="kit-items">
+                <label><input type="checkbox" onchange="checkKit(this)"> Saco de Dormir (Ancorado na base)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Isolante térmico (Ancorado no topo)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Garrafa plástica com água potável (Por cima)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Capacete (Idt + Cartão Urina à frente)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Roupa de muda/contato (Estanque)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Agasalhos e Poncho (Estanque)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Cabo Solteiro (4m / 12mm)</label>
+            </div>
+        </div>
+
+        <div class="kit-container">
+            <div class="kit-header" onclick="toggleKit(this)">
+                <label class="checkbox-kit">
+                    <input type="checkbox" class="kit-master-check" disabled>
+                    <span class="kit-name">Fardo Aberto (Equipamento)</span>
+                </label>
+                <i class="fas fa-plus"></i>
+            </div>
+            <div class="kit-items">
+                <label><input type="checkbox" onchange="checkKit(this)"> Cinto e Suspensório tático</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Porta-carregadores e Porta-cantil (com água)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Caneco de alumínio</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Bandoleira (Configuração 1 ou 2 pontos)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Faca de selva / Baioneta</label>
+            </div>
+        </div>
+
+        <div class="kit-container">
+            <div class="kit-header" onclick="toggleKit(this)">
+                <label class="checkbox-kit">
+                    <input type="checkbox" class="kit-master-check" disabled>
+                    <span class="kit-name">Kit de Anotações</span>
+                </label>
+                <i class="fas fa-plus"></i>
+            </div>
+            <div class="kit-items">
+                <label><input type="checkbox" onchange="checkKit(this)"> Caderneta de anotações (com capa)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Lápis, borracha e caneta (Azul/Preta)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Canetas permanentes e Transferidor</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Papel vegetal ou Acetato</label>
+            </div>
+        </div>
+
+        <div class="kit-container">
+            <div class="kit-header" onclick="toggleKit(this)">
+                <label class="checkbox-kit">
+                    <input type="checkbox" class="kit-master-check" disabled>
+                    <span class="kit-name">Kit de Camuflagem</span>
+                </label>
+                <i class="fas fa-plus"></i>
+            </div>
+            <div class="kit-items">
+                <label><input type="checkbox" onchange="checkKit(this)"> Bastão de camuflagem (Verde/Preto)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Espelho de bolso</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Rede de camuflagem para capacete/fuzil</label>
+            </div>
+        </div>
+
+        <div class="kit-container">
+            <div class="kit-header" onclick="toggleKit(this)">
+                <label class="checkbox-kit">
+                    <input type="checkbox" class="kit-master-check" disabled>
+                    <span class="kit-name">Kit de Sobrevivência</span>
+                </label>
+                <i class="fas fa-plus"></i>
+            </div>
+            <div class="kit-items">
+                <label><input type="checkbox" onchange="checkKit(this)"> Material para fogo (Iscas/Isqueiro/Pederneira)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Material de pesca e armadilha</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Canivete multiuso / Lanterna reserva</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Purificador de água (Clorin)</label>
+            </div>
+        </div>
+
+        <div class="kit-container">
+            <div class="kit-header" onclick="toggleKit(this)">
+                <label class="checkbox-kit">
+                    <input type="checkbox" class="kit-master-check" disabled>
+                    <span class="kit-name">Kit Mnt Armamento</span>
+                </label>
+                <i class="fas fa-plus"></i>
+            </div>
+            <div class="kit-items">
+                <label><input type="checkbox" onchange="checkKit(this)"> Óleo lubrificante e Pincel</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Flanela e Escova de dente</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Cordel (limpeza do cano)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Chave de clique</label>
+            </div>
+        </div>
+
+        <div class="kit-container">
+            <div class="kit-header" onclick="toggleKit(this)">
+                <label class="checkbox-kit">
+                    <input type="checkbox" class="kit-master-check" disabled>
+                    <span class="kit-name">Kit de Higiene Pessoal</span>
+                </label>
+                <i class="fas fa-plus"></i>
+            </div>
+            <div class="kit-items">
+                <label><input type="checkbox" onchange="checkKit(this)"> Escova, creme dental e sabonete</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Aparelho de barbear e espelho</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Papel higiênico e Toalha de rosto</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Desodorante (sem cheiro)</label>
+            </div>
+        </div>
+
+        <div class="kit-container">
+            <div class="kit-header" onclick="toggleKit(this)">
+                <label class="checkbox-kit">
+                    <input type="checkbox" class="kit-master-check" disabled>
+                    <span class="kit-name">Kit 1º Socorros</span>
+                </label>
+                <i class="fas fa-plus"></i>
+            </div>
+            <div class="kit-items">
+                <label><input type="checkbox" onchange="checkKit(this)"> Gaze, esparadrapo e band-aid</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Antisséptico e Repelente</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Medicamentos pessoais (prescritos)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Protetor solar</label>
+            </div>
+        </div>
+
+        <div class="kit-container">
+            <div class="kit-header" onclick="toggleKit(this)">
+                <label class="checkbox-kit">
+                    <input type="checkbox" class="kit-master-check" disabled>
+                    <span class="kit-name">Kit de Costura</span>
+                </label>
+                <i class="fas fa-plus"></i>
+            </div>
+            <div class="kit-items">
+                <label><input type="checkbox" onchange="checkKit(this)"> Agulhas e Linhas (Verde/Preta)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Botões sobressalentes e Alfinetes</label>
+            </div>
+        </div>
+
+        <div class="kit-container">
+            <div class="kit-header" onclick="toggleKit(this)">
+                <label class="checkbox-kit">
+                    <input type="checkbox" class="kit-master-check" disabled>
+                    <span class="kit-name">Kit Mnt Coturno</span>
+                </label>
+                <i class="fas fa-plus"></i>
+            </div>
+            <div class="kit-items">
+                <label><input type="checkbox" onchange="checkKit(this)"> Graxa preta e Escova</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Flanela para brilho</label>
+            </div>
+        </div>
+
+        <div class="kit-container">
+            <div class="kit-header" onclick="toggleKit(this)">
+                <label class="checkbox-kit">
+                    <input type="checkbox" class="kit-master-check" disabled>
+                    <span class="kit-name">Kit EPI</span>
+                </label>
+                <i class="fas fa-plus"></i>
+            </div>
+            <div class="kit-items">
+                <label><input type="checkbox" onchange="checkKit(this)"> Luvas táticas e Óculos de proteção</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Protetor auricular</label>
+            </div>
+        </div>
+
+        <div class="kit-container">
+            <div class="kit-header" onclick="toggleKit(this)">
+                <label class="checkbox-kit">
+                    <input type="checkbox" class="kit-master-check" disabled>
+                    <span class="kit-name">Kit Diversos</span>
+                </label>
+                <i class="fas fa-plus"></i>
+            </div>
+            <div class="kit-items">
+                <label><input type="checkbox" onchange="checkKit(this)"> Fita isolante e Silver Tape</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Enforca-gato (Zip-ties)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Pilhas reserva / Cordel Velame</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Sacos plásticos sobressalentes</label>
+            </div>
+        </div>
+
+
+   
+
+            <i class="fas fa-chevron-down seta-expandir"></i>
+        </div>
+        <div class="card-content">
+           <a href="assets/Aprestamento-SIEsp-EOpCFI.pdf" class="btn-download" download>
+                <i class="fas fa-file-download"></i> Baixar Aprestamento PDF
+            </a>
+            <div class="bizu-box">
+                <strong>BIZU DO ANTIGO:</strong> Aprestar kits abertos (Pronto 3) para que os itens sejam verificados!
+            </div>
+        </div>
+    </div>
+
+    <h2 class="titulo-pagina">Cronograma de Campos</h2>
+
+    <div class="card-campo" data-id="campo1" data-data="2026-03-09T08:00:00">
+        <div class="card-header">
+            <label class="checkbox-container">
+                <input type="checkbox" class="check-campo">
+                <span class="checkmark"></span>
+            </label>
+            <div class="card-info">
+                <h3>1º ECD Op Pedra Galena</h3>
+                <p><i class="far fa-calendar-alt"></i> 09 a 13 de Março</p>
+                <span class="countdown"></span>
+            </div>
+            <i class="fas fa-chevron-down seta-expandir"></i>
+        </div>
+        <div class="card-content">
+           <br> <p><strong>Campo de patrulha!</strong></p><br>
+            <p><strong>Provável Missão:</strong> NEUTRALIZAR e CAPTURAR objetos perdidos e inimigos, caso haja sobrevivente, não executar, torná-los prisioneiro!</p>
+            <p class="section-title">Materiais Específicos:</p>
+            <ul>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <div class="bizu-box">
+                <strong>BIZU DO ANTIGO:</strong>Serve como um "nivelamento" e "tira verniz" dos Alunos. Preparem a carcaça para carregar cunhetes, reparo de mag e materiais capturados! Preparem-se também para andar muito (sem dormir)!
+            </div>
+        </div>
+    </div>
+
+    <div class="card-campo" data-id="campo2" data-data="2026-04-13T08:00:00">
+        <div class="card-header">
+            <label class="checkbox-container">
+                <input type="checkbox" class="check-campo">
+                <span class="checkmark"></span>
+            </label>
+            <div class="card-info">
+                <h3>Técnicas Aeromóveis</h3>
+                <p><i class="far fa-calendar-alt"></i> 13 a 17 de Abril</p>
+                <span class="countdown"></span>
+            </div>
+            <i class="fas fa-chevron-down seta-expandir"></i>
+        </div>
+        <div class="card-content">
+            <br> <p><strong>Missão:</strong> Execução de técnicas especiais de infiltração e apoio de comunicações em aeronaves.</p>
+            <p class="section-title">Materiais Específicos:</p>
+            <ul>
+                <li>Luvas de rapel e óculos de proteção</li>
+            </ul>
+            <div class="bizu-box">
+                <strong>BIZU DO ANTIGO:</strong> Uma semana de instruções realizadas dentro da ESA entre as demais instruções. Amarre todo o equipamento; o rotor não perdoa itens soltos.
+            </div>
+        </div>
+    </div>
+
+    <div class="card-campo" data-id="campo3" data-data="2026-05-11T08:00:00">
+        <div class="card-header">
+            <label class="checkbox-container">
+                <input type="checkbox" class="check-campo">
+                <span class="checkmark"></span>
+            </label>
+            <div class="card-info">
+                <h3>1º ELD FITCOM</h3>
+                <p><i class="far fa-calendar-alt"></i> 11 a 15 de Maio</p>
+                <span class="countdown"></span>
+            </div>
+            <i class="fas fa-chevron-down seta-expandir"></i>
+        </div>
+        <div class="card-content">
+            <p><strong>Missão:</strong> Comando de pequenas frações e exploração de meios rádio em Situação Integradora.</p>
+            <p class="section-title">Materiais Específicos:</p>
+            <ul>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <div class="bizu-box">
+                <strong>BIZU DO ANTIGO:</strong> Aqui haverá a famosa "Manda Fio"! Será basicamente andar muito de uma instrução para a outra estabelecendo as comunicações e no fim subir o Pico do Gavião!
+            </div>
+        </div>
+    </div>
+
+    <div class="card-campo" data-id="campo4" data-data="2026-05-25T08:00:00">
+        <div class="card-header">
+            <label class="checkbox-container">
+                <input type="checkbox" class="check-campo">
+                <span class="checkmark"></span>
+            </label>
+            <div class="card-info">
+                <h3>1º SIESP Guerra Cibernética</h3>
+                <p><i class="far fa-calendar-alt"></i> 25 a 29 de Maio</p>
+                <span class="countdown"></span>
+            </div>
+            <i class="fas fa-chevron-down seta-expandir"></i>
+        </div>
+        <div class="card-content">
+            <p><strong>Missão:</strong> Operação de sistemas rádio sob Medidas de Proteção Eletrônica (MPE) e Guerra Eletrônica.</p>
+            <p class="section-title">Materiais Específicos:</p>
+            <ul>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <div class="bizu-box">
+                <strong>BIZU DO PLADIS:</strong> Disciplina de exploração rádio. O inimigo estará caçando sua emissão; use a potência mínima necessária.
+            </div>
+        </div>
+    </div>
+
+    <div class="card-campo" data-id="campo5" data-data="2026-06-29T08:00:00">
+        <div class="card-header">
+            <label class="checkbox-container">
+                <input type="checkbox" class="check-campo">
+                <span class="checkmark"></span>
+            </label>
+            <div class="card-info">
+                <h3>2º ELD Operação Defensiva</h3>
+                <p><i class="far fa-calendar-alt"></i> 29 de Junho a 03 de Julho</p>
+                <span class="countdown"></span>
+            </div>
+            <i class="fas fa-chevron-down seta-expandir"></i>
+        </div>
+        <div class="card-content">
+            <p><strong>Missão:</strong> Apoio de comunicações em Centros de Mensagens e redundância de enlaces em defesa.</p>
+            <p class="section-title">Materiais Específicos:</p>
+            <ul>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <div class="bizu-box">
+                <strong>BIZU DO PLADIS:</strong> A redundância entre o sistema fio e rádio é o que garante a continuidade do Comando e Controlo (C2) na defesa.
+            </div>
+        </div>
+    </div>
+
+    <div class="card-campo" data-id="campo6" data-data="2026-08-10T08:00:00">
+        <div class="card-header">
+            <label class="checkbox-container">
+                <input type="checkbox" class="check-campo">
+                <span class="checkmark"></span>
+            </label>
+            <div class="card-info">
+                <h3>3º ELD Apoio de Com</h3>
+                <p><i class="far fa-calendar-alt"></i> 10 a 14 de Agosto</p>
+                <span class="countdown"></span>
+            </div>
+            <i class="fas fa-chevron-down seta-expandir"></i>
+        </div>
+        <div class="card-content">
+            <p><strong>Missão:</strong> Instalação de Centros de Comunicações informatizados e sistemas de C2 em Combate.</p>
+            <p class="section-title">Materiais Específicos:</p>
+            <ul>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <div class="bizu-box">
+                <strong>BIZU DO PLADIS:</strong> Foco na segurança lógica da rede e na rapidez de montagem do Centro de Mensagens informatizado.
+            </div>
+        </div>
+    </div>
+
+    <div class="card-campo" data-id="campo7" data-data="2026-09-21T08:00:00">
+        <div class="card-header">
+            <label class="checkbox-container">
+                <input type="checkbox" class="check-campo">
+                <span class="checkmark"></span>
+            </label>
+            <div class="card-info">
+                <h3>2º SIESP - Manobra Escolar</h3>
+                <p><i class="far fa-calendar-alt"></i> 21 a 25 de Setembro</p>
+                <span class="countdown"></span>
+            </div>
+            <i class="fas fa-chevron-down seta-expandir"></i>
+        </div>
+        <div class="card-content">
+            <p><strong>Missão:</strong> Aplicação integrada de todas as competências em exercício de campanha final (EPS).</p>
+           <p class="section-title">Materiais Específicos:</p>
+            <ul>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <div class="bizu-box">
+                <strong>BIZU DO PLADIS:</strong> Avaliação somativa final. O foco é a integração de sistemas sob alto estresse. Mantenha o padrão até o último dia.
+            </div>
+        </div>
+    </div>
+</main>
+
+
+</div>
+</div>
+
+
+
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase.js"></script>
 <script src="header.js"></script>
 <script src="auth.js"></script>
+<script src="campo.js"></script>
 
 
 </body>

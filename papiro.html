@@ -15,7 +15,7 @@
 </head>
 <body>
 <header class="header">
-    <img src="assets/AL.png" class="logo">
+    <img src="assets/com.png" class="logo">
 
      <img src="assets/com.png" class="logo-mobile">
 
@@ -39,11 +39,11 @@
         <i class="fas fa-right-from-bracket"></i>
         Sair
     </a>
-
-    <img src="assets/com.png" class="logo">
+    <img src="assets/AL.png" class="logo">
+    
 
     <!-- BOTÃO MOBILE -->
-    <button class="menu-toggle" id="menuToggle">
+        <button class="menu-toggle" id="menuToggle">
     <span></span>
     <span></span>
     <span></span>
@@ -68,11 +68,190 @@
 
 <div class="overlay"></div>
 
+<div class="ferramenta-tecnica">
+    <h2><i class="fas fa-list-ul"></i> Consulta Rápida Tática</h2>
+    
+    <div class="tabs">
+        <button class="tab-btn active" onclick="openTab(event, 'fonetico')">Fonético/Morse</button>
+        <button class="tab-btn" onclick="openTab(event, 'codigoq')">Código Q</button>
+    </div>
+
+    <div id="fonetico" class="tab-content" style="display: block;">
+        <div class="tabela-scroll">
+            <table class="tabela-consulta">
+                <thead>
+                    <tr><th>Letra</th><th>Fonético</th><th>Morse</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>A</td><td>Alfa</td><td>• —</td></tr>
+                    <tr><td>B</td><td>Bravo</td><td>— • • •</td></tr>
+                    <tr><td>C</td><td>Charlie</td><td>— • — •</td></tr>
+                    <tr><td>D</td><td>Delta</td><td>— • •</td></tr>
+                    <tr><td>E</td><td>Echo</td><td>•</td></tr>
+                    <tr><td>F</td><td>Foxtrot</td><td>• • — •</td></tr>
+                    <tr><td>G</td><td>Golf</td><td>— — •</td></tr>
+                    <tr><td>H</td><td>Hotel</td><td>• • • •</td></tr>
+                    <tr><td>I</td><td>India</td><td>• •</td></tr>
+                    <tr><td>J</td><td>Juliet</td><td>• — — —</td></tr>
+                    <tr><td>K</td><td>Kilo</td><td>— • —</td></tr>
+                    <tr><td>L</td><td>Lima</td><td>• — • •</td></tr>
+                    <tr><td>M</td><td>Mike</td><td>— —</td></tr>
+                    <tr><td>N</td><td>November</td><td>— •</td></tr>
+                    <tr><td>O</td><td>Oscar</td><td>— — —</td></tr>
+                    <tr><td>P</td><td>Papa</td><td>• — — •</td></tr>
+                    <tr><td>Q</td><td>Quebec</td><td>— — • —</td></tr>
+                    <tr><td>R</td><td>Romeo</td><td>• — •</td></tr>
+                    <tr><td>S</td><td>Sierra</td><td>• • •</td></tr>
+                    <tr><td>T</td><td>Tango</td><td>—</td></tr>
+                    <tr><td>U</td><td>Uniform</td><td>• • —</td></tr>
+                    <tr><td>V</td><td>Victor</td><td>• • • —</td></tr>
+                    <tr><td>W</td><td>Whiskey</td><td>• — —</td></tr>
+                    <tr><td>X</td><td>X-Ray</td><td>— • • —</td></tr>
+                    <tr><td>Y</td><td>Yankee</td><td>— • — —</td></tr>
+                    <tr><td>Z</td><td>Zulu</td><td>— — • •</td></tr>
+                    <tr class="separator"><td colspan="3">Números</td></tr>
+                    <tr><td>1</td><td>Uno</td><td>• — — — —</td></tr>
+                    <tr><td>2</td><td>Done</td><td>• • — — —</td></tr>
+                    <tr><td>3</td><td>Tree</td><td>• • • — —</td></tr>
+                    <tr><td>4</td><td>Quarter</td><td>• • • • —</td></tr>
+                    <tr><td>5</td><td>Cinco</td><td>• • • • •</td></tr>
+                    <tr><td>6</td><td>Sexto</td><td>— • • • •</td></tr>
+                    <tr><td>7</td><td>Sete</td><td>— — • • •</td></tr>
+                    <tr><td>8</td><td>Oito</td><td>— — — • •</td></tr>
+                    <tr><td>9</td><td>Nove</td><td>— — — — •</td></tr>
+                    <tr><td>0</td><td>Zero</td><td>— — — — —</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="codigoq" class="tab-content">
+        <div class="tabela-scroll">
+            <table class="tabela-consulta">
+                <thead>
+                    <tr><th>Cód.</th><th>Significado / Pergunta</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>QAP</td><td>Está na escuta? / Estou na escuta.</td></tr>
+                    <tr><td>QAM</td><td>Qual é a condição meteorológica?</td></tr>
+                    <tr><td>QRA</td><td>Qual o nome da sua estação?</td></tr>
+                    <tr><td>QRG</td><td>Qual a sua frequência exata?</td></tr>
+                    <tr><td>QRK</td><td>Qual a clareza dos meus sinais? (1 a 5)</td></tr>
+                    <tr><td>QRL</td><td>Está ocupado? / Não interfira.</td></tr>
+                    <tr><td>QRM</td><td>Interferência de outra estação.</td></tr>
+                    <tr><td>QRN</td><td>Interferência estática (atmosférica).</td></tr>
+                    <tr><td>QRO</td><td>Aumentar a potência de emissão.</td></tr>
+                    <tr><td>QRP</td><td>Diminuir a potência de emissão.</td></tr>
+                    <tr><td>QRQ</td><td>Manipular mais rápido.</td></tr>
+                    <tr><td>QRV</td><td>Está preparado? / Estou pronto.</td></tr>
+                    <tr><td>QRW</td><td>Avise a "X" que o chamo em "Y".</td></tr>
+                    <tr><td>QRX</td><td>Quando me chamará de novo? / Aguarde.</td></tr>
+                    <tr><td>QRZ</td><td>Quem me chama?</td></tr>
+                    <tr><td>QSA</td><td>Qual a força dos meus sinais? (1 a 5)</td></tr>
+                    <tr><td>QSB</td><td>Os meus sinais estão a sumir (fading).</td></tr>
+                    <tr><td>QSL</td><td>Pode confirmar recepção? / Entendido.</td></tr>
+                    <tr><td>QSM</td><td>Devo repetir a última mensagem?</td></tr>
+                    <tr><td>QSO</td><td>Comunicar com... / Contacto directo.</td></tr>
+                    <tr><td>QSP</td><td>Pode retransmitir para...? (Ponte)</td></tr>
+                    <tr><td>QTH</td><td>Qual a sua posição (latitude/longitude)?</td></tr>
+                    <tr><td>QTR</td><td>Qual a hora exata?</td></tr>
+                    <tr><td>QTI</td><td>Qual o seu destino?</td></tr>
+                    <tr><td>QTX</td><td>Saída de rede por tempo indeterminado.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="ferramenta-calc">
+    <h2><i class="fas fa-broadcast-tower"></i> Calculadora de Antena Dipolo</h2>
+    <p class="instrucao">Insira a frequência para obter o comprimento do fio (Meia Onda).</p>
+    
+    <div class="input-group">
+        <input type="number" id="freqAntena" step="0.001" placeholder="Frequência (ex: 7.150)">
+        <span>MHz</span>
+    </div>
+    
+    <button onclick="calcularAntena()" class="btn-calc">Calcular Comprimento</button>
+
+    <div id="resultado-container" class="resultado-antena" style="display: none;">
+        <div class="res-item">
+            <span>Comprimento Total:</span>
+            <strong id="total-antena">--</strong>
+        </div>
+        <div class="res-item">
+            <span>Cada Perna (L):</span>
+            <strong id="perna-antena">--</strong>
+        </div>
+        <p class="obs">* Cálculo baseado na constante 142.5 (V de propagação).</p>
+    </div>
+</div>
+
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase.js"></script>
 <script src="header.js"></script>
 <script src="auth.js"></script>
 
+<script>
+function calcularAntena() {
+    const freq = document.getElementById('freqAntena').value;
+    const resultadoContainer = document.getElementById('resultado-container');
+    
+    if (freq && freq > 0) {
+        // Fórmula: 142.5 / Frequência = Comprimento Total (metros)
+        const total = 142.5 / freq;
+        const perna = total / 2;
+
+        document.getElementById('total-antena').innerText = total.toFixed(2) + " m";
+        document.getElementById('perna-antena').innerText = perna.toFixed(2) + " m";
+        
+        resultadoContainer.style.display = 'block';
+    } else {
+        alert("Por favor, insira uma frequência válida.");
+    }
+}
+
+// Tabela de Autenticação fictícia (Sistema de Substituição)
+const tabelaAutenticacao = {
+    'A': 'X', 'B': 'M', 'C': 'P', 'D': 'R', 'E': 'L',
+    'F': 'A', 'G': 'K', 'H': 'S', 'I': 'T', 'J': 'O'
+};
+
+function gerarDesafio() {
+    const letrasValidas = Object.keys(tabelaAutenticacao);
+    const desafio = letrasValidas[Math.floor(Math.random() * letrasValidas.length)];
+    
+    desafioCorreto = tabelaAutenticacao[desafio];
+    
+    const display = document.getElementById('display-autenticacao');
+    display.style.color = "#00ff00";
+    display.innerText = `[REDE LIMA] ESCUTA DESAFIO: "${desafio}". CAMBIO.`;
+    
+    document.getElementById('area-resposta').style.display = 'block';
+    document.getElementById('input-senha').value = ""; // Limpa campo
+}
+
+function openTab(evt, tabName) {
+    var i, tabcontent, tablinks;
+
+    // Esconde todas as divs de conteúdo das abas
+    tabcontent = document.getElementsByClassName("tab-content");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+
+    // Remove a classe "active" de todos os botões
+    tablinks = document.getElementsByClassName("tab-btn");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].classList.remove("active");
+    }
+
+    // Mostra a aba atual e adiciona a classe "active" ao botão que foi clicado
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.classList.add("active");
+}
+</script>
 
 </body>
 </html>

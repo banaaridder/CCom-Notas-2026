@@ -1,0 +1,351 @@
+/* =========================
+   VARIÁVEIS GLOBAIS
+========================= */
+:root {
+    --bg-main: #0d0d0d;
+    --bg-card: #111;
+    --bg-card-2: #0b0b0b;
+    --primary: rgb(0,175,239);
+    --success: #2ecc71;
+    --border-soft: rgba(255,255,255,0.08);
+    --text-main: #e6e6e6;
+    --text-muted: #9aa0a6;
+    --shadow-soft: 0 8px 22px rgba(0,0,0,0.7);
+}
+
+/* =========================
+   ESTILOS GERAIS
+========================= */
+.campos-container {
+    padding: 100px 20px 40px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.titulo-pagina {
+    text-align: center;
+    color: var(--primary);
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 1.5rem;
+}
+
+.btn-download {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 12px 24px;
+    background-color: var(--primary);
+    color: #000;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.btn-download:hover {
+    background-color: #008fca;
+}
+
+/* =========================
+   CARDS (CAMPO E APRESTAMENTO)
+========================= */
+.card-campo, .card-aprestamento {
+    background: rgba(17, 17, 17, 0.95);
+    border: 1px solid rgba(0, 175, 239, 0.15);
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.card-campo:hover, .card-aprestamento:hover {
+    border-color: rgba(0, 175, 239, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+}
+
+/* Estado de Card Principal Concluído */
+.card-campo.concluido {
+    border-color: var(--success) !important;
+    background: rgba(46, 204, 113, 0.03);
+}
+
+.card-campo.concluido .card-info h3,
+.card-campo.concluido .card-info p {
+    text-decoration: line-through;
+    color: var(--success);
+    opacity: 0.7;
+}
+
+.card-campo.concluido .countdown {
+    display: none;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    cursor: pointer;
+    position: relative;
+}
+
+.card-info {
+    padding-right: 40px;
+}
+
+.card-info h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+.card-info p {
+    margin: 5px 0 0;
+    font-size: 0.85rem;
+    color: var(--primary);
+    transition: all 0.3s ease;
+}
+
+.countdown {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: #ff9f43;
+    margin-top: 5px;
+    text-transform: uppercase;
+}
+
+/* =========================
+   CHECKBOXES (ESTILO MILITAR)
+========================= */
+/* Checkbox Principal */
+.checkbox-container {
+    width: 25px;
+    height: 25px;
+    margin-right: 15px;
+    position: relative;
+}
+
+.check-campo { display: none; }
+
+.checkmark {
+    position: absolute;
+    top: 0; left: 0;
+    height: 25px; width: 25px;
+    border: 2px solid var(--primary);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.check-campo:checked ~ .checkmark {
+    background-color: var(--success);
+    border-color: var(--success);
+}
+
+.checkmark:after {
+    content: "\f00c";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    color: white;
+    font-size: 14px;
+    display: none;
+    text-align: center;
+    line-height: 22px;
+}
+
+.check-campo:checked ~ .checkmark:after { display: block; }
+
+/* Padronização Master Check (Kits) */
+.kit-master-check {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(0, 175, 239, 0.5);
+    border-radius: 4px;
+    margin-right: 12px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+    background: transparent;
+}
+
+.kit-master-check:checked {
+    background: var(--success);
+    border-color: var(--success);
+}
+
+.kit-master-check:checked::after {
+    content: '✓';
+    position: absolute;
+    color: #000;
+    font-size: 12px;
+    font-weight: bold;
+    left: 2px;
+    top: -2px;
+}
+
+/* =========================
+   KITS E ITENS (CHECKLISTS)
+========================= */
+.kit-container {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    margin-bottom: 12px;
+    transition: all 0.3s ease;
+}
+
+.kit-header {
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.kit-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-main);
+    transition: all 0.3s ease;
+}
+
+/* Quando o KIT está completo */
+.kit-container.completed {
+    border-color: var(--success);
+    background: rgba(46, 204, 113, 0.08);
+}
+
+.kit-container.completed .kit-name {
+    color: var(--success);
+    text-decoration: line-through;
+}
+
+.kit-items {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 0 0 10px 10px;
+}
+
+.kit-container.open .kit-items {
+    max-height: 1000px;
+    padding: 5px 0;
+}
+
+/* ESTILO DOS ITENS INDIVIDUAIS */
+.kit-items label {
+    padding: 12px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    display: flex;
+    align-items: center;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* Efeito Verde e Riscado para Itens Marcados */
+.kit-items label:has(input:checked) {
+    color: var(--success);
+    text-decoration: line-through;
+    background: rgba(46, 204, 113, 0.05);
+}
+
+.kit-items input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(0, 175, 239, 0.5);
+    border-radius: 4px;
+    margin-right: 12px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.kit-items input[type="checkbox"]:checked {
+    background: var(--success); /* Alterado para verde como o card-campo */
+    border-color: var(--success);
+}
+
+.kit-items input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    color: #000;
+    font-size: 12px;
+    left: 2px;
+    top: -2px;
+    font-weight: bold;
+}
+
+/* =========================
+   CONTEÚDO E SETAS
+========================= */
+.card-content {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    padding: 0 20px 0 60px;
+    transition: max-height 0.5s cubic-bezier(0, 1, 0, 1), opacity 0.3s ease;
+}
+
+.card-campo.active .card-content, 
+.card-aprestamento.active .card-content {
+    max-height: 2500px;
+    opacity: 1;
+    padding: 20px 20px 30px 60px;
+    border-top: 1px solid rgba(0, 175, 239, 0.1);
+}
+
+.seta-expandir {
+    color: var(--primary);
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: transform 0.3s ease;
+}
+
+.card-campo.active .seta-expandir,
+.card-aprestamento.active .seta-expandir {
+    transform: translateY(-50%) rotate(180deg);
+}
+
+/* =========================
+   ELEMENTOS DE TEXTO
+========================= */
+.bizu-box {
+    background: rgba(0, 175, 239, 0.1);
+    border-left: 4px solid var(--primary);
+    padding: 12px;
+    margin-top: 15px;
+    font-style: italic;
+    font-size: 0.85rem;
+}
+
+.section-title {
+    color: #fff;
+    font-weight: bold;
+    margin: 15px 0 8px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
+@media (max-width: 768px) {
+    .campos-container { padding-top: 80px; }
+    .card-content { padding: 0 15px 0 45px; }
+    .card-campo.active .card-content { padding: 15px 15px 25px 45px; }
+}
