@@ -92,13 +92,22 @@
                 <i class="fas fa-plus"></i>
             </div>
             <div class="kit-items">
-                <label><input type="checkbox"> Saco de Dormir (Ancorado na base)</label>
-                <label><input type="checkbox"> Isolante térmico (Ancorado no topo)</label>
-                <label><input type="checkbox"> Garrafa plástica com água potável (Por cima)</label>
-                <label><input type="checkbox"> Capacete (Idt + Cartão Urina à frente)</label>
-                <label><input type="checkbox"> Roupa de muda/contato (Estanque)</label>
-                <label><input type="checkbox"> Agasalhos e Poncho (Estanque)</label>
-                <label><input type="checkbox"> Cabo Solteiro (4m / 12mm)</label>
+                <label><input type="checkbox"> Agasalho MILITAR</label>
+                <label><input type="checkbox"> 1x Cabo Solteiro 5m x 12mm (Ancorado na lateral esquerda da mochila)</label>
+                <label><input type="checkbox"> Caneco (Bolso externo da mochila)</label>
+                <label><input type="checkbox"> Capacete Balístico (sem coifa)</label>
+                <label><input type="checkbox"> Facão de mato (2x por GC / Ancorado no lado direito da mochila)</label>
+                <label><input type="checkbox"> 4x Garrafa PET 2L (contendo água potável)</label>
+                <label><input type="checkbox"> Isolante térmico</label>
+                <label><input type="checkbox"> Lona plástica de aprestamento</label>
+                <label><input type="checkbox"> Marmita e colher (Bolso externo da mochila)</label>
+                <label><input type="checkbox"> Poncho</label>
+                <label><input type="checkbox"> 2x Rojões 12 tiros (Modelo iluminativo)</label>
+                <label><input type="checkbox"> Roupa de contato (½ PELOPES rural e ½ urbana)</label>
+                <label><input type="checkbox"> Saco de dormir</label>
+                <label><input type="checkbox"> 10x Saco de Impermeabilizar (Diversos tamanhos)</label>
+                <label><input type="checkbox"> Uniforme de muda (Gandola e calça / 01 camisa camuflada / 02 pares de meia /
+01 cueca ou short térmico / 01 gorro de pala) </label>
             </div>
         </div>
 
@@ -111,74 +120,36 @@
                 <i class="fas fa-plus"></i>
             </div>
             <div class="kit-items">
-                <label><input type="checkbox" onchange="checkKit(this)"> Cinto e Suspensório tático</label>
-                <label><input type="checkbox" onchange="checkKit(this)"> Porta-carregadores e Porta-cantil (com água)</label>
-                <label><input type="checkbox" onchange="checkKit(this)"> Caneco de alumínio</label>
-                <label><input type="checkbox" onchange="checkKit(this)"> Bandoleira (Configuração 1 ou 2 pontos)</label>
-                <label><input type="checkbox" onchange="checkKit(this)"> Faca de selva / Baioneta</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Cinto e Suspensório</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> 2x Porta-carregadores (À frente do cinto)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> 2x Cantil com Porta-cantil (À retaguarda do cinto)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Apito (Ancorado no bolso ESQUERDO)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Bússula (Ancorado no bolso ESQUERDO)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Lanterna velada (Ancorado no bolso DIREITO)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Canivete (Ancorado no bolso DIREITO)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Relógio de pulso</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Torniquete com Porta Torniquete</label>
             </div>
         </div>
 
-        <div class="kit-container">
+         <div class="kit-container">
             <div class="kit-header" onclick="toggleKit(this)">
                 <label class="checkbox-kit">
                     <input type="checkbox" class="kit-master-check" disabled>
-                    <span class="kit-name">Kit de Anotações</span>
+                    <span class="kit-name">Kit 1º Socorros</span>
                 </label>
                 <i class="fas fa-plus"></i>
             </div>
             <div class="kit-items">
-                <label><input type="checkbox" onchange="checkKit(this)"> Caderneta de anotações (com capa)</label>
-                <label><input type="checkbox" onchange="checkKit(this)"> Lápis, borracha e caneta (Azul/Preta)</label>
-                <label><input type="checkbox" onchange="checkKit(this)"> Canetas permanentes e Transferidor</label>
-                <label><input type="checkbox" onchange="checkKit(this)"> Papel vegetal ou Acetato</label>
-            </div>
-        </div>
-
-        <div class="kit-container">
-            <div class="kit-header" onclick="toggleKit(this)">
-                <label class="checkbox-kit">
-                    <input type="checkbox" class="kit-master-check" disabled>
-                    <span class="kit-name">Kit de Camuflagem</span>
-                </label>
-                <i class="fas fa-plus"></i>
-            </div>
-            <div class="kit-items">
-                <label><input type="checkbox" onchange="checkKit(this)"> Bastão de camuflagem (Verde/Preto)</label>
-                <label><input type="checkbox" onchange="checkKit(this)"> Espelho de bolso</label>
-                <label><input type="checkbox" onchange="checkKit(this)"> Rede de camuflagem para capacete/fuzil</label>
-            </div>
-        </div>
-
-        <div class="kit-container">
-            <div class="kit-header" onclick="toggleKit(this)">
-                <label class="checkbox-kit">
-                    <input type="checkbox" class="kit-master-check" disabled>
-                    <span class="kit-name">Kit de Sobrevivência</span>
-                </label>
-                <i class="fas fa-plus"></i>
-            </div>
-            <div class="kit-items">
-                <label><input type="checkbox" onchange="checkKit(this)"> Material para fogo (Iscas/Isqueiro/Pederneira)</label>
-                <label><input type="checkbox" onchange="checkKit(this)"> Material de pesca e armadilha</label>
-                <label><input type="checkbox" onchange="checkKit(this)"> Canivete multiuso / Lanterna reserva</label>
-                <label><input type="checkbox" onchange="checkKit(this)"> Purificador de água (Clorin)</label>
-            </div>
-        </div>
-
-        <div class="kit-container">
-            <div class="kit-header" onclick="toggleKit(this)">
-                <label class="checkbox-kit">
-                    <input type="checkbox" class="kit-master-check" disabled>
-                    <span class="kit-name">Kit Mnt Armamento</span>
-                </label>
-                <i class="fas fa-plus"></i>
-            </div>
-            <div class="kit-items">
-                <label><input type="checkbox" onchange="checkKit(this)"> Óleo lubrificante e Pincel</label>
-                <label><input type="checkbox" onchange="checkKit(this)"> Flanela e Escova de dente</label>
-                <label><input type="checkbox" onchange="checkKit(this)"> Cordel (limpeza do cano)</label>
-                <label><input type="checkbox" onchange="checkKit(this)"> Chave de clique</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Agulha estéril</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> 30ml Álcool 70%</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Anti séptico</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Atadura</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Esparadrapo</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Gaze estéril</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Hipoglós ou similitar (½ bisnaga)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Par de luvas de procedimento</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Pinça</label>
             </div>
         </div>
 
@@ -191,54 +162,13 @@
                 <i class="fas fa-plus"></i>
             </div>
             <div class="kit-items">
-                <label><input type="checkbox" onchange="checkKit(this)"> Escova, creme dental e sabonete</label>
-                <label><input type="checkbox" onchange="checkKit(this)"> Aparelho de barbear e espelho</label>
-                <label><input type="checkbox" onchange="checkKit(this)"> Papel higiênico e Toalha de rosto</label>
-                <label><input type="checkbox" onchange="checkKit(this)"> Desodorante (sem cheiro)</label>
-            </div>
-        </div>
-
-        <div class="kit-container">
-            <div class="kit-header" onclick="toggleKit(this)">
-                <label class="checkbox-kit">
-                    <input type="checkbox" class="kit-master-check" disabled>
-                    <span class="kit-name">Kit 1º Socorros</span>
-                </label>
-                <i class="fas fa-plus"></i>
-            </div>
-            <div class="kit-items">
-                <label><input type="checkbox" onchange="checkKit(this)"> Gaze, esparadrapo e band-aid</label>
-                <label><input type="checkbox" onchange="checkKit(this)"> Antisséptico e Repelente</label>
-                <label><input type="checkbox" onchange="checkKit(this)"> Medicamentos pessoais (prescritos)</label>
-                <label><input type="checkbox" onchange="checkKit(this)"> Protetor solar</label>
-            </div>
-        </div>
-
-        <div class="kit-container">
-            <div class="kit-header" onclick="toggleKit(this)">
-                <label class="checkbox-kit">
-                    <input type="checkbox" class="kit-master-check" disabled>
-                    <span class="kit-name">Kit de Costura</span>
-                </label>
-                <i class="fas fa-plus"></i>
-            </div>
-            <div class="kit-items">
-                <label><input type="checkbox" onchange="checkKit(this)"> Agulhas e Linhas (Verde/Preta)</label>
-                <label><input type="checkbox" onchange="checkKit(this)"> Botões sobressalentes e Alfinetes</label>
-            </div>
-        </div>
-
-        <div class="kit-container">
-            <div class="kit-header" onclick="toggleKit(this)">
-                <label class="checkbox-kit">
-                    <input type="checkbox" class="kit-master-check" disabled>
-                    <span class="kit-name">Kit Mnt Coturno</span>
-                </label>
-                <i class="fas fa-plus"></i>
-            </div>
-            <div class="kit-items">
-                <label><input type="checkbox" onchange="checkKit(this)"> Graxa preta e Escova</label>
-                <label><input type="checkbox" onchange="checkKit(this)"> Flanela para brilho</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Aparelho de barbear</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Creme de barbear</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Creme dental</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Escova dental</label>
+                <label><input type="checkbox" onchange="checkKit(thee44is)"> Espelho portátil</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Lenço umidecido</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Sabonete ou sabão de coco</label>
             </div>
         </div>
 
@@ -251,8 +181,118 @@
                 <i class="fas fa-plus"></i>
             </div>
             <div class="kit-items">
-                <label><input type="checkbox" onchange="checkKit(this)"> Luvas táticas e Óculos de proteção</label>
-                <label><input type="checkbox" onchange="checkKit(this)"> Protetor auricular</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Luvas táticas (com proteção de dedos)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Óculos de proteção (lente clara)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> 2x Protetor auricular</label>
+            </div>
+        </div>
+
+        <div class="kit-container">
+            <div class="kit-header" onclick="toggleKit(this)">
+                <label class="checkbox-kit">
+                    <input type="checkbox" class="kit-master-check" disabled>
+                    <span class="kit-name">Kit Mnt Armamento</span>
+                </label>
+                <i class="fas fa-plus"></i>
+            </div>
+            <div class="kit-items">
+                <label><input type="checkbox" onchange="checkKit(this)"> Chave de clicar</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Cordel para limpeza do cano</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Escova ou pincel (limpeza externa)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Escova ou pincel (limpeza interna)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Lenço tático</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> 30ml Óleo</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> 2x Pano limpo</label>
+            </div>
+        </div>
+
+        <div class="kit-container">
+            <div class="kit-header" onclick="toggleKit(this)">
+                <label class="checkbox-kit">
+                    <input type="checkbox" class="kit-master-check" disabled>
+                    <span class="kit-name">Kit Mnt Coturno</span>
+                </label>
+                <i class="fas fa-plus"></i>
+            </div>
+            <div class="kit-items">
+                <label><input type="checkbox" onchange="checkKit(this)"> Escova para graxa</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Escova para lavagem do coturno</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Graxa (1 lata)</label>
+            </div>
+        </div>
+
+        <div class="kit-container">
+            <div class="kit-header" onclick="toggleKit(this)">
+                <label class="checkbox-kit">
+                    <input type="checkbox" class="kit-master-check" disabled>
+                    <span class="kit-name">Kit de Anotações</span>
+                </label>
+                <i class="fas fa-plus"></i>
+            </div>
+            <div class="kit-items">
+                <label><input type="checkbox" onchange="checkKit(this)"> Álcool (mínimo 30ml)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> 5x Pano (tipo perfex)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Bloco de anotações de plástico "não transparente" (Aprx 12 x 18cm)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Bloco de anotações de papel (Aprx 15 x 22cm)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Caderneta da SIEsp ATUALIZADA (mínimo modelo 2024)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Caderneta de planejamento completa</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> 2x Retroprojetor ponta fina (Duas cores diferentes)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Caneta quatro cores</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Escalímetro</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Fita adesiva transparente (largura de 48mm)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Prancheta pequena de acrílico ou madeira</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Tesoura escolar</label>
+            </div>
+        </div>
+
+        <div class="kit-container">
+            <div class="kit-header" onclick="toggleKit(this)">
+                <label class="checkbox-kit">
+                    <input type="checkbox" class="kit-master-check" disabled>
+                    <span class="kit-name">Kit de Sobrevivência</span>
+                </label>
+                <i class="fas fa-plus"></i>
+            </div>
+            <div class="kit-items">
+                <label><input type="checkbox" onchange="checkKit(this)"> 3x Anzóis (tamanho variado)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> 3x Boia de isopor n3 para pesca</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> 3x chumbada para pesca</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Isqueiro</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Linha de pesca (5m x 0,5mm)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Pedaço de esponja de aço</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Sal</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Vela</label>
+                
+            </div>
+        </div>
+
+        <div class="kit-container">
+            <div class="kit-header" onclick="toggleKit(this)">
+                <label class="checkbox-kit">
+                    <input type="checkbox" class="kit-master-check" disabled>
+                    <span class="kit-name">Kit de Camuflagem</span>
+                </label>
+                <i class="fas fa-plus"></i>
+            </div>
+            <div class="kit-items">
+                <label><input type="checkbox" onchange="checkKit(this)"> Bastão de camuflagem Preto</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Bastão de camuflagem Verde</label>
+            </div>
+        </div>
+
+        <div class="kit-container">
+            <div class="kit-header" onclick="toggleKit(this)">
+                <label class="checkbox-kit">
+                    <input type="checkbox" class="kit-master-check" disabled>
+                    <span class="kit-name">Kit de Costura</span>
+                </label>
+                <i class="fas fa-plus"></i>
+            </div>
+            <div class="kit-items">
+                <label><input type="checkbox" onchange="checkKit(this)"> 2x Agulhas de costura</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Par de bombachas</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> 5x Botao V.O</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Linha V.O</label>
             </div>
         </div>
 
@@ -265,10 +305,17 @@
                 <i class="fas fa-plus"></i>
             </div>
             <div class="kit-items">
-                <label><input type="checkbox" onchange="checkKit(this)"> Fita isolante e Silver Tape</label>
-                <label><input type="checkbox" onchange="checkKit(this)"> Enforca-gato (Zip-ties)</label>
-                <label><input type="checkbox" onchange="checkKit(this)"> Pilhas reserva / Cordel Velame</label>
-                <label><input type="checkbox" onchange="checkKit(this)"> Sacos plásticos sobressalentes</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Banco de campanha (OPCIONAL)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Cordel velame sobressalente (10m)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> 3x Cyalume 15cm 12 horas (verde ou amarelo)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Fita isolante</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Pano limpo</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> 2 pares de Pilhas reservas (AA e AAA)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Pomada cicatrizante (tipo minâncora / OPCIONAL)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Protetor labial (OPCIONAL)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Protetor solar(OPCIONAL)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Talco antisséptico (Pote até 200g)</label>
+                <label><input type="checkbox" onchange="checkKit(this)"> Repelente (Padrão EB ou similar)</label>
             </div>
         </div>
 

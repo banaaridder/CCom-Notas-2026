@@ -6,7 +6,9 @@
     --bg-card: #111;
     --bg-card-2: #0b0b0b;
     --primary: rgb(0,175,239);
+    --primary-glow: rgba(0, 175, 239, 0.4);
     --success: #2ecc71;
+    --danger-red: #e74c3c;
     --border-soft: rgba(255,255,255,0.08);
     --text-main: #e6e6e6;
     --text-muted: #9aa0a6;
@@ -16,6 +18,14 @@
 /* =========================
    ESTILOS GERAIS
 ========================= */
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
 .campos-container {
     padding: 100px 20px 40px;
     max-width: 900px;
@@ -40,33 +50,44 @@
     text-decoration: none;
     font-weight: bold;
     border-radius: 5px;
-    transition: background 0.3s;
+    transition: all 0.3s ease;
 }
 
 .btn-download:hover {
     background-color: #008fca;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px var(--primary-glow);
 }
 
 /* =========================
-   CARDS (CAMPO E APRESTAMENTO)
+   CARDS (CAMPO, APRESTAMENTO E MATÉRIAS)
 ========================= */
-.card-campo, .card-aprestamento {
+.card-campo, .card-aprestamento, .card-materia {
     background: rgba(17, 17, 17, 0.95);
     border: 1px solid rgba(0, 175, 239, 0.15);
     border-radius: 12px;
     margin-bottom: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(10px);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* OTIMIZAÇÃO DE ANIMAÇÃO: Cubic Bezier para suavidade e will-change para GPU */
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), 
+                box-shadow 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
+                border-color 0.3s ease,
+                background 0.3s ease;
     position: relative;
     overflow: hidden;
+    will-change: transform; 
+    cursor: pointer;
 }
 
-.card-campo:hover, .card-aprestamento:hover {
+.card-campo:hover, .card-aprestamento:hover, .card-materia:hover {
     border-color: rgba(0, 175, 239, 0.4);
-    transform: translateY(-2px);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+    transform: translateY(-5px) scale(1.01); /* Subida suave */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 15px var(--primary-glow);
 }
+
+
 
 /* Estado de Card Principal Concluído */
 .card-campo.concluido {
@@ -81,34 +102,23 @@
     opacity: 0.7;
 }
 
-.card-campo.concluido .countdown {
-    display: none;
-}
-
 .card-header {
     display: flex;
     align-items: center;
     padding: 20px;
-    cursor: pointer;
     position: relative;
-}
-
-.card-info {
-    padding-right: 40px;
 }
 
 .card-info h3 {
     margin: 0;
     font-size: 1.1rem;
     color: #fff;
-    transition: all 0.3s ease;
 }
 
 .card-info p {
     margin: 5px 0 0;
     font-size: 0.85rem;
     color: var(--primary);
-    transition: all 0.3s ease;
 }
 
 .countdown {
@@ -188,6 +198,42 @@
     font-weight: bold;
     left: 2px;
     top: -2px;
+}
+
+/* =========================
+   CONTEÚDO E ACORDEÃO (EXPANSÃO)
+========================= */
+.card-content {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    padding: 0 20px 0 60px;
+    /* Transição otimizada para expansão */
+    transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1), 
+                opacity 0.4s ease, 
+                padding 0.4s ease;
+}
+
+.card-campo.active .card-content, 
+.card-aprestamento.active .card-content {
+    max-height: 2500px;
+    opacity: 1;
+    padding: 20px 20px 30px 60px;
+    border-top: 1px solid rgba(0, 175, 239, 0.1);
+}
+
+.seta-expandir {
+    color: var(--primary);
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.card-campo.active .seta-expandir,
+.card-aprestamento.active .seta-expandir {
+    transform: translateY(-50%) rotate(180deg);
 }
 
 /* =========================
@@ -286,42 +332,87 @@
     top: -2px;
     font-weight: bold;
 }
-
 /* =========================
-   CONTEÚDO E SETAS
+   MODAL (POP-UP) OTIMIZADO
 ========================= */
-.card-content {
-    max-height: 0;
-    overflow: hidden;
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
     opacity: 0;
-    padding: 0 20px 0 60px;
-    transition: max-height 0.5s cubic-bezier(0, 1, 0, 1), opacity 0.3s ease;
+    transition: opacity 0.3s ease;
 }
 
-.card-campo.active .card-content, 
-.card-aprestamento.active .card-content {
-    max-height: 2500px;
+.modal-overlay.active {
+    display: flex;
     opacity: 1;
-    padding: 20px 20px 30px 60px;
-    border-top: 1px solid rgba(0, 175, 239, 0.1);
 }
 
-.seta-expandir {
-    color: var(--primary);
+.modal-content {
+    background: #0f1115;
+    border: 1px solid var(--primary);
+    width: 90%;
+    max-width: 500px;
+    border-radius: 15px;
+    padding: 30px;
+    position: relative;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+    
+    /* Animação de entrada suave (Scale + Fade) */
+    transform: scale(0.8) translateY(20px);
+    opacity: 0;
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), 
+                opacity 0.3s ease;
+}
+
+.modal-overlay.active .modal-content {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+.close-modal {
     position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    transition: transform 0.3s ease;
+    top: 15px; right: 20px;
+    font-size: 1.8rem;
+    color: var(--text-muted);
+    cursor: pointer;
 }
 
-.card-campo.active .seta-expandir,
-.card-aprestamento.active .seta-expandir {
-    transform: translateY(-50%) rotate(180deg);
+.close-modal:hover { color: var(--danger-red); }
+
+.modal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+.btn-modal {
+    display: block;
+    text-align: center;
+    padding: 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+    background: rgba(0, 175, 239, 0.1);
+    border: 1px solid var(--primary);
+    color: #fff;
+}
+
+.btn-modal:hover {
+    background: var(--primary);
+    color: #000;
 }
 
 /* =========================
-   ELEMENTOS DE TEXTO
+   EXTRAS E RESPONSIVIDADE
 ========================= */
 .bizu-box {
     background: rgba(0, 175, 239, 0.1);
@@ -340,7 +431,6 @@
     text-transform: uppercase;
 }
 
-/* Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
 
@@ -348,4 +438,5 @@
     .campos-container { padding-top: 80px; }
     .card-content { padding: 0 15px 0 45px; }
     .card-campo.active .card-content { padding: 15px 15px 25px 45px; }
+    .titulo-pagina { font-size: 1.2rem; }
 }

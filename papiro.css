@@ -5,7 +5,7 @@
     --military-green: #2ecc71;
     --danger-red: #e74c3c;
     --bg-dark: #0a0c10;
-    --card-bg: rgba(20, 25, 35, 0.85);
+    --card-bg: #111;
     --border-color: rgba(0, 175, 239, 0.2);
 }
 
@@ -16,8 +16,195 @@ body {
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
+/* --- GRID DE MATÉRIAS --- */
+.container-materias {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.titulo-sessao {
+    color: var(--primary-blue);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 1.25rem;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.grid-materias {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); /* Melhora a responsividade */
+    gap: 20px;
+    justify-content: center; /* Centraliza os itens horizontalmente */
+}
+.card-materia {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: default;
+}
+
+.card-materia:hover {
+    border-color: var(--primary-blue);
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px var(--primary-glow);
+}
+
+.card-icon {
+    font-size: 2rem;
+    color: var(--primary-blue);
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px var(--primary-glow);
+}
+
+.card-materia h3 {
+    font-size: 0.95rem;
+    color: #fff;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.card-materia p {
+    font-size: 0.8rem;
+    color: #888;
+    line-height: 1.4;
+}
+
+/* Se você quer que o ÚLTIMO item especificamente centralize sozinho na linha: */
+.card-materia:last-child:nth-child(3n+1) {
+    grid-column: 2; /* Move o 7º item para a coluna central */
+}
+
+/* Responsividade: No celular vira lista */
+@media (max-width: 768px) {
+    .grid-materias {
+        grid-template-columns: 1fr; /* 1 coluna */
+    }
+}
+
+
+/* --- MODAL TÁTICO --- */
+.modal-overlay {
+    display: none; /* Escondido por padrão */
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+}
+
+.modal-content {
+    background: #111;
+    border: 2px solid var(--primary-blue);
+    width: 90%;
+    max-width: 550px;
+    border-radius: 15px;
+    padding: 30px;
+    position: relative;
+    box-shadow: 0 0 30px var(--primary-glow);
+    animation: modalSurge 0.3s ease-out;
+}
+
+@keyframes modalSurge {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px; right: 20px;
+    font-size: 2rem;
+    color: var(--danger-red);
+    cursor: pointer;
+}
+
+.modal-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.modal-header i {
+    font-size: 3rem;
+    color: var(--primary-blue);
+    margin-bottom: 10px;
+}
+
+.modal-body h3 {
+    color: var(--military-green);
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.modal-body p {
+    color: #ccc;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+.modal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.btn-modal {
+    display: block;
+    text-align: center;
+    padding: 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+    background: rgba(0, 175, 239, 0.1);
+    border: 1px solid var(--primary-blue);
+    color: #fff;
+}
+
+.btn-modal:hover {
+    background: var(--primary-blue);
+    color: #000;
+}
+
+.btn-ebaula {
+    border-color: var(--military-green);
+    color: var(--military-green);
+}
+
+.btn-ebaula:hover {
+    background: var(--military-green);
+    color: #000;
+} 
+
+.btn-download {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 12px 24px;
+    background-color: #00afef;
+    color: #000;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.btn-download:hover {
+    background-color: #008fca;
+}
+
+
+
 .ferramenta-calc {
-    background: rgba(255, 255, 255, 0.05);
+    background: #111;
     border: 1px solid rgba(0, 175, 239, 0.3);
     padding: 25px;
     border-radius: 12px;
@@ -99,7 +286,7 @@ body {
 
 
 .ferramenta-tecnica {
-    background: var(--card-bg);
+    background: #111;
     border: 1px solid var(--border-color);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(8px);
