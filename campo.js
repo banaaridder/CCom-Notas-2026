@@ -1,5 +1,3 @@
-
-
 document.addEventListener('DOMContentLoaded', async () => {
     const usuarioId = localStorage.getItem("usuarioLogado");
 
@@ -7,7 +5,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const headers = document.querySelectorAll('.card-header');
     headers.forEach(header => {
         header.addEventListener('click', function(e) {
+            // Não expande se clicar no checkbox ou no master check
             if (e.target.closest('.checkbox-container') || e.target.closest('.kit-master-check')) return;
+            
             const card = this.closest('.card-campo, .card-aprestamento');
             if (card) card.classList.toggle('active');
         });
@@ -21,7 +21,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Se for o check principal do card (o de borda azul)
             if (cb.classList.contains('check-campo')) {
                 const card = cb.closest('.card-campo');
-                cb.checked ? card.classList.add('concluido') : card.classList.remove('concluido');
+                if (card) {
+                    cb.checked ? card.classList.add('concluido') : card.classList.remove('concluido');
+                }
             }
 
             // Se for um item dentro de um kit
@@ -34,23 +36,31 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    // 3. INICIALIZAÇÃO
+    // 3. INICIALIZAÇÃO COM PEQUENO ATRASO
+    // O timeout garante que o 'supabaseClient' definido no outro arquivo já esteja disponível
     atualizarContadores();
+    
     if (usuarioId) {
-        await carregarProgressoSupabase(usuarioId);
+        setTimeout(async () => {
+            await carregarProgressoSupabase(usuarioId);
+        }, 200);
     }
 });
 
 // FUNÇÃO PARA SALVAR
 async function salvarProgressoSupabase() {
     const usuarioId = localStorage.getItem("usuarioLogado");
-    if (!usuarioId) return;
+    
+    // Verifica se o cliente do Supabase existe
+    if (!usuarioId || typeof supabaseClient === 'undefined') {
+        console.warn("Tentativa de salvar sem supabaseClient pronto ou sem usuário.");
+        return;
+    }
 
-    // Captura o estado de TODOS os checkboxes da página em ordem
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
     const estado = Array.from(checkboxes).map(cb => cb.checked);
 
-    const { error } = await supabase
+    const { error } = await supabaseClient
         .from('estados_campo')
         .upsert({ 
             user_id: usuarioId, 
@@ -58,24 +68,23 @@ async function salvarProgressoSupabase() {
             updated_at: new Date() 
         });
 
-    if (error) console.error("Erro ao salvar:", error);
+    if (error) console.error("Erro ao salvar no Supabase:", error);
 }
 
 // FUNÇÃO PARA CARREGAR
 async function carregarProgressoSupabase(id) {
-
-    if (typeof supabase === 'undefined' || !supabase.from) {
-        console.error("Erro: A instância do Supabase não foi encontrada. Verifique o arquivo supabase.js");
+    if (typeof supabaseClient === 'undefined') {
+        console.error("Erro: supabaseClient não encontrado no carregamento.");
         return;
     }
-    
-    const { data, error } = await supabase
+
+    const { data, error } = await supabaseClient
         .from('estados_campo')
         .select('checklist_data')
         .eq('user_id', id)
-        .single();
+        .maybeSingle(); // maybeSingle evita erro caso o usuário seja novo
 
-    if (error || !data) return;
+    if (error || !data || !data.checklist_data) return;
 
     const listaChecks = data.checklist_data.checks;
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
@@ -84,12 +93,13 @@ async function carregarProgressoSupabase(id) {
         if (listaChecks[index] !== undefined) {
             cb.checked = listaChecks[index];
             
-            // Aplica visuais de conclusão
+            // Aplica visual de concluído se for o check principal
             if (cb.classList.contains('check-campo') && cb.checked) {
-                cb.closest('.card-campo').classList.add('concluido');
+                const card = cb.closest('.card-campo');
+                if (card) card.classList.add('concluido');
             }
             
-            // Atualiza os Kits (Mochila, Higiene, etc)
+            // Atualiza visual se for parte de um kit
             if (cb.closest('.kit-items')) {
                 atualizarVisualKit(cb);
             }
@@ -97,20 +107,24 @@ async function carregarProgressoSupabase(id) {
     });
 }
 
-// Lógica Visual dos Kits
+// Lógica Visual dos Kits (Garante que o pai marque se os filhos estiverem marcados)
 function atualizarVisualKit(checkbox) {
     const kitContainer = checkbox.closest('.kit-container');
+    if (!kitContainer) return;
+
     const itemsContainer = kitContainer.querySelector('.kit-items');
     const masterCheck = kitContainer.querySelector('.kit-master-check');
     
-    const todosDoKit = itemsContainer.querySelectorAll('input[type="checkbox"]');
-    const todosMarcados = Array.from(todosDoKit).every(cb => cb.checked);
-    
-    masterCheck.checked = todosMarcados;
-    todosMarcados ? kitContainer.classList.add('completed') : kitContainer.classList.remove('completed');
+    if (itemsContainer && masterCheck) {
+        const todosDoKit = itemsContainer.querySelectorAll('input[type="checkbox"]');
+        const todosMarcados = Array.from(todosDoKit).every(cb => cb.checked);
+        
+        masterCheck.checked = todosMarcados;
+        todosMarcados ? kitContainer.classList.add('completed') : kitContainer.classList.remove('completed');
+    }
 }
 
-// Contadores de dias
+// Contadores de dias para a missão
 function atualizarContadores() {
     const agora = new Date().getTime();
     document.querySelectorAll('.card-campo').forEach(card => {
@@ -118,7 +132,9 @@ function atualizarContadores() {
         const contadorTxt = card.querySelector('.countdown');
         if (!dataStr || !contadorTxt) return;
 
-        const diff = new Date(dataStr).getTime() - agora;
+        const dataMissao = new Date(dataStr).getTime();
+        const diff = dataMissao - agora;
+
         if (diff > 0) {
             const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
             contadorTxt.textContent = dias > 0 ? `${dias} DIAS FORA!` : `É AMANHÃ!`;
@@ -128,7 +144,9 @@ function atualizarContadores() {
     });
 }
 
-// Função global para o HTML não dar erro ao clicar no header do kit
+// Função para abrir/fechar kits internos
 function toggleKit(element) {
-    element.parentElement.classList.toggle('open');
+    if (element && element.parentElement) {
+        element.parentElement.classList.toggle('open');
+    }
 }
