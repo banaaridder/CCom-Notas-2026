@@ -1,87 +1,126 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. SELEÇÃO DE ELEMENTOS
-    // Selecionamos todos os headers dentro de cards de campo OU de aprestamento
-    const headers = document.querySelectorAll('.card-campo .card-header, .card-aprestamento .card-header');
+document.addEventListener('DOMContentLoaded', async () => {
+    const usuarioId = localStorage.getItem("usuarioLogado");
 
-    // 2. LÓGICA DE EXPANSÃO (ABRIR/FECHAR)
+    // 1. EXPANSÃO DOS CARDS
+    const headers = document.querySelectorAll('.card-header');
     headers.forEach(header => {
-        header.addEventListener('click', function() {
-            // Encontra o card pai (independente de qual classe seja)
+        header.addEventListener('click', function(e) {
+            if (e.target.closest('.checkbox-container') || e.target.closest('.kit-master-check')) return;
             const card = this.closest('.card-campo, .card-aprestamento');
-            
-            // Alterna a classe 'active'
-            if (card) {
-                card.classList.toggle('active');
-            }
+            if (card) card.classList.toggle('active');
         });
     });
 
-    const checkCampos = document.querySelectorAll('.check-campo');
-    
-    checkCampos.forEach(check => {
-        check.addEventListener('change', function() {
-            const card = this.closest('.card-campo');
-            if (this.checked) {
-                card.classList.add('concluido');
-            } else {
-                card.classList.remove('concluido');
+    // 2. ESCUTAR MUDANÇAS (SALVAMENTO AUTOMÁTICO)
+    document.addEventListener('change', async (e) => {
+        if (e.target.type === 'checkbox') {
+            const cb = e.target;
+
+            // Se for o check principal do card (o de borda azul)
+            if (cb.classList.contains('check-campo')) {
+                const card = cb.closest('.card-campo');
+                cb.checked ? card.classList.add('concluido') : card.classList.remove('concluido');
             }
-        });
+
+            // Se for um item dentro de um kit
+            if (cb.closest('.kit-items')) {
+                atualizarVisualKit(cb);
+            }
+
+            // Salva no Supabase
+            await salvarProgressoSupabase();
+        }
     });
 
-    // 3. LÓGICA DOS CONTADORES (Apenas para os cards de campo)
+    // 3. INICIALIZAÇÃO
     atualizarContadores();
-    setInterval(atualizarContadores, 60000); // Atualiza a cada minuto
+    if (usuarioId) {
+        await carregarProgressoSupabase(usuarioId);
+    }
 });
 
+// FUNÇÃO PARA SALVAR
+async function salvarProgressoSupabase() {
+    const usuarioId = localStorage.getItem("usuarioLogado");
+    if (!usuarioId) return;
+
+    // Captura o estado de TODOS os checkboxes da página em ordem
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    const estado = Array.from(checkboxes).map(cb => cb.checked);
+
+    const { error } = await supabase
+        .from('estados_campo')
+        .upsert({ 
+            user_id: usuarioId, 
+            checklist_data: { checks: estado },
+            updated_at: new Date() 
+        });
+
+    if (error) console.error("Erro ao salvar:", error);
+}
+
+// FUNÇÃO PARA CARREGAR
+async function carregarProgressoSupabase(id) {
+    const { data, error } = await supabase
+        .from('estados_campo')
+        .select('checklist_data')
+        .eq('user_id', id)
+        .single();
+
+    if (error || !data) return;
+
+    const listaChecks = data.checklist_data.checks;
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+    checkboxes.forEach((cb, index) => {
+        if (listaChecks[index] !== undefined) {
+            cb.checked = listaChecks[index];
+            
+            // Aplica visuais de conclusão
+            if (cb.classList.contains('check-campo') && cb.checked) {
+                cb.closest('.card-campo').classList.add('concluido');
+            }
+            
+            // Atualiza os Kits (Mochila, Higiene, etc)
+            if (cb.closest('.kit-items')) {
+                atualizarVisualKit(cb);
+            }
+        }
+    });
+}
+
+// Lógica Visual dos Kits
+function atualizarVisualKit(checkbox) {
+    const kitContainer = checkbox.closest('.kit-container');
+    const itemsContainer = kitContainer.querySelector('.kit-items');
+    const masterCheck = kitContainer.querySelector('.kit-master-check');
+    
+    const todosDoKit = itemsContainer.querySelectorAll('input[type="checkbox"]');
+    const todosMarcados = Array.from(todosDoKit).every(cb => cb.checked);
+    
+    masterCheck.checked = todosMarcados;
+    todosMarcados ? kitContainer.classList.add('completed') : kitContainer.classList.remove('completed');
+}
+
+// Contadores de dias
 function atualizarContadores() {
     const agora = new Date().getTime();
-    const cardsDeCampo = document.querySelectorAll('.card-campo');
-
-    cardsDeCampo.forEach(card => {
+    document.querySelectorAll('.card-campo').forEach(card => {
         const dataStr = card.getAttribute('data-data');
         const contadorTxt = card.querySelector('.countdown');
-        
         if (!dataStr || !contadorTxt) return;
 
-        const dataAlvo = new Date(dataStr).getTime();
-        const diff = dataAlvo - agora;
-
+        const diff = new Date(dataStr).getTime() - agora;
         if (diff > 0) {
             const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
-            if (dias > 0) {
-                contadorTxt.textContent = `${dias} DIAS FORA!`;
-            } else {
-                contadorTxt.textContent = `É AMANHÃ!`;
-            }
+            contadorTxt.textContent = dias > 0 ? `${dias} DIAS FORA!` : `É AMANHÃ!`;
         } else {
             contadorTxt.textContent = "MISSÃO INICIADA";
         }
     });
 }
 
-// Abre ou fecha o kit clicado
+// Função global para o HTML não dar erro ao clicar no header do kit
 function toggleKit(element) {
-    const container = element.parentElement;
-    container.classList.toggle('open');
-}
-
-// Verifica se todos os itens de um kit estão marcados
-function checkKit(checkbox) {
-    const itemsContainer = checkbox.closest('.kit-items');
-    const kitContainer = checkbox.closest('.kit-container');
-    const masterCheck = kitContainer.querySelector('.kit-master-check');
-    
-    // Procura por todos os checkboxes dentro deste kit
-    const allCheckboxes = itemsContainer.querySelectorAll('input[type="checkbox"]');
-    const allChecked = Array.from(allCheckboxes).every(cb => cb.checked);
-    
-    // Atualiza o master check e a classe visual
-    masterCheck.checked = allChecked;
-    
-    if (allChecked) {
-        kitContainer.classList.add('completed');
-    } else {
-        kitContainer.classList.remove('completed');
-    }
+    element.parentElement.classList.toggle('open');
 }
