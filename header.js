@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const mobileMenu = document.querySelector(".mobile-menu");
     const navLinksDesktop = document.querySelector(".nav-links");
 
-    // 1. Exibe o nome do usuário no Desktop
+    // 1. Exibe o nome do usuário
     if (nomeUsuario && spanUsername) {
         spanUsername.textContent = nomeUsuario;
     }
@@ -12,26 +12,26 @@ document.addEventListener("DOMContentLoaded", () => {
     // 2. Lógica para Injetar o Painel se for ADMIN
     if (nomeUsuario === "ADMIN") {
         
-        // Injetar no Desktop
+        // Injetar no Desktop (Lado Direito, após o Ranking Geral)
         if (navLinksDesktop && !navLinksDesktop.querySelector('a[href="admin.html"]')) {
             const linkAdminDesk = document.createElement("a");
             linkAdminDesk.href = "admin.html";
-            linkAdminDesk.className = "link-admin-destaque"; // Aplicando a classe
+            linkAdminDesk.className = "link-admin-destaque";
             linkAdminDesk.innerHTML = '<i class="fa-solid fa-user-shield"></i> Painel';
-            navLinksDesktop.prepend(linkAdminDesk);
+            // .append() coloca o elemento por último na lista
+            navLinksDesktop.append(linkAdminDesk);
         }
 
-        // Injetar no Mobile
+        // Injetar no Mobile (Mantém no topo para fácil acesso)
         if (mobileMenu && !mobileMenu.querySelector('a[href="admin.html"]')) {
             const linkAdminMob = document.createElement("a");
             linkAdminMob.href = "admin.html";
-            linkAdminMob.className = "link-admin-destaque"; // Aplicando a classe
+            linkAdminMob.className = "link-admin-destaque";
             linkAdminMob.innerHTML = '<i class="fa-solid fa-user-shield"></i> Painel Admin';
             mobileMenu.prepend(linkAdminMob);
         }
     }
 });
-
 document.getElementById("username").addEventListener("click", e => {
     e.stopPropagation();
     e.preventDefault();
