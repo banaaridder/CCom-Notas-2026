@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel do Instrutor CCom</title>
+
+
+     
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="header.css">
+    <link rel="stylesheet" href="admin.css">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <script>
+            // PROTEÇÃO DE ROTA: Executa antes de carregar o resto
+            if (localStorage.getItem("nomeUsuario") !== "ADMIN") {
+                window.location.href = "index.html";
+            }
+        </script>
+    <meta name="theme-color" content="#1b383a">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+</head>
+<body>
+<header class="header">
+    <img src="assets/com.png" class="logo">
+
+     <img src="assets/com.png" class="logo-mobile">
+
+    <div class="center">
+        <h1>COMUNICAÇÕES</h1>
+
+        <!-- NAV CENTRAL -->
+        <nav class="nav-links">
+            <a href="qts.html">QTS</a>
+            <a href="calendario.html">Calendário</a>
+            <a href="campo.html">Campo</a>
+            <a href="papiro.html">Papiro</a>
+            <a href="index.html">Notas</a>
+            <a href="ranking.html">Ranking Geral</a>
+        </nav>
+    </div>
+
+    <!-- SAIR DESKTOP -->
+    <a href="login.html" class="logout-desktop">
+        <span class="username" id="username"></span>
+        <i class="fas fa-right-from-bracket"></i>
+        Sair
+    </a>
+    <img src="assets/AL.png" class="logo">
+    
+
+    <!-- BOTÃO MOBILE -->
+        <button class="menu-toggle" id="menuToggle">
+    <span></span>
+    <span></span>
+    <span></span>
+    </button>
+</header>
+
+<nav class="mobile-menu">
+            <a href="qts.html">QTS</a>
+            <a href="calendario.html">Calendário</a>
+            <a href="campo.html">Campo</a>
+            <a href="papiro.html">Papiro</a>
+            <a href="index.html">Notas</a>
+            <a href="ranking.html">Ranking Geral</a>
+
+    <!-- SAIR MOBILE -->
+    <a href="login.html" class="logout-mobile">
+        <span class="username" id="username-mobile"></span>
+        <i class="fas fa-right-from-bracket"></i>
+        Sair
+    </a>
+</nav>
+
+<div class="overlay"></div>
+
+    <main class="admin-container">
+        <div class="stats-header">
+            <h2><i class="fa-solid fa-users-viewfinder"></i> Monitoramento de Alunos</h2>
+            <div id="info-geral">Carregando dados da turma...</div>
+        </div>
+
+        <div id="grid-alunos" class="grid-alunos">
+            </div>
+    </main>
+
+
+</div>
+</div>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script src="header.js"></script>
+<script src="auth.js"></script>
+<script src="admin.js"></script>
+
+
+</body>
+</html>

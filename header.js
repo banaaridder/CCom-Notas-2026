@@ -1,5 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
     const nomeUsuario = localStorage.getItem("nomeUsuario");
+    const navLinks = document.querySelector(".nav-links");
+
+    // Se for ADMIN, adiciona o link no menu
+    if (nomeUsuario === "ADMIN" && navLinks) {
+        const adminLink = document.createElement("a");
+        adminLink.href = "admin.html";
+        adminLink.innerHTML = '<i class="fa-solid fa-user-shield"></i> PAINEL';
+        adminLink.style.color = "#ff9f43"; // Cor de destaque para o instrutor
+        navLinks.appendChild(adminLink);
+    }
 
     if (!nomeUsuario) return;
 
