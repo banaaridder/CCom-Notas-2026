@@ -1,8 +1,18 @@
 document.addEventListener("DOMContentLoaded", () => {
     const btn = document.getElementById("btnLogin");
+    const senhaInput = document.getElementById("senha");
     btn.addEventListener("click", async () => {
         await loginComFeedback(btn);
     });
+
+    senhaInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+            // Evita comportamentos padrão e clica no botão
+            e.preventDefault();
+            btn.click();
+        }
+    });
+
 });
 
 async function loginComFeedback(btn) {
@@ -53,12 +63,18 @@ async function loginComFeedback(btn) {
     }
 
     // Login bem-sucedido
-    btn.className = "btn-feedback salvo";
+btn.className = "btn-feedback salvo";
     localStorage.setItem("usuarioLogado", data.id);
-    localStorage.setItem("nomeUsuario", data.nome);
+    const nomeFormatado = data.nome.toUpperCase().trim();
+    localStorage.setItem("nomeUsuario", nomeFormatado);
 
     setTimeout(() => {
-        window.location.href = "index.html";
+        // REDIRECIONAMENTO INTELIGENTE
+        if (nomeFormatado === "ADMIN") {
+            window.location.href = "admin.html";
+        } else {
+            window.location.href = "index.html";
+        }
     }, 700);
 }
 

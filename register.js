@@ -1,7 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
     const btn = document.getElementById("btn");
+    const senhaInput = document.getElementById("senha");
     btn.addEventListener("click", async () => {
         await registrarComFeedback(btn);
+    });
+
+    senhaInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+            // Evita comportamentos padrão e clica no botão
+            e.preventDefault();
+            btn.click();
+        }
     });
 });
 

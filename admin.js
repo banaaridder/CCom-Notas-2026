@@ -1,3 +1,5 @@
+
+
 const supabaseAdmin = window.supabaseClient;
 
 const alunosOficiais = ["ROGER", "D SILVA", "GABRIEL PIMENTEL", "REBELO", "DAVI COSTA", "GOES", "FRANCO", "CONTILE", "LOBO", "GUILHERME SOUZA", "ALMEIDA", "DOS REIS", "MATEUS RIBEIRO", "SAMUEL VICTOR", "YURY LINS", "J VICTOR", "LUCAS RYAN", "ROSANOVA", "CORDEIRO SILVA", "TEODORO", "DAVI CARLOS", "L MARTINS", "CAIO NASCIMENTO", "MATHEUS SILVA", "CESAR", "CESTARO", "PERROTTE", "WAGNER PEREIRA", "CLEMENTE", "WALLACE OLIVEIRA", "ESTEVAO", "PEDRO CARVALHO", "R SILVA", "GUILHERME FERREIRA", "QUEIROZ", "LEMOS", "LIESSI", "REIS SOUSA", "SOUZA MOTA", "ALCANTARA", "ADRIEL VALENÇA", "THALES", "VICTOR PEREIRA", "VALE", "LUIZ SANTOS", "BERTUCE", "KAUA SOUZA", "CLAUDIO", "DE ALBUQUERQUE", "GABRIEL SILVA", "MENDONCA", "AMORIM", "P MOURA", "EDUARDO", "TAUAN", "V MAGALHAES", "CONCEICAO", "CYRILLO", "LUCAS ABREU", "BARCELLOS", "MAURO", "LISBOA", "GUEDES", "PRADO", "THIAGO WESLLEY", "STELLE", "MEIRELES", "MONTANHA", "VITOR", "MATHEUS BARBOSA", "ANTONIO SILVA", "ASSUNCAO", "GABRIEL AMORA", "VERRI", "DE ANGELO", "JOAO CESARIO", "LUCAS ALVES", "L SILVEIRA", "FAGUNDES", "COSTA", "AURINO", "R MOURA", "JULIACI", "LUAN SILVA", "JOAO SANTOS", "ARTHUR", "ISIDORO", "ENZO FERRARI", "CARLOS EDUARDO", "FEITOSA", "CAPUTO", "DE CASTRO", "LUCAS CRUZ", "DIOGO VINICIUS", "VICTOR SANTOS", "E FAGNER", "SILVA GOMES", "PIRES SOUZA", "C ALCANTARA", "JULIAO", "CAMPOS", "MAURILIO", "JOAO RODRIGUES", "LATTO", "BASTOS", "TEOFILO", "MARCENES", "FRANK", "FARIAS", "JEZIEL", "J RIBEIRO", "EDUARDO NASCIMENTO", "F DANTAS", "NASCIMENTO ANTUNES", "SIMOES", "TRANCOZO", "RITZMANN", "CASTRO ALVES", "CHRISTIAN", "S GABRIEL", "DEIVISSON", "THOMAS", "CAMILO", "TAVARES NETO", "SERPA", "GIMENEZ", "ZAKUR", "CARVALHO SOUZA", "DE ARAUJO", "DOMINGUES", "GONÇALVES", "D LIMA"];
@@ -28,24 +30,29 @@ function calcularNotaTFM(tipo, valor, modalidade) {
 }
 
 async function carregarDados() {
-    const { data: usuarios } = await supabaseAdmin.from("usuarios").select("id, nome");
-    const { data: notas } = await supabaseAdmin.from("notas").select("*");
-    const mapaUsuarios = {};
-    usuarios.forEach(u => mapaUsuarios[u.id] = u.nome.toUpperCase().trim());
-    
-    const apenasAlunos = usuarios.filter(u => u.nome.toUpperCase().trim() !== "ADMIN");
-    document.getElementById("total-alunos").textContent = apenasAlunos.length;
-    document.getElementById("total-notas").textContent = notas.length;
-    
-    // Armazenar dados globalmente para o filtro funcionar
-    window.dadosUsuarios = mapaUsuarios;
-    window.dadosNotas = notas;
-    
-    gerarCards(mapaUsuarios, notas);
+    try {
+        const { data: usuarios } = await supabaseAdmin.from("usuarios").select("id, nome");
+        const { data: notas } = await supabaseAdmin.from("notas").select("*");
+        
+        const mapaUsuarios = {};
+        usuarios.forEach(u => mapaUsuarios[u.id] = u.nome.toUpperCase().trim());
+        
+        const apenasAlunos = usuarios.filter(u => u.nome.toUpperCase().trim() !== "ADMIN");
+        document.getElementById("total-alunos").textContent = apenasAlunos.length;
+        document.getElementById("total-notas").textContent = notas.length;
+        
+        window.dadosUsuarios = mapaUsuarios;
+        window.dadosNotas = notas;
+        
+        gerarCards(mapaUsuarios, notas);
+    } catch (error) {
+        console.error("Erro ao carregar dados:", error);
+    }
 }
 
 function gerarCards(mapaUsuarios, notas, filtro = "") {
     const grid = document.getElementById("grid-alunos");
+    if (!grid) return;
     grid.innerHTML = "";
     
     const alunosFiltrados = alunosOficiais.filter(nome => 
@@ -56,7 +63,12 @@ function gerarCards(mapaUsuarios, notas, filtro = "") {
         const registro = notas.find(n => mapaUsuarios[n.usuario_id] === alunoNome.toUpperCase().trim());
         const card = document.createElement("div");
         card.className = "card-aluno";
-        card.onclick = () => abrirModal(alunoNome, registro || { dados: {} });
+        
+        // Atribui o evento de clique de forma segura
+        card.addEventListener('click', () => {
+            abrirModal(alunoNome, registro || null);
+        });
+
         card.innerHTML = `
             <div class="card-header-resumido">
                 <h3>${alunoNome}</h3>
@@ -75,10 +87,15 @@ document.getElementById("filtroAluno").addEventListener("input", (e) => {
 function abrirModal(nome, registro) {
     const modal = document.getElementById("modalAluno");
     const lista = document.getElementById("modalListaNotas");
+    
+    if (!modal || !lista) return;
+
     document.getElementById("modalNomeAluno").textContent = nome;
 
+    // Se não houver registro, mostra aviso e abre o modal
     if (!registro || !registro.dados) {
-        lista.innerHTML = "<p class='vazio'>Nenhum lançamento encontrado.</p>";
+        lista.innerHTML = "<p class='vazio'>Nenhum lançamento encontrado para este aluno.</p>";
+        document.getElementById("modalMediaBadge").textContent = "--";
         modal.style.display = "flex";
         return;
     }
@@ -114,14 +131,12 @@ function abrirModal(nome, registro) {
         return htmlProvas ? `<div class="secao-modal"><div class="secao-header"><span>${titulo}</span></div>${htmlProvas}</div>` : "";
     };
 
-    // Matérias
     htmlFinal += gerarMateriaComMedia("Técnicas Militares", [{ label: "AA1", ac: "acertos-tec-aa1", tot: "total-tec-aa1" }, { label: "AA2", ac: "acertos-tec-aa2", tot: "total-tec-aa2" }, { label: "AC", ac: "acertos-tec-ac", tot: "total-tec-ac" }]);
     htmlFinal += gerarMateriaComMedia("Fundamentos", [{ label: "AA", ac: "acertos-fund-aa", tot: "total-fund-aa" }, { label: "AC", ac: "acertos-fund-ac", tot: "total-fund-ac" }]);
     htmlFinal += gerarMateriaComMedia("Cibernética", [{ label: "AA1", ac: "acertos-ciber-aa1", tot: "total-ciber-aa1" }, { label: "AA2", ac: "acertos-ciber-aa2", tot: "total-ciber-aa2" }, { label: "AC", ac: "acertos-ciber-ac", tot: "total-ciber-ac" }]);
     htmlFinal += gerarMateriaComMedia("Emprego das Com", [{ label: "AA", ac: "acertos-empre-aa", tot: "total-empre-aa" }, { label: "AC", ac: "acertos-empre-ac", tot: "total-empre-ac" }]);
     htmlFinal += gerarMateriaSemMedia("Ensino", [{ label: "Português", ac: "acertos-pt-ac", tot: "total-pt-ac" }, { label: "Lógica", ac: "acertos-racio-ac", tot: "total-racio-ac" }, { label: "Didática", ac: "acertos-didat-ac", tot: "total-didat-ac" }]);
 
-    // Tiro
     let tiroHtml = "", sTiro = 0, cTiro = 0;
     ["aa", "ac1", "ac2"].forEach(t => {
         const v = parseFloat(d[`tiro-${t}`]);
@@ -129,7 +144,6 @@ function abrirModal(nome, registro) {
     });
     if (tiroHtml) htmlFinal += `<div class="secao-modal"><div class="secao-header"><span>Tiro</span><span class="badge-media-item gold">${(sTiro / cTiro).toFixed(2)}</span></div>${tiroHtml}</div>`;
 
-    // TFM
     let tfmHtml = "", sTfm = 0, cTfm = 0;
     const mods = [
         { id: 'corrida', l: 'Corrida', t: true },
@@ -151,22 +165,14 @@ function abrirModal(nome, registro) {
             const formatarV = (val) => {
                 if (!val || val <= 0) return "00:00";
                 if (m.t) {
-                    // Mantém o formato mm.ss transformando em mm:ss
                     let s = val.toFixed(2).replace('.', ':');
-                    if (s.indexOf(':') === 1) s = '0' + s; // Garante 09:30 em vez de 9:30
+                    if (s.indexOf(':') === 1) s = '0' + s;
                     return s;
                 }
                 return `${val} ${m.u}`.trim();
             };
 
-            tfmHtml += `
-                <div class="linha-tfm-detalhe">
-                    <strong>${m.l}</strong>
-                    <div class="tfm-bruto">
-                        AA: ${formatarV(vAA)} <span class="laranja">(${nAA.toFixed(1)})</span> | 
-                        AC: ${formatarV(vAC)} <span class="laranja">(${nAC.toFixed(1)})</span>
-                    </div>
-                </div>`;
+            tfmHtml += `<div class="linha-tfm-detalhe"><strong>${m.l}</strong><div class="tfm-bruto">AA: ${formatarV(vAA)} <span class="laranja">(${nAA.toFixed(1)})</span> | AC: ${formatarV(vAC)} <span class="laranja">(${nAC.toFixed(1)})</span></div></div>`;
         }
     });
     if (tfmHtml) htmlFinal += `<div class="secao-modal"><div class="secao-header"><span>TFM</span><span class="badge-media-item gold">${(sTfm / cTfm).toFixed(2)}</span></div>${tfmHtml}</div>`;
@@ -183,11 +189,8 @@ function exportarParaExcel() {
         return;
     }
 
-    // 1. Organizar os dados para a planilha
     const dadosPlanilha = window.dadosNotas.map(nota => {
         const d = nota.dados || {};
-        
-        // Função auxiliar para formatar tempo (ponto para dois pontos)
         const fmtT = (val) => {
             if(!val) return "--";
             let s = parseFloat(val).toFixed(2).replace('.', ':');
@@ -197,8 +200,6 @@ function exportarParaExcel() {
         return {
             "Nome de Guerra": window.dadosUsuarios[nota.usuario_id] || "NÃO ENCONTRADO",
             "Média Geral": nota.media_geral || 0,
-            
-            // TFM
             "Corrida AA": fmtT(d["corrida-aa"]),
             "Corrida AC": fmtT(d["corrida-ac"]),
             "Flexão AA": d["flexao-aa"] || 0,
@@ -207,37 +208,42 @@ function exportarParaExcel() {
             "Barra AC": d["barra-ac"] || 0,
             "Natação AA": fmtT(d["natacao-aa"]),
             "Natação AC": fmtT(d["natacao-ac"]),
-
-            // Matérias (Exemplo de algumas, adicione as outras seguindo o padrão)
             "Tec. Mil AA1": (parseFloat(d["acertos-tec-aa1"])/parseFloat(d["total-tec-aa1"])*10 || 0).toFixed(2),
             "Tec. Mil AC": (parseFloat(d["acertos-tec-ac"])/parseFloat(d["total-tec-ac"])*10 || 0).toFixed(2),
-            
-            // Ensino
             "Português": (parseFloat(d["acertos-pt-ac"])/parseFloat(d["total-pt-ac"])*10 || 0).toFixed(2),
             "Lógica": (parseFloat(d["acertos-racio-ac"])/parseFloat(d["total-racio-ac"])*10 || 0).toFixed(2),
             "Didática": (parseFloat(d["acertos-didat-ac"])/parseFloat(d["total-didat-ac"])*10 || 0).toFixed(2),
-
-            // Conceitos
             "Básico": d["nota-bas"] || "--",
             "TCC": d["nota-tcc"] || "--",
             "Conceito": d["nota-conceito"] || "--"
         };
     });
 
-    // 2. Criar a planilha (Workbook)
     const worksheet = XLSX.utils.json_to_sheet(dadosPlanilha);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Notas Alunos");
-
-    // 3. Ajustar largura das colunas automaticamente
     const colWidths = Object.keys(dadosPlanilha[0]).map(key => ({ wch: key.length + 5 }));
     worksheet['!cols'] = colWidths;
-
-    // 4. Gerar arquivo e baixar
     const dataAtual = new Date().toLocaleDateString().replace(/\//g, '-');
     XLSX.writeFile(workbook, `Relatorio_Notas_Monitorizacao_${dataAtual}.xlsx`);
 }
 
-document.querySelector(".close-modal").onclick = () => document.getElementById("modalAluno").style.display = "none";
-window.onclick = (e) => { if (e.target == document.getElementById("modalAluno")) document.getElementById("modalAluno").style.display = "none"; };
-document.addEventListener("DOMContentLoaded", carregarDados);
+// Inicialização e Eventos
+document.addEventListener("DOMContentLoaded", () => {
+    // Esconde o modal imediatamente ao carregar
+    const modal = document.getElementById("modalAluno");
+    if (modal) modal.style.display = "none";
+    
+    // Inicia carregamento
+    carregarDados();
+
+    // Eventos de fechar
+    const closeBtn = document.querySelector(".close-modal");
+    if (closeBtn) {
+        closeBtn.onclick = () => modal.style.display = "none";
+    }
+
+    window.onclick = (e) => { 
+        if (e.target == modal) modal.style.display = "none"; 
+    };
+});
