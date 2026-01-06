@@ -129,3 +129,30 @@ function resetErroFade(btn, inputs = [], mensagem, tempo = 1000) {
         }, 500);
     }, tempo);
 }
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const usuarioInput = document.getElementById("usuario");
+
+    if (usuarioInput) {
+        // Ao focar ou clicar, ele abre a lista
+        usuarioInput.addEventListener("mousedown", function() {
+            if (this.value === "") {
+                this.setAttribute("placeholder", ""); // Remove o texto pra não confundir
+                // O navegador abrirá o datalist automaticamente no evento de foco
+            }
+        });
+
+        // Truque para navegadores que não abrem no primeiro clique
+        usuarioInput.addEventListener("focus", function() {
+            this.setAttribute("list", "lista-alunos");
+        });
+        
+        // Se quiser que a lista apareça completa mesmo se já houver algo escrito
+        usuarioInput.addEventListener("click", function() {
+            const val = this.value;
+            this.value = '';
+            this.value = val;
+        });
+    }
+});
