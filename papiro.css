@@ -24,6 +24,7 @@ body {
 }
 
 .titulo-sessao {
+    margin-top: 50px;
     color: var(--primary-blue);
     text-transform: uppercase;
     letter-spacing: 2px;

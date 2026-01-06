@@ -33,6 +33,7 @@ body {
 }
 
 .titulo-pagina {
+    margin-top: 50px;
     text-align: center;
     color: var(--primary);
     margin-bottom: 30px;
@@ -69,8 +70,6 @@ body {
     margin-bottom: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(10px);
-    
-    /* OTIMIZAÇÃO DE ANIMAÇÃO: Cubic Bezier para suavidade e will-change para GPU */
     transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), 
                 box-shadow 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
                 border-color 0.3s ease,
@@ -83,13 +82,10 @@ body {
 
 .card-campo:hover, .card-aprestamento:hover, .card-materia:hover {
     border-color: rgba(0, 175, 239, 0.4);
-    transform: translateY(-5px) scale(1.01); /* Subida suave */
+    transform: translateY(-5px) scale(1.01);
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 15px var(--primary-glow);
 }
 
-
-
-/* Estado de Card Principal Concluído */
 .card-campo.concluido {
     border-color: var(--success) !important;
     background: rgba(46, 204, 113, 0.03);
@@ -110,11 +106,10 @@ body {
 }
 
 .card-info h3 {
-    margin: 0;
+    margin: 0; 
     font-size: 1.1rem;
     color: #fff;
 }
-
 .card-info p {
     margin: 5px 0 0;
     font-size: 0.85rem;
@@ -133,12 +128,13 @@ body {
 /* =========================
    CHECKBOXES (ESTILO MILITAR)
 ========================= */
-/* Checkbox Principal */
 .checkbox-container {
     width: 25px;
     height: 25px;
+    min-width: 25px;
     margin-right: 15px;
     position: relative;
+    flex-shrink: 0;
 }
 
 .check-campo { display: none; }
@@ -166,16 +162,17 @@ body {
     display: none;
     text-align: center;
     line-height: 22px;
+    width: 100%;
 }
 
 .check-campo:checked ~ .checkmark:after { display: block; }
 
-/* Padronização Master Check (Kits) */
 .kit-master-check {
     appearance: none;
     -webkit-appearance: none;
     width: 18px;
     height: 18px;
+    min-width: 18px;
     border: 2px solid rgba(0, 175, 239, 0.5);
     border-radius: 4px;
     margin-right: 12px;
@@ -183,13 +180,10 @@ body {
     position: relative;
     transition: all 0.2s ease;
     background: transparent;
+    flex-shrink: 0;
 }
 
-.kit-master-check:checked {
-    background: var(--success);
-    border-color: var(--success);
-}
-
+.kit-master-check:checked { background: var(--success); border-color: var(--success); }
 .kit-master-check:checked::after {
     content: '✓';
     position: absolute;
@@ -201,24 +195,26 @@ body {
 }
 
 /* =========================
-   CONTEÚDO E ACORDEÃO (EXPANSÃO)
+   CONTEÚDO E ACORDEÃO (CENTRALIZADO)
 ========================= */
 .card-content {
     max-height: 0;
     overflow: hidden;
     opacity: 0;
-    padding: 0 20px 0 60px;
-    /* Transição otimizada para expansão */
+    padding: 0 20px; /* Removido o padding-left exagerado */
+    display: flex;
+    flex-direction: column;
     transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1), 
                 opacity 0.4s ease, 
                 padding 0.4s ease;
+    margin-left: 20px;
 }
 
 .card-campo.active .card-content, 
 .card-aprestamento.active .card-content {
     max-height: 2500px;
     opacity: 1;
-    padding: 20px 20px 30px 60px;
+    padding: 20px; /* Padding uniforme */
     border-top: 1px solid rgba(0, 175, 239, 0.1);
 }
 
@@ -237,13 +233,15 @@ body {
 }
 
 /* =========================
-   KITS E ITENS (CHECKLISTS)
+   KITS E ITENS (CENTRALIZADO)
 ========================= */
 .kit-container {
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 10px;
-    margin-bottom: 12px;
+    margin: 0 auto 12px auto; /* Centraliza o card do kit */
+    width: 100%;
+    max-width: 600px; /* Largura máxima para não ficar esticado em telas grandes */
     transition: all 0.3s ease;
 }
 
@@ -262,7 +260,6 @@ body {
     transition: all 0.3s ease;
 }
 
-/* Quando o KIT está completo */
 .kit-container.completed {
     border-color: var(--success);
     background: rgba(46, 204, 113, 0.08);
@@ -286,7 +283,6 @@ body {
     padding: 5px 0;
 }
 
-/* ESTILO DOS ITENS INDIVIDUAIS */
 .kit-items label {
     padding: 12px 20px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.03);
@@ -298,7 +294,6 @@ body {
     transition: all 0.2s ease;
 }
 
-/* Efeito Verde e Riscado para Itens Marcados */
 .kit-items label:has(input:checked) {
     color: var(--success);
     text-decoration: line-through;
@@ -308,6 +303,7 @@ body {
 .kit-items input[type="checkbox"] {
     appearance: none;
     -webkit-appearance: none;
+    min-width: 18px;
     width: 18px;
     height: 18px;
     border: 2px solid rgba(0, 175, 239, 0.5);
@@ -316,10 +312,11 @@ body {
     position: relative;
     cursor: pointer;
     transition: all 0.2s ease;
+    flex-shrink: 0;
 }
 
 .kit-items input[type="checkbox"]:checked {
-    background: var(--success); /* Alterado para verde como o card-campo */
+    background: var(--success); 
     border-color: var(--success);
 }
 
@@ -332,8 +329,9 @@ body {
     top: -2px;
     font-weight: bold;
 }
+
 /* =========================
-   MODAL (POP-UP) OTIMIZADO
+   MODAL
 ========================= */
 .modal-overlay {
     display: none;
@@ -349,10 +347,7 @@ body {
     transition: opacity 0.3s ease;
 }
 
-.modal-overlay.active {
-    display: flex;
-    opacity: 1;
-}
+.modal-overlay.active { display: flex; opacity: 1; }
 
 .modal-content {
     background: #0f1115;
@@ -363,18 +358,12 @@ body {
     padding: 30px;
     position: relative;
     box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
-    
-    /* Animação de entrada suave (Scale + Fade) */
     transform: scale(0.8) translateY(20px);
     opacity: 0;
-    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), 
-                opacity 0.3s ease;
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
 }
 
-.modal-overlay.active .modal-content {
-    transform: scale(1) translateY(0);
-    opacity: 1;
-}
+.modal-overlay.active .modal-content { transform: scale(1) translateY(0); opacity: 1; }
 
 .close-modal {
     position: absolute;
@@ -406,10 +395,7 @@ body {
     color: #fff;
 }
 
-.btn-modal:hover {
-    background: var(--primary);
-    color: #000;
-}
+.btn-modal:hover { background: var(--primary); color: #000; }
 
 /* =========================
    EXTRAS E RESPONSIVIDADE
@@ -421,6 +407,8 @@ body {
     margin-top: 15px;
     font-style: italic;
     font-size: 0.85rem;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .section-title {
@@ -429,6 +417,8 @@ body {
     margin: 15px 0 8px;
     font-size: 0.9rem;
     text-transform: uppercase;
+    text-align: left;
+    width: 100%;
 }
 
 ::-webkit-scrollbar { width: 6px; }
@@ -436,7 +426,6 @@ body {
 
 @media (max-width: 768px) {
     .campos-container { padding-top: 80px; }
-    .card-content { padding: 0 15px 0 45px; }
-    .card-campo.active .card-content { padding: 15px 15px 25px 45px; }
+    .card-content { padding: 15px !important; }
     .titulo-pagina { font-size: 1.2rem; }
 }
