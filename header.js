@@ -1,27 +1,34 @@
 document.addEventListener("DOMContentLoaded", () => {
     const nomeUsuario = localStorage.getItem("nomeUsuario");
-    const navLinks = document.querySelector(".nav-links");
+    const spanUsername = document.getElementById("username");
+    const mobileMenu = document.querySelector(".mobile-menu");
+    const navLinksDesktop = document.querySelector(".nav-links");
 
-    // Se for ADMIN, adiciona o link no menu
-    if (nomeUsuario === "ADMIN" && navLinks) {
-        const adminLink = document.createElement("a");
-        adminLink.href = "admin.html";
-        adminLink.innerHTML = '<i class="fa-solid fa-user-shield"></i> PAINEL';
-        adminLink.style.color = "#ff9f43"; // Cor de destaque para o instrutor
-        navLinks.appendChild(adminLink);
+    // 1. Exibe o nome do usuário no Desktop
+    if (nomeUsuario && spanUsername) {
+        spanUsername.textContent = nomeUsuario;
     }
 
-    if (!nomeUsuario) return;
+    // 2. Lógica para Injetar o Painel se for ADMIN
+    if (nomeUsuario === "ADMIN") {
+        
+        // Injetar no Desktop
+        if (navLinksDesktop && !navLinksDesktop.querySelector('a[href="admin.html"]')) {
+            const linkAdminDesk = document.createElement("a");
+            linkAdminDesk.href = "admin.html";
+            linkAdminDesk.className = "link-admin-destaque"; // Aplicando a classe
+            linkAdminDesk.innerHTML = '<i class="fa-solid fa-user-shield"></i> Painel';
+            navLinksDesktop.prepend(linkAdminDesk);
+        }
 
-    const username = document.getElementById("username");
-    const usernameMobile = document.getElementById("username-mobile");
-
-    if (username) {
-        username.textContent = nomeUsuario;
-    }
-
-    if (usernameMobile) {
-        usernameMobile.textContent = nomeUsuario;
+        // Injetar no Mobile
+        if (mobileMenu && !mobileMenu.querySelector('a[href="admin.html"]')) {
+            const linkAdminMob = document.createElement("a");
+            linkAdminMob.href = "admin.html";
+            linkAdminMob.className = "link-admin-destaque"; // Aplicando a classe
+            linkAdminMob.innerHTML = '<i class="fa-solid fa-user-shield"></i> Painel Admin';
+            mobileMenu.prepend(linkAdminMob);
+        }
     }
 });
 

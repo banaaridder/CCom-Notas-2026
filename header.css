@@ -64,6 +64,8 @@ body {
     padding-top: 95px;
 }
 
+
+
 /* Logos */
 .logo {
     width: 40px;
@@ -125,6 +127,24 @@ body {
     font-size: 14px;
 }
 
+/* Classe de destaque para o Painel Admin */
+.link-admin-destaque {
+    color: #ff9f43 !important; /* Dourado padrão */
+    font-weight: bold !important;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.link-admin-destaque i {
+    color: #ff9f43;
+}
+
+/* No mobile, adicionamos uma borda lateral para diferenciar */
+.mobile-menu a.link-admin-destaque {
+    border-left: 4px solid #ff9f43;
+    background: rgba(255, 159, 67, 0.05);
+}
 /* =========================
    SAIR DESKTOP
 ========================= */
