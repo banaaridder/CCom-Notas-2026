@@ -1,4 +1,5 @@
-const supabase = window.supabaseClient;
+// Usamos window.supabaseClient para evitar o erro de "already declared"
+const supabaseAdmin = window.supabaseClient; 
 
 const alunosOficiais = [
     "ROGER", "D SILVA", "GABRIEL PIMENTEL", "REBELO", "DAVI COSTA", "GOES", 
@@ -27,37 +28,13 @@ const alunosOficiais = [
     "DE ARAUJO", "DOMINGUES"
 ];
 
-async function carregarDados() {
-    const grid = document.getElementById("grid-alunos");
-    
-    // Busca todas as notas (certifica-te que a tabela se chama 'notas')
-    const { data: todasNotas, error } = await supabase
-        .from("notas")
-        .select("*");
+let dadosParaExportar = [];
 
-    if (error) {
-        grid.innerHTML = `<p class='erro'>Erro ao carregar dados: ${error.message}</p>`;
-        return;
-    }
-
-    document.getElementById("total-alunos").textContent = alunosOficiais.length;
-    document.getElementById("total-notas").textContent = todasNotas.length;
-
-    gerarCards(todasNotas);
-
-    // Filtro de pesquisa em tempo real
-    document.getElementById("filtroAluno").addEventListener("input", (e) => {
-        const termo = e.target.value.toUpperCase();
-        const cards = document.querySelectorAll(".card-aluno");
-        cards.forEach(card => {
-            const nome = card.dataset.nome;
-            card.style.display = nome.includes(termo) ? "block" : "none";
-        });
-    });
-}
-
+// 1. Função que gera os cards visualmente
 function gerarCards(notas) {
     const grid = document.getElementById("grid-alunos");
+    if (!grid) return;
+    
     grid.innerHTML = "";
 
     alunosOficiais.forEach(aluno => {
@@ -87,4 +64,66 @@ function gerarCards(notas) {
     });
 }
 
-document.addEventListener("DOMContentLoaded", carregarDados);
+// 2. Função principal de carga
+async function carregarDados() {
+    const grid = document.getElementById("grid-alunos");
+    
+    const { data: todasNotas, error } = await supabaseAdmin
+        .from("notas")
+        .select("*");
+
+    if (error) {
+        if(grid) grid.innerHTML = `<p class='erro'>Erro: ${error.message}</p>`;
+        return;
+    }
+
+    dadosParaExportar = todasNotas;
+    
+    const totalAlunosElem = document.getElementById("total-alunos");
+    const totalNotasElem = document.getElementById("total-notas");
+    
+    if (totalAlunosElem) totalAlunosElem.textContent = alunosOficiais.length;
+    if (totalNotasElem) totalNotasElem.textContent = todasNotas.length;
+
+    gerarCards(todasNotas);
+}
+
+// 3. Função de Exportação
+window.exportarParaExcel = function() {
+    if (dadosParaExportar.length === 0) return alert("Não há dados para exportar");
+
+    // Cabeçalho com BOM para o Excel entender acentos (UTF-8)
+    let csvContent = "\uFEFF"; 
+    csvContent += "Aluno,Materia,Nota,Data\n";
+
+    dadosParaExportar.forEach(n => {
+        const dataFormatada = new Date(n.created_at).toLocaleDateString('pt-BR');
+        csvContent += `${n.usuario_nome},${n.materia},${n.nota},${dataFormatada}\n`;
+    });
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "notas_ccom.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+};
+
+// 4. Inicialização e Filtro
+document.addEventListener("DOMContentLoaded", () => {
+    carregarDados();
+
+    const filtro = document.getElementById("filtroAluno");
+    if (filtro) {
+        filtro.addEventListener("input", (e) => {
+            const termo = e.target.value.toUpperCase();
+            const cards = document.querySelectorAll(".card-aluno");
+            cards.forEach(card => {
+                const nome = card.dataset.nome;
+                card.style.display = nome.includes(termo) ? "block" : "none";
+            });
+        });
+    }
+});

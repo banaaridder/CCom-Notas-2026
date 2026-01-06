@@ -85,16 +85,19 @@
     </header>
 
     <main class="container">
-        <section class="stats-overview">
-            <div class="stat-card">
-                <span class="label">Alunos em Lista</span>
-                <span id="total-alunos" class="value">0</span>
-            </div>
-            <div class="stat-card">
-                <span class="label">Lançamentos Totais</span>
-                <span id="total-notas" class="value">0</span>
-            </div>
-        </section>
+       <section class="stats-overview">
+    <div class="stat-card">
+        <span class="label">Alunos em Lista</span>
+        <span id="total-alunos" class="value">0</span>
+    </div>
+    <div class="stat-card">
+        <span class="label">Lançamentos Totais</span>
+        <span id="total-notas" class="value">0</span>
+        <button onclick="exportarParaExcel()" class="btn-export">
+            <i class="fa-solid fa-file-excel"></i> Exportar Notas
+        </button>
+    </div>
+</section>
 
         <div class="search-bar">
             <i class="fa-solid fa-magnifying-glass"></i>
