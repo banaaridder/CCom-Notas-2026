@@ -9,20 +9,39 @@ document.addEventListener("DOMContentLoaded", () => {
         spanUsername.textContent = nomeUsuario;
     }
 
-    // 2. Lógica para Injetar o Painel se for ADMIN
+    // 2. Lógica de Restrição e Injeção para o ADMIN
     if (nomeUsuario === "ADMIN") {
         
-        // Injetar no Desktop (Lado Direito, após o Ranking Geral)
+        // --- REMOVER LINKS INDESEJADOS ---
+        // Lista de páginas que o instrutor NÃO deve ver no menu
+        const paginasParaRemover = ["Notas", "Campo"];
+
+        const removerLinks = (container) => {
+            if (!container) return;
+            const links = container.querySelectorAll("a");
+            links.forEach(link => {
+                // Se o texto do link estiver na nossa "lista negra", removemos o elemento
+                if (paginasParaRemover.includes(link.textContent.trim())) {
+                    link.remove();
+                }
+            });
+        };
+
+        removerLinks(navLinksDesktop);
+        removerLinks(mobileMenu);
+
+        // --- INJETAR PAINEL ADMIN ---
+        
+        // Injetar no Desktop (Lado Direito, ao lado do Ranking)
         if (navLinksDesktop && !navLinksDesktop.querySelector('a[href="admin.html"]')) {
             const linkAdminDesk = document.createElement("a");
             linkAdminDesk.href = "admin.html";
             linkAdminDesk.className = "link-admin-destaque";
             linkAdminDesk.innerHTML = '<i class="fa-solid fa-user-shield"></i> Painel';
-            // .append() coloca o elemento por último na lista
             navLinksDesktop.append(linkAdminDesk);
         }
 
-        // Injetar no Mobile (Mantém no topo para fácil acesso)
+        // Injetar no Mobile (Topo da lista)
         if (mobileMenu && !mobileMenu.querySelector('a[href="admin.html"]')) {
             const linkAdminMob = document.createElement("a");
             linkAdminMob.href = "admin.html";
@@ -31,10 +50,6 @@ document.addEventListener("DOMContentLoaded", () => {
             mobileMenu.prepend(linkAdminMob);
         }
     }
-});
-document.getElementById("username").addEventListener("click", e => {
-    e.stopPropagation();
-    e.preventDefault();
 });
 
 
