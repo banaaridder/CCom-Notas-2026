@@ -3,32 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>Painel do Instrutor CCom</title>
-
-
-     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="header.css">
     <link rel="stylesheet" href="admin.css">
     <link rel="icon" type="image/png" href="assets/favicon.png">
     <script>
-            // PROTEÇÃO DE ROTA: Executa antes de carregar o resto
-            if (localStorage.getItem("nomeUsuario") !== "ADMIN") {
-                window.location.href = "index.html";
-            }
-        </script>
+        if (localStorage.getItem("nomeUsuario") !== "ADMIN") { window.location.href = "index.html"; }
+    </script>
     <meta name="theme-color" content="#1b383a">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 </head>
 <body>
 <header class="header">
     <img src="assets/com.png" class="logo">
-
-     <img src="assets/com.png" class="logo-mobile">
-
     <div class="center">
         <h1>COMUNICAÇÕES</h1>
-
-        <!-- NAV CENTRAL -->
         <nav class="nav-links">
             <a href="qts.html">QTS</a>
             <a href="calendario.html">Calendário</a>
@@ -38,90 +27,76 @@
             <a href="ranking.html">Ranking Geral</a>
         </nav>
     </div>
-
-    <!-- SAIR DESKTOP -->
     <a href="login.html" class="logout-desktop">
         <span class="username" id="username"></span>
-        <i class="fas fa-right-from-bracket"></i>
-        Sair
+        <i class="fas fa-right-from-bracket"></i> Sair
     </a>
     <img src="assets/AL.png" class="logo">
-    
-
-    <!-- BOTÃO MOBILE -->
-        <button class="menu-toggle" id="menuToggle">
-    <span></span>
-    <span></span>
-    <span></span>
-    </button>
+    <button class="menu-toggle" id="menuToggle"><span></span><span></span><span></span></button>
 </header>
 
 <nav class="mobile-menu">
-            <a href="qts.html">QTS</a>
-            <a href="calendario.html">Calendário</a>
-            <a href="campo.html">Campo</a>
-            <a href="papiro.html">Papiro</a>
-            <a href="index.html">Notas</a>
-            <a href="ranking.html">Ranking Geral</a>
-
-    <!-- SAIR MOBILE -->
-    <a href="login.html" class="logout-mobile">
-        <span class="username" id="username-mobile"></span>
-        <i class="fas fa-right-from-bracket"></i>
-        Sair
-    </a>
+    <a href="qts.html">QTS</a>
+    <a href="calendario.html">Calendário</a>
+    <a href="campo.html">Campo</a>
+    <a href="papiro.html">Papiro</a>
+    <a href="index.html">Notas</a>
+    <a href="ranking.html">Ranking Geral</a>
 </nav>
 
 <div class="overlay"></div>
 
 <header class="admin-header">
-        <div class="header-content">
-            <div class="logo-area">
-                <i class="fa-solid fa-user-shield"></i>
-                <h1>SISTEMA DE MONITORIZAÇÃO (INSTRUTOR)</h1>
-            </div>
-            <a href="index.html" class="btn-voltar"><i class="fa-solid fa-arrow-left"></i> Voltar</a>
+    <div class="header-content">
+        <div class="logo-area">
+            <i class="fa-solid fa-user-shield"></i>
+            <h1>SISTEMA DE MONITORIZAÇÃO (INSTRUTOR)</h1>
         </div>
-    </header>
-
-    <main class="container">
-       <section class="stats-overview">
-    <div class="stat-card">
-        <span class="label">Alunos em Lista</span>
-        <span id="total-alunos" class="value">0</span>
+        <a href="index.html" class="btn-voltar"><i class="fa-solid fa-arrow-left"></i> Voltar</a>
     </div>
-    <div class="stat-card">
-        <span class="label">Lançamentos Totais</span>
-        <span id="total-notas" class="value">0</span>
-        <button onclick="exportarParaExcel()" class="btn-export">
-            <i class="fa-solid fa-file-excel"></i> Exportar Notas
-        </button>
+</header>
+
+<main class="container">
+    <section class="stats-overview">
+        <div class="stat-card">
+            <span class="label">Contas criadas</span>
+            <span id="total-alunos" class="value">0</span>
+        </div>
+        <div class="stat-card">
+            <span class="label">Lançamentos de notas</span>
+            <span id="total-notas" class="value">0</span>
+            <button onclick="exportarParaExcel()" class="btn-export">
+                <i class="fa-solid fa-file-excel"></i> Exportar Notas
+            </button>
+        </div>
+    </section>
+
+    <div class="search-bar">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="filtroAluno" placeholder="Procurar aluno por nome de guerra...">
     </div>
-</section>
 
-        <div class="search-bar">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="filtroAluno" placeholder="Procurar aluno por nome de guerra...">
+    <div id="grid-alunos" class="grid-alunos">
+        <div class="loading">Carregando dados...</div>
+    </div>
+</main>
+
+<div id="modalAluno" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <div id="modalHeader">
+            <h2 id="modalNomeAluno">Nome</h2>
+            <div id="modalMediaBadge" class="media-badge">--</div>
         </div>
-
-        <div id="grid-alunos" class="grid-alunos">
-            <div class="loading">A carregar dados do Supabase...</div>
-        </div>
-    </main>
-
-
-</div>
+        <div id="modalListaNotas" class="modal-body-scroll"></div>
+    </div>
 </div>
 
-
-
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase.js"></script>
 <script src="header.js"></script>
 <script src="auth.js"></script>
 <script src="admin.js"></script>
-
-
 </body>
 </html>
