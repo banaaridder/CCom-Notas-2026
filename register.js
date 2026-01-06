@@ -36,7 +36,7 @@ async function registrarComFeedback(btn) {
         "EDUARDO NASCIMENTO", "F DANTAS", "NASCIMENTO ANTUNES", "SIMOES", "TRANCOZO", 
         "RITZMANN", "CASTRO ALVES", "CHRISTIAN", "S GABRIEL", "DEIVISSON", "THOMAS", 
         "CAMILO", "TAVARES NETO", "SERPA", "GIMENEZ", "ZAKUR", "CARVALHO SOUZA", 
-        "DE ARAUJO", "DOMINGUES"
+        "DE ARAUJO", "DOMINGUES", "ADMIN"
     ];
 
     if (!alunosOficiais.includes(usuario)) {
