@@ -445,3 +445,4 @@ function mascaraTempo(input) {
     if (valor.length >= 3) valor = valor.slice(0, 2) + ":" + valor.slice(2);
     input.value = valor;
 }
+

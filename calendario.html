@@ -15,7 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-<header class="header">
+   <header class="header">
     <img src="assets/com.png" class="logo">
 
      <img src="assets/com.png" class="logo-mobile">
@@ -36,7 +36,10 @@
 
     <!-- SAIR DESKTOP -->
     <a href="login.html" class="logout-desktop">
-        <span class="username" id="username"></span>
+<div class="user-info-header">
+    <span id="username" class="username">Carregando...</span>
+    <div id="user-badges-header" class="badges-header"></div>
+</div>
         <i class="fas fa-right-from-bracket"></i>
         Sair
     </a>
@@ -52,6 +55,7 @@
 </header>
 
 <nav class="mobile-menu">
+    
             <a href="qts.html">QTS</a>
             <a href="calendario.html">Calendário</a>
             <a href="campo.html">Campo</a>
@@ -61,7 +65,11 @@
 
     <!-- SAIR MOBILE -->
     <a href="login.html" class="logout-mobile">
-        <span class="username" id="username-mobile"></span>
+<div class="user-info-header">
+    <span id="username" class="username">Carregando...</span>
+    <div id="user-badges-header" class="badges-header"></div>
+</div>
+</div>
         <i class="fas fa-right-from-bracket"></i>
         Sair
     </a>

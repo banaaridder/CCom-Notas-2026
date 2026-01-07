@@ -56,9 +56,10 @@ body {
 
 .ranking-options {
     display: flex;
-    gap: 10px;
-    white-space: nowrap; /* Impede que os botões quebrem linha */
-    padding: 0 5px;
+    gap: 12px;
+    white-space: nowrap;
+    padding: 0 20px;
+    margin: 0 auto; /* Reforça a centralização */
 }
 
 /* Botões de Opção */
@@ -88,9 +89,14 @@ body {
     box-shadow: 0 0 10px rgba(0, 175, 239, 0.4);
 }
 
+/* Container que permite o scroll */
 .ranking-options-container {
-    cursor: grab; /* Mão aberta indicando que pode pegar */
-    user-select: none; /* Impede selecionar texto enquanto arrasta */
+    width: 100%;
+    display: flex;
+    justify-content: center; /* Centraliza quando os botões não ocupam a tela toda */
+    overflow-x: auto;
+    padding: 10px 0 20px 0;
+    scrollbar-width: none; 
 }
 
 .ranking-options-container.active-dragging {
@@ -187,6 +193,10 @@ body {
     .ranking tbody td {
         border: none;
         padding: 6px;
+    }
+
+    .ranking-options-container {
+        justify-content: flex-start;
     }
 }
 

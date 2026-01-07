@@ -64,6 +64,75 @@ body {
     padding-top: 95px;
 }
 
+.user-info-header{
+    max-width: 150px;
+}
+
+
+.badges-container {
+    display: flex;
+    gap: 5px;
+    font-size: 0.75rem;
+    margin-top: 4px;
+    margin-left: 0;
+}
+
+
+/* Estilo geral das etiquetas de distintivo */
+.badge-pill {
+display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px; /* Controla o espaço exato entre o ícone e o texto */
+    padding: 4px 10px; /* Aumentamos um pouco o padding lateral */
+    border-radius: 12px; /* Garante o formato de pílula arredondada */
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap; /* Impede que o texto quebre linha */
+    width: fit-content;  /* Força o badge a ter apenas a largura do texto */
+    vertical-align: middle;
+    border: 1px solid transparent;
+}
+
+.badge-pill i {
+    margin: 0 !important; 
+    padding: 0 !important;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+}
+
+/* Cores específicas para cada distintivo */
+.badge-pill.elite {
+    background: rgba(255, 215, 0, 0.15) !important;
+    color: #ffd700 !important; /* Dourado */
+    border-color: rgba(255, 215, 0, 0.4) !important;
+}
+
+.badge-pill.cacador {
+    background: rgba(231, 76, 60, 0.15);
+    color: #e74c3c;
+    border-color: rgba(231, 76, 60, 0.3);
+}
+
+.badge-pill.guerreiro {
+    background: rgba(0, 0, 0, 0.5) !important; /* Fundo levemente branco */
+    color: #8b8b8b !important; /* Texto branco */
+    border-color: rgba(0, 0, 0, 0.4) !important;
+}
+
+.badge-pill.mestre {
+    background: rgba(255, 255, 255, 0.1) !important; /* Fundo levemente branco */
+    color: #ffffff !important; /* Texto branco */
+    border-color: rgba(255, 255, 255, 0.4) !important;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+}
+
+/* Ajuste para o Header não ficar muito grande */
+.badges-header .badge-pill {
+    font-size: 0.65rem;
+    padding: 1px 6px;
+}
 
 
 /* Logos */
@@ -237,6 +306,35 @@ body {
     color: rgb(0,175,239);
     text-decoration: none;
     font-size: 18px;
+}
+
+.user-info-mobile {
+    padding: 20px 15px;
+    border-top: 1px solid var(--border-soft);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.user-info-mobile .username {
+    font-weight: bold;
+    color: var(--primary);
+    font-size: 1.1rem;
+}
+
+/* Garante que os badges no mobile fiquem alinhados à esquerda e quebrem linha se necessário */
+#user-badges-mobile {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-left: 0; /* No mobile, alinhar à esquerda do menu */
+}
+
+/* Ajuste no tamanho do badge dentro do menu mobile para não ocupar a tela toda */
+.user-info-mobile .badge-pill {
+    margin-left: 0;
+    font-size: 0.7rem;
+    padding: 4px 8px;
 }
 
 /* SAIR MOBILE */
