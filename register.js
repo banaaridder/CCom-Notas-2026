@@ -1,16 +1,19 @@
 document.addEventListener("DOMContentLoaded", () => {
     const btn = document.getElementById("btn");
     const senhaInput = document.getElementById("senha");
+    
     btn.addEventListener("click", async () => {
         await registrarComFeedback(btn);
     });
 
-    senhaInput.addEventListener("keypress", (e) => {
-        if (e.key === "Enter") {
-            // Evita comportamentos padrão e clica no botão
-            e.preventDefault();
-            btn.click();
-        }
+    // Atalho com a tecla Enter
+    [document.getElementById("usuario"), senhaInput, document.getElementById("confirmar-senha")].forEach(el => {
+        el.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                btn.click();
+            }
+        });
     });
 });
 
@@ -20,7 +23,28 @@ async function registrarComFeedback(btn) {
     const confirmarInput = document.getElementById("confirmar-senha");
     const mensagemErro = document.getElementById("mensagem-erro");
 
-    const usuario = usuarioInput.value.trim().toUpperCase(); // Normaliza para maiúsculo
+    // 1. PADRONIZAÇÃO TOTAL (Maiúsculo e sem espaços)
+    const usuarioRaw = usuarioInput.value.trim().toUpperCase();
+    const senha = senhaInput.value;
+    const confirmar = confirmarInput.value;
+
+    // Reset Visual
+    mensagemErro.textContent = "";
+    mensagemErro.style.opacity = 1;
+    btn.className = "btn-feedback salvando";
+
+    // 2. VALIDAÇÕES BÁSICAS
+    if (!usuarioRaw || !senha || !confirmar) {
+        exibirErro("Preencha todos os campos!", [usuarioInput, senhaInput, confirmarInput]);
+        return;
+    }
+
+    if (senha !== confirmar) {
+        exibirErro("As senhas não conferem!", [confirmarInput]);
+        return;
+    }
+
+    // 3. LISTA DE ALUNOS AUTORIZADOS
     const alunosOficiais = [
         "ROGER", "D SILVA", "GABRIEL PIMENTEL", "REBELO", "DAVI COSTA", "GOES", 
         "FRANCO", "CONTILE", "LOBO", "GUILHERME SOUZA", "ALMEIDA", "DOS REIS", 
@@ -33,108 +57,62 @@ async function registrarComFeedback(btn) {
         "VALE", "LUIZ SANTOS", "BERTUCE", "KAUA SOUZA", "CLAUDIO", "DE ALBUQUERQUE", 
         "GABRIEL SILVA", "MENDONCA", "AMORIM", "P MOURA", "EDUARDO", "TAUAN", 
         "V MAGALHAES", "CONCEICAO", "CYRILLO", "LUCAS ABREU", "BARCELLOS", "MAURO", 
-        "LISBOA", "GUEDES", "PRADO", "THIAGO WESLLEY", "STELLE", "MEIRELES", 
-        "MONTANHA", "VITOR", "MATHEUS BARBOSA", "ANTONIO SILVA", "ASSUNCAO", 
-        "GABRIEL AMORA", "VERRI", "DE ANGELO", "JOAO CESARIO", "LUCAS ALVES", 
-        "L SILVEIRA", "FAGUNDES", "COSTA", "AURINO", "R MOURA", "JULIACI", 
-        "LUAN SILVA", "JOAO SANTOS", "ARTHUR", "ISIDORO", "ENZO FERRARI", 
-        "CARLOS EDUARDO", "FEITOSA", "CAPUTO", "DE CASTRO", "LUCAS CRUZ", 
-        "DIOGO VINICIUS", "VICTOR SANTOS", "E FAGNER", "SILVA GOMES", "PIRES SOUZA", 
-        "C ALCANTARA", "JULIAO", "CAMPOS", "MAURILIO", "JOAO RODRIGUES", "LATTO", 
-        "BASTOS", "TEOFILO", "MARCENES", "FRANK", "FARIAS", "JEZIEL", "J RIBEIRO", 
-        "EDUARDO NASCIMENTO", "F DANTAS", "NASCIMENTO ANTUNES", "SIMOES", "TRANCOZO", 
-        "RITZMANN", "CASTRO ALVES", "CHRISTIAN", "S GABRIEL", "DEIVISSON", "THOMAS", 
-        "CAMILO", "TAVARES NETO", "SERPA", "GIMENEZ", "ZAKUR", "CARVALHO SOUZA", 
-        "DE ARAUJO", "DOMINGUES", "GONÇALVES", "D.LIMA", "ADMIN"
+        "LISBOA", "GUEDES", "FARIAS", "JEZIEL", "J RIBEIRO", "EDUARDO NASCIMENTO", 
+        "F DANTAS", "NASCIMENTO ANTUNES", "SIMOES", "TRANCOZO", "RITZMANN", 
+        "CASTRO ALVES", "CHRISTIAN", "S GABRIEL", "DEIVISSON", "THOMAS", "CAMILO", 
+        "TAVARES NETO", "SERPA", "GIMENEZ", "ZAKUR", "CARVALHO SOUZA", "DE ARAUJO", 
+        "DOMINGUES", "GONÇALVES", "D LIMA", "ADMIN"
     ];
 
-    if (!alunosOficiais.includes(usuario)) {
-        mensagemErro.textContent = "Nome não identificado na lista oficial de alunos.";
-        usuarioInput.classList.add("input-erro");
-        btn.className = "btn-feedback erro";
-        resetErroFade(btn, [usuarioInput], mensagemErro, 1500);
+    if (!alunosOficiais.includes(usuarioRaw)) {
+        exibirErro("Nome de guerra não autorizado.", [usuarioInput]);
         return;
     }
 
-    // Reset visual
-    mensagemErro.textContent = "";
-    mensagemErro.style.opacity = 1;
-    usuarioInput.classList.remove("input-erro");
-    senhaInput.classList.remove("input-erro");
-    confirmarInput.classList.remove("input-erro");
-    btn.className = "btn-feedback salvando";
+    try {
+        // 4. VERIFICAÇÃO REAL NO BANCO
+        // Usamos .maybeSingle() para não disparar erro caso não encontre
+        const { data: usuarioExistente, error: erroBusca } = await window.supabaseClient
+            .from("usuarios")
+            .select("nome")
+            .eq("nome", usuarioRaw)
+            .maybeSingle();
 
-    const senha = senhaInput.value;
-    const confirmarSenha = confirmarInput.value;
+        if (erroBusca) throw erroBusca;
 
-    // Validação campos vazios
-    let erro = false;
-    if (!usuario) { usuarioInput.classList.add("input-erro"); erro = true; }
-    if (!senha) { senhaInput.classList.add("input-erro"); erro = true; }
-    if (!confirmarSenha) { confirmarInput.classList.add("input-erro"); erro = true; }
-    if (erro) {
-        mensagemErro.textContent = "Preencha todos os campos";
-        btn.className = "btn-feedback erro";
-        resetErroFade(btn, [usuarioInput, senhaInput, confirmarInput], mensagemErro, 1000);
-        return;
-    }
+        if (usuarioExistente) {
+            exibirErro("Este aluno já possui conta!", [usuarioInput]);
+            return;
+        }
 
-    // Verificar se senhas coincidem
-    if (senha !== confirmarSenha) {
-        mensagemErro.textContent = "As senhas não coincidem";
-        senhaInput.classList.add("input-erro");
-        confirmarInput.classList.add("input-erro");
-        btn.className = "btn-feedback erro";
-        resetErroFade(btn, [senhaInput, confirmarInput], mensagemErro, 1000);
-        return;
-    }
+        // 5. INSERÇÃO (CRIAR CONTA)
+        const { error: erroInsert } = await window.supabaseClient
+            .from("usuarios")
+            .insert([{ nome: usuarioRaw, senha: senha }]);
 
-    // Verificar se usuário já existe
-    const { data } = await window.supabaseClient
-        .from("usuarios")
-        .select("*")
-        .eq("nome", usuario)
-        .single();
+        if (erroInsert) throw erroInsert;
 
-    if (data) {
-        mensagemErro.textContent = "Nome de usuário já existe";
-        usuarioInput.classList.add("input-erro");
-        btn.className = "btn-feedback erro";
-        resetErroFade(btn, [usuarioInput], mensagemErro, 1000);
-        return;
-    }
-
-    // Criar usuário
-    const { error } = await window.supabaseClient
-        .from("usuarios")
-        .insert({ nome: usuario, senha });
-
-    if (error) {
-        mensagemErro.textContent = "Erro ao criar conta";
-        btn.className = "btn-feedback erro";
-        resetErroFade(btn, [usuarioInput, senhaInput, confirmarInput], mensagemErro, 1000);
-        return;
-    }
-
-    // Conta criada com sucesso
-    btn.className = "btn-feedback salvo";
-    setTimeout(() => {
-        window.location.href = "login.html";
-    }, 900);
-}
-
-// Função de reset com fade
-function resetErroFade(btn, inputs = [], mensagem, tempo = 1000) {
-    setTimeout(() => {
-        mensagem.style.transition = "opacity 0.5s";
-        mensagem.style.opacity = 0;
-        btn.className = "btn-feedback";
-
-        inputs.forEach(input => input.classList.remove("input-erro"));
-
+        // SUCESSO
+        btn.className = "btn-feedback salvo";
         setTimeout(() => {
-            mensagem.textContent = "";
-            mensagem.style.opacity = 1;
-        }, 500);
-    }, tempo);
+            window.location.href = "login.html";
+        }, 1200);
+
+    } catch (error) {
+        console.error("Erro no Supabase:", error);
+        exibirErro("Erro na rede. Tente novamente.", []);
+    }
+
+    // Função interna para facilitar a exibição de erros
+    function exibirErro(msg, inputs) {
+        mensagemErro.textContent = msg;
+        btn.className = "btn-feedback erro";
+        inputs.forEach(i => i.classList.add("input-erro"));
+        
+        setTimeout(() => {
+            mensagemErro.style.opacity = 0;
+            btn.className = "btn-feedback";
+            inputs.forEach(i => i.classList.remove("input-erro"));
+        }, 2500);
+    }
 }

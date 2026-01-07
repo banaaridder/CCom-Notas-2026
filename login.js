@@ -28,6 +28,7 @@ async function loginComFeedback(btn) {
     btn.className = "btn-feedback salvando";
 
     const usuario = usuarioInput.value.trim();
+    const usuarioDigitado = usuarioInput.value.trim().toUpperCase();
     const senha = senhaInput.value;
 
     // Validação campos vazios
@@ -45,8 +46,8 @@ async function loginComFeedback(btn) {
     const { data, error } = await window.supabaseClient
         .from("usuarios")
         .select("*")
-        .eq("nome", usuario)
-        .single();
+        .eq("nome", usuarioDigitado)
+        .maybeSingle();
 
     if (error || !data) {
         mensagemErro.textContent = "Usuário não encontrado";

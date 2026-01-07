@@ -71,19 +71,33 @@
 
 
 <div class="materia ranking">
-    <h2>Ranking Geral</h2>
+    <h2>Ranking</h2>
+
+    <div class="ranking-options-container">
+        <div class="ranking-options" id="ranking-options">
+            <button class="opt-btn active" data-materia="media_geral">Geral</button>
+            <button class="opt-btn" data-materia="tfm">TFM</button>
+            <button class="opt-btn" data-materia="tiro">Tiro</button>
+            <button class="opt-btn" data-materia="tec">Tec Mil Com</button>
+            <button class="opt-btn" data-materia="fund">Fund. das Com</button>
+            <button class="opt-btn" data-materia="ciber">Cibernética</button>
+            <button class="opt-btn" data-materia="empre">Emprego</button>
+            <button class="opt-btn" data-materia="pt">Português</button>
+            <button class="opt-btn" data-materia="racio">Raciocínio</button>
+            <button class="opt-btn" data-materia="didat">Didática</button>
+        </div>
+    </div>
 
     <table>
         <thead>
             <tr>
                 <th>#</th>
                 <th>Aluno</th>
-                <th>Média Geral</th>
+                <th id="label-media">Média Geral</th>
             </tr>
         </thead>
         <tbody id="ranking-body"></tbody>
     </table>
-</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

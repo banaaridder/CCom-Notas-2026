@@ -36,6 +36,75 @@ body {
     letter-spacing: 1px;
 }
 
+/* Container do Scroll Lateral */
+.ranking-options-container {
+    width: 100%;
+    overflow-x: auto; /* Habilita o scroll lateral */
+    padding: 10px 0 20px 0;
+    margin-bottom: 10px;
+    -webkit-overflow-scrolling: touch; /* Scroll suave no iOS */
+}
+
+/* Esconder a barra de scroll feia em alguns navegadores */
+.ranking-options-container::-webkit-scrollbar {
+    height: 4px;
+}
+.ranking-options-container::-webkit-scrollbar-thumb {
+    background: rgba(0, 175, 239, 0.3);
+    border-radius: 10px;
+}
+
+.ranking-options {
+    display: flex;
+    gap: 10px;
+    white-space: nowrap; /* Impede que os botões quebrem linha */
+    padding: 0 5px;
+}
+
+/* Botões de Opção */
+.opt-btn {
+    background: rgba(255, 255, 255, 0.05);
+    color: #888;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    flex-shrink: 0; /* Impede que o botão esmague */
+}
+
+.opt-btn:hover {
+    background: rgba(0, 175, 239, 0.1);
+    color: #00afef;
+}
+
+.opt-btn.active {
+    background: #00afef;
+    color: #000;
+    border-color: #00afef;
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(0, 175, 239, 0.4);
+}
+
+.ranking-options-container {
+    cursor: grab; /* Mão aberta indicando que pode pegar */
+    user-select: none; /* Impede selecionar texto enquanto arrasta */
+}
+
+.ranking-options-container.active-dragging {
+    cursor: grabbing; /* Mão fechada enquanto arrasta */
+    scroll-behavior: auto; /* Desativa o scroll suave apenas durante o arrasto para evitar atrasos */
+}
+
+/* Ajuste na tabela para manter o width fixo */
+.materia.ranking {
+    max-width: 720px;
+    width: 95%; /* Garante margens em telas pequenas */
+    margin: 40px auto;
+}
+
 /* =========================
    TABELA
 ========================= */
