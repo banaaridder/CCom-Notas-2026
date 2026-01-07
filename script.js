@@ -62,132 +62,118 @@ let ultimoSnapshot = "";
 const AUTO_SAVE_DELAY = 1500;
 
 /* =========================
-   SNAPSHOT DOS INPUTS
-========================= */
-function criarSnapshot() {
-    const dados = {};
-
-    // Captura todos os inputs (como já fazia)
-    document.querySelectorAll("input, select, textarea").forEach(el => {
-        if (!el.id || el.id === "btn-modo-teste") return;
-        if (el.type === "checkbox") {
-            dados[el.id] = el.checked;
-        } else {
-            dados[el.id] = el.value;
-        }
-    });
-
-    // NOVIDADE: Captura os valores das médias calculadas nos spans
-    // Isso garante que o ranking tenha de onde ler no banco de dados
-    const spansMedia = [
-        "media-tfm", "media-tiro", "media-tec", "media-fund", 
-        "media-ciber", "media-empre", "media-pt", "media-racio", "media-didat"
-    ];
-
-    spansMedia.forEach(id => {
-        const span = document.getElementById(id);
-        if (span) {
-            // Salva com a chave "media-xxx" para o ranking encontrar
-            dados[id] = span.innerText; 
-        }
-    });
-
-    return JSON.stringify(dados);
-}
-/* =========================
-   AGENDAR AUTO-SAVE
-========================= */
-function agendarAutoSave() {
-    // Bloqueia auto-save se estiver no modo teste
-    const checkTeste = document.getElementById("btn-modo-teste");
-    if (checkTeste && checkTeste.checked) return;
-
-    const btn = document.getElementById("btnSalvar");
-    const status = document.getElementById("status-save");
-    if (!btn || !status) return;
-
-    const snapshotAtual = criarSnapshot();
-    if (snapshotAtual === ultimoSnapshot) return;
-
-    btn.className = "btn-salvar pendente";
-    status.textContent = "Alterações pendentes…";
-    status.style.color = "#00afef";
-
-    clearTimeout(autoSaveTimer);
-    autoSaveTimer = setTimeout(() => {
-        salvarNotas(snapshotAtual);
-    }, AUTO_SAVE_DELAY);
-}
-
-/* =========================
    EVENTOS PRINCIPAIS
 ========================= */
 document.addEventListener("DOMContentLoaded", async () => {
-    // Força o modo teste a começar desativado ao carregar/recarregar a página
+    // Forçar Modo Teste OFF no F5
     const checkTeste = document.getElementById("btn-modo-teste");
     if (checkTeste) checkTeste.checked = false;
 
-    // Configura botões
     const btnSalvar = document.getElementById("btnSalvar");
-    if (btnSalvar) {
-        btnSalvar.addEventListener("click", () => {
+if (btnSalvar) {
+    btnSalvar.addEventListener("click", () => {
+        const checkTeste = document.getElementById("btn-modo-teste");
+        // Só permite salvar se não estiver no modo teste
+        if (checkTeste && !checkTeste.checked) {
+            // Chamamos o salvarNotas passando o snapshot atual
             salvarNotas(criarSnapshot());
-        });
-    }
+        }
+    });
+}
 
-    // Configura o Switch do Modo Teste
     configurarModoTeste();
-
-    // Carrega dados do Supabase
+    configurarMediaMobile(); // Ativa a média flutuante
     await carregarNotasDoUsuario();
 
-    // Auto-save e cálculos ao digitar
     document.addEventListener("input", (e) => {
-        if (!carregamentoConcluido) return;
-        if (e.target.id === "btn-modo-teste") return;
-        
+        if (!carregamentoConcluido || e.target.id === "btn-modo-teste") return;
         calcularTudo();
         agendarAutoSave();
     });
 });
 
 /* =========================
-   LÓGICA DO MODO TESTE
+   MÉDIA MOBILE FLUTUANTE (BACKUP RESTAURADO)
 ========================= */
+function configurarMediaMobile() {
+    const containerMedia = document.getElementById('container-media');
+    const anchor = document.getElementById('anchor-media');
+    
+    if (!containerMedia || !anchor) return;
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            const isMobile = window.innerWidth <= 768;
+            if (isMobile) {
+                if (!entry.isIntersecting) {
+                    containerMedia.classList.add('fixed-mobile');
+                    document.body.classList.add('with-fixed-footer');
+                } else {
+                    containerMedia.classList.remove('fixed-mobile');
+                    document.body.classList.remove('with-fixed-footer');
+                }
+            } else {
+                containerMedia.classList.remove('fixed-mobile');
+                document.body.classList.remove('with-fixed-footer');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    observer.observe(anchor);
+}
+
+/* =========================
+   MODO TESTE E SNAPSHOT
+========================= */
+function criarSnapshot() {
+    const dados = {};
+    document.querySelectorAll("input, select, textarea").forEach(el => {
+        if (!el.id || el.id === "btn-modo-teste") return;
+        dados[el.id] = el.type === "checkbox" ? el.checked : el.value;
+    });
+    // Salva médias calculadas para o ranking
+    ["media-tfm", "media-tiro", "media-tec", "media-fund", "media-ciber", "media-empre", "media-pt", "media-racio", "media-didat"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) dados[id] = el.innerText;
+    });
+    return JSON.stringify(dados);
+}
+
 function configurarModoTeste() {
     const checkTeste = document.getElementById("btn-modo-teste");
     const statusTexto = document.getElementById("status-teste");
     const btnSalvar = document.getElementById("btnSalvar");
 
-    if (!checkTeste) return;
-
-    checkTeste.addEventListener("change", async () => {
+    checkTeste?.addEventListener("change", async () => {
         if (checkTeste.checked) {
-            // ATIVAR MODO TESTE
-            statusTexto.innerHTML = "<strong>MODO SIMULAÇÃO ATIVO</strong><br>Salvamento bloqueado. Teste suas notas!";
+            statusTexto.innerHTML = "<strong>MODO SIMULAÇÃO ATIVO - Teste suas notas alvo</strong>";
             statusTexto.style.color = "#f1c40f";
-            
-            if (btnSalvar) {
-                btnSalvar.disabled = true;
-                btnSalvar.style.filter = "grayscale(1)";
-                btnSalvar.style.cursor = "not-allowed";
-            }
+            if (btnSalvar) btnSalvar.disabled = true;
         } else {
-            // DESATIVAR MODO TESTE
-            statusTexto.innerText = "Limpando testes e restaurando notas reais...";
+            statusTexto.innerText = "Restaurando notas reais...";
+            if (btnSalvar) btnSalvar.disabled = false;
+            await carregarNotasDoUsuario(); // Limpa inputs voltando dados do banco
+            statusTexto.innerText = "Desativado - Notas reais restauradas.";
             statusTexto.style.color = "#ccc";
-
-            if (btnSalvar) {
-                btnSalvar.disabled = false;
-                btnSalvar.style.filter = "none";
-                btnSalvar.style.cursor = "pointer";
-            }
-
-            // LIMPAR INPUTS: Recarrega os dados reais do Supabase
-            await carregarNotasDoUsuario();
-            statusTexto.innerText = "Desativado - Notas originais restauradas.";
         }
     });
+}
+
+function agendarAutoSave() {
+    const checkTeste = document.getElementById("btn-modo-teste");
+    if (checkTeste?.checked) return;
+
+    const snapshotAtual = criarSnapshot();
+    if (snapshotAtual === ultimoSnapshot) return;
+
+    // ADICIONA O PULSO: Indica que há algo novo para salvar
+    const btnSalvar = document.getElementById("btnSalvar");
+    if (btnSalvar) btnSalvar.classList.add("pendente");
+
+    clearTimeout(autoSaveTimer);
+    autoSaveTimer = setTimeout(() => {
+        salvarNotas(snapshotAtual);
+    }, AUTO_SAVE_DELAY);
 }
 
 /* =========================
