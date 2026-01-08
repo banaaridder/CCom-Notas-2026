@@ -15,34 +15,69 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-// login.js - Altere a parte final da função loginComFeedback
 async function loginComFeedback(btn) {
-    // ... (suas validações de campo permanecem iguais)
+    const usuarioInput = document.getElementById("usuario");
+    const senhaInput = document.getElementById("senha");
+    const mensagemErro = document.getElementById("mensagem-erro");
 
-    // EM VEZ DE CONSULTAR A TABELA "usuarios", USE O AUTH DO SUPABASE:
-    const { data, error } = await window.supabaseClient.auth.signInWithPassword({
-        email: usuario.includes('@') ? usuario : `${usuario}@seudominio.com`, // Supabase exige formato de e-mail
-        password: senha,
-    });
+    // Reset visual
+    mensagemErro.textContent = "";
+    mensagemErro.style.opacity = 1;
+    usuarioInput.classList.remove("input-erro");
+    senhaInput.classList.remove("input-erro");
+    btn.className = "btn-feedback salvando";
 
-    if (error) {
-        mensagemErro.textContent = "Usuário ou senha inválidos";
+    const usuario = usuarioInput.value.trim();
+    const usuarioDigitado = usuarioInput.value.trim().toUpperCase();
+    const senha = senhaInput.value;
+
+    // Validação campos vazios
+    let erro = false;
+    if (!usuario) { usuarioInput.classList.add("input-erro"); erro = true; }
+    if (!senha) { senhaInput.classList.add("input-erro"); erro = true; }
+    if (erro) {
+        mensagemErro.textContent = "Preencha todos os campos";
         btn.className = "btn-feedback erro";
         resetErroFade(btn, [usuarioInput, senhaInput], mensagemErro, 1000);
         return;
     }
 
-    // Login REAL bem-sucedido
-    btn.className = "btn-feedback salvo";
-    
-    // Opcional: manter seus itens de localStorage para compatibilidade com outras telas
-    localStorage.setItem("usuarioLogado", data.user.id);
+    // Verificar usuário no Supabase
+    const { data, error } = await window.supabaseClient
+        .from("usuarios")
+        .select("*")
+        .eq("nome", usuarioDigitado)
+        .maybeSingle();
+
+    if (error || !data) {
+        mensagemErro.textContent = "Usuário não encontrado";
+        btn.className = "btn-feedback erro";
+        resetErroFade(btn, [usuarioInput, senhaInput], mensagemErro, 1000);
+        return;
+    }
+
+    if (data.senha !== senha) {
+        mensagemErro.textContent = "Senha incorreta";
+        btn.className = "btn-feedback erro";
+        resetErroFade(btn, [senhaInput], mensagemErro, 1000);
+        return;
+    }
+
+    // Login bem-sucedido
+btn.className = "btn-feedback salvo";
+    localStorage.setItem("usuarioLogado", data.id);
+    const nomeFormatado = data.nome.toUpperCase().trim();
+    localStorage.setItem("nomeUsuario", nomeFormatado);
 
     setTimeout(() => {
-        window.location.href = "index.html";
+        // REDIRECIONAMENTO INTELIGENTE
+        if (nomeFormatado === "ADMIN") {
+            window.location.href = "admin.html";
+        } else {
+            window.location.href = "index.html";
+        }
     }, 700);
 }
-
 
 // Função para resetar botão e inputs com fade
 function resetErroFade(btn, inputs = [], mensagem, tempo = 1000) {

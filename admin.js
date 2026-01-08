@@ -1,4 +1,4 @@
-
+let filtroCorAtual = 'todos';
 
 const supabaseAdmin = window.supabaseClient;
 
@@ -8,7 +8,11 @@ const TABELAS_TFM = {
     corrida: [{aa:660,ac:645,nota:10},{aa:697,ac:680,nota:8.5},{aa:733,ac:716,nota:7},{aa:757,ac:740,nota:6},{aa:820,ac:791,nota:3.5}],
     flexao: [{aa:41,ac:42,nota:10},{aa:35,ac:36,nota:8.5},{aa:29,ac:30,nota:7},{aa:25,ac:26,nota:6},{aa:15,ac:16,nota:3.5}],
     barra: [{aa:10,ac:12,nota:10},{aa:8,ac:9,nota:8.5},{aa:6,ac:7,nota:7},{aa:5,ac:6,nota:6},{aa:2,ac:3,nota:3.5}],
-    natacao: [{aa:45,ac:41,nota:10},{aa:55,ac:51,nota:8.5},{aa:65,ac:61,nota:7},{aa:75,ac:71,nota:6},{aa:100,ac:96,nota:3.5}],
+    // Substitua a linha da natacao dentro de TABELAS_TFM por esta:
+natacao: [
+        { aa: 17, ac: 15, nota: 10 }, { aa: 21, ac: 19, nota: 8.5 }, 
+        { aa: 26, ac: 24, nota: 7 }, { aa: 32, ac: 30, nota: 6 }, { aa: 54, ac: 52, nota: 3.5 }
+    ],
     corda: [{aa:1,ac:1,nota:10}],
     ppm: [{aa:1,ac:1,nota:10}]
 };
@@ -55,30 +59,43 @@ function gerarCards(mapaUsuarios, notas, filtro = "") {
     if (!grid) return;
     grid.innerHTML = "";
     
-    const alunosFiltrados = alunosOficiais.filter(nome => 
+    // 1. Filtra primeiro pela busca de texto (Nome)
+    const alunosFiltradosPorNome = alunosOficiais.filter(nome => 
         nome.toUpperCase().includes(filtro.toUpperCase())
     );
 
-    alunosFiltrados.forEach(alunoNome => {
+    alunosFiltradosPorNome.forEach(alunoNome => {
         const registro = notas.find(n => mapaUsuarios[n.usuario_id] === alunoNome.toUpperCase().trim());
-        const card = document.createElement("div");
-        card.className = "card-aluno";
+        const mediaGeral = registro ? parseFloat(registro.media_geral) : null;
         
-        // Atribui o evento de clique de forma segura
-        card.addEventListener('click', () => {
-            abrirModal(alunoNome, registro || null);
-        });
+        // 2. Determina a cor do status baseado na nota
+        let corStatus = "vazio"; // Padrão para quem não tem nota
+        if (mediaGeral !== null && !isNaN(mediaGeral)) {
+            if (mediaGeral >= 8.0) corStatus = "verde";
+            else if (mediaGeral > 6.0) corStatus = "amarelo";
+            else corStatus = "vermelho";
+        }
 
-        card.innerHTML = `
-            <div class="card-header-resumido">
-                <h3>${alunoNome}</h3>
-                <div class="media-badge">${registro?.media_geral || "--"}</div>
-            </div>
-            <p class="click-info">Clique para ver detalhes</p>`;
-        grid.appendChild(card);
+        // 3. Aplica o Filtro de Cor selecionado pelos botões
+        if (filtroCorAtual === 'todos' || filtroCorAtual === corStatus) {
+            const card = document.createElement("div");
+            // Adiciona a classe status-cor para a borda lateral
+            card.className = `card-aluno status-${corStatus}`;
+            
+            card.addEventListener('click', () => {
+                abrirModal(alunoNome, registro || null);
+            });
+
+            card.innerHTML = `
+                <div class="card-header-resumido">
+                    <h3>${alunoNome}</h3>
+                    <div class="media-badge ${corStatus}">${registro?.media_geral || "--"}</div>
+                </div>
+                <p class="click-info">Clique para ver detalhes</p>`;
+            grid.appendChild(card);
+        }
     });
 }
-
 // Lógica de Busca
 document.getElementById("filtroAluno").addEventListener("input", (e) => {
     gerarCards(window.dadosUsuarios, window.dadosNotas, e.target.value);
@@ -87,6 +104,7 @@ document.getElementById("filtroAluno").addEventListener("input", (e) => {
 function abrirModal(nome, registro) {
     const modal = document.getElementById("modalAluno");
     const lista = document.getElementById("modalListaNotas");
+    const badgeModal = document.getElementById("modalMediaBadge"); // Referência ao badge do modal
     
     if (!modal || !lista) return;
 
@@ -95,12 +113,28 @@ function abrirModal(nome, registro) {
     // Se não houver registro, mostra aviso e abre o modal
     if (!registro || !registro.dados) {
         lista.innerHTML = "<p class='vazio'>Nenhum lançamento encontrado para este aluno.</p>";
-        document.getElementById("modalMediaBadge").textContent = "--";
+        badgeModal.textContent = "--";
+        badgeModal.classList.remove("verde", "amarelo", "vermelho"); // Limpa cores se estiver vazio
         modal.style.display = "flex";
         return;
     }
 
-    document.getElementById("modalMediaBadge").textContent = registro.media_geral || "--";
+    // --- LÓGICA DE COR DO BADGE ADICIONADA AQUI ---
+    const mediaGeral = registro.media_geral || "--";
+    badgeModal.textContent = mediaGeral;
+    
+    // Limpa classes anteriores para não acumular
+    badgeModal.classList.remove("verde", "amarelo", "vermelho");
+    
+    // Aplica a classe baseada na nota
+    if (mediaGeral !== "--") {
+        const notaNum = parseFloat(mediaGeral);
+        if (notaNum >= 8.0) badgeModal.classList.add("verde");
+        else if (notaNum > 6.0) badgeModal.classList.add("amarelo");
+        else badgeModal.classList.add("vermelho");
+    }
+    // ----------------------------------------------
+
     const d = registro.dados;
     let htmlFinal = "";
 
@@ -247,3 +281,154 @@ document.addEventListener("DOMContentLoaded", () => {
         if (e.target == modal) modal.style.display = "none"; 
     };
 });
+
+
+
+function filtrarPorCor(cor) {
+    filtroCorAtual = cor;
+    
+    // Atualiza o visual dos botões de filtro
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    const btnAtivo = document.querySelector(`.filter-btn.${cor === 'todos' ? 'all' : cor}`);
+    if (btnAtivo) btnAtivo.classList.add('active');
+    
+    // Dispara a atualização do grid mantendo o que estiver escrito na busca por nome
+    const termoBusca = document.getElementById("filtroAluno").value;
+    gerarCards(window.dadosUsuarios, window.dadosNotas, termoBusca);
+}
+
+async function gerarPDFIndividual() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({
+        orientation: "p",
+        unit: "mm",
+        format: "a4"
+    });
+
+    const nomeGuerra = document.getElementById("modalNomeAluno").textContent;
+    const mediaGeral = document.getElementById("modalMediaBadge").textContent;
+    const dataEmissao = new Date().toLocaleDateString();
+
+    // --- CONFIGURAÇÃO DE CABEÇALHO ---
+    const azulEscuro = [27, 56, 58];
+    const laranjaTema = [255, 159, 67];
+
+    doc.setFillColor(...azulEscuro);
+    doc.rect(0, 0, 210, 40, 'F');
+    
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(18);
+    doc.text("RELATÓRIO DE DESEMPENHO INDIVIDUAL", 105, 20, { align: "center" });
+    doc.setFontSize(11);
+    doc.text("CURSO DE FORMAÇÃO DE SARGENTOS - CCom", 105, 30, { align: "center" });
+
+    // --- INFO ALUNO ---
+    doc.setTextColor(0, 0, 0);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    doc.text(`ALUNO: ${nomeGuerra}`, 15, 55);
+    
+    // Badge de Média no PDF
+    doc.setFillColor(...laranjaTema);
+    doc.roundedRect(160, 48, 35, 12, 2, 2, 'F');
+    doc.setTextColor(0, 0, 0);
+    doc.text(mediaGeral, 177.5, 56, { align: "center" });
+    doc.setFontSize(8);
+    doc.text("MÉDIA GERAL", 177.5, 63, { align: "center" });
+
+    doc.setFont("helvetica", "normal");
+    doc.text(`Data de Emissão: ${dataEmissao}`, 15, 62);
+    doc.line(15, 67, 195, 67);
+
+    // --- COLETA DE DADOS DINÂMICA ---
+    const linhasNotas = [];
+    const secoes = document.querySelectorAll("#modalListaNotas .secao-modal");
+
+    secoes.forEach(secao => {
+        const tituloArea = secao.querySelector(".secao-header span").textContent;
+        const subNotas = secao.querySelectorAll(".sub-nota, .linha-tfm-detalhe, .linha-extra");
+        
+        subNotas.forEach((nota, index) => {
+            // Limpa o texto para o PDF (remove excesso de espaços e quebras)
+            const textoNota = nota.innerText.replace(/\s\s+/g, ' ').trim();
+            // Apenas adiciona o título da área na primeira linha daquela área
+            linhasNotas.push([index === 0 ? tituloArea : "", textoNota]);
+        });
+    });
+
+    // --- GERAÇÃO DA TABELA COM AUTO-PAGING ---
+    doc.autoTable({
+        startY: 75,
+        head: [['ÁREA', 'AVALIAÇÃO / NOTA DETALHADA']],
+        body: linhasNotas,
+        theme: 'striped',
+        headStyles: { fillColor: azulEscuro, textColor: [255, 255, 255], fontStyle: 'bold' },
+        columnStyles: {
+            0: { cellWidth: 50, fontStyle: 'bold' },
+            1: { cellWidth: 'auto' }
+        },
+        margin: { top: 45, bottom: 20 },
+        didDrawPage: function (data) {
+            // Rodapé em cada página
+            doc.setFontSize(8);
+            doc.setTextColor(150, 150, 150);
+            doc.text(`Página ${data.pageNumber}`, 105, 290, { align: "center" });
+        }
+    });
+
+    // --- RESUMO DE COMPETÊNCIAS (Abaixo da tabela) ---
+    let finalY = doc.lastAutoTable.finalY + 15;
+
+    // Verificar se cabe o resumo na página atual, senão cria nova
+    if (finalY > 240) {
+        doc.addPage();
+        finalY = 30;
+    }
+
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "bold");
+    doc.text("GRÁFICO DE DESEMPENHO (SÍNTESE)", 15, finalY);
+
+    // Extraímos médias das áreas principais para as barras
+    const categorias = [
+        { label: "Técnica Militar", nota: extrairMedia(secoes, "Técnicas") },
+        { label: "Cibernética", nota: extrairMedia(secoes, "Cibernética") },
+        { label: "Ensino", nota: extrairMedia(secoes, "Ensino") },
+        { label: "TFM", nota: extrairMedia(secoes, "TFM") }
+    ];
+
+    categorias.forEach((cat, i) => {
+        const yBar = finalY + 15 + (i * 12);
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "normal");
+        doc.text(cat.label, 15, yBar);
+
+        // Fundo da barra
+        doc.setFillColor(235, 235, 235);
+        doc.rect(55, yBar - 4, 100, 5, 'F');
+
+        // Cor da barra baseada na nota
+        if (cat.nota >= 8) doc.setFillColor(46, 204, 113);
+        else if (cat.nota >= 6) doc.setFillColor(241, 196, 15);
+        else doc.setFillColor(231, 76, 60);
+
+        const larguraBarra = Math.min(cat.nota * 10, 100); // Max 100mm
+        doc.rect(55, yBar - 4, larguraBarra, 5, 'F');
+        doc.text(cat.nota > 0 ? cat.nota.toFixed(2) : "N/I", 160, yBar);
+    });
+
+    doc.save(`Relatorio_${nomeGuerra}.pdf`);
+}
+
+// Função auxiliar para pegar a média das badges no modal
+function extrairMedia(secoes, busca) {
+    let nota = 0;
+    secoes.forEach(s => {
+        if (s.innerText.includes(busca)) {
+            const badge = s.querySelector(".badge-media-item");
+            if (badge) nota = parseFloat(badge.innerText);
+        }
+    });
+    return nota;
+}

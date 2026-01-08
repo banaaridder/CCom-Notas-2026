@@ -91,7 +91,7 @@ body {
 
 .search-bar {
     position: relative;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
 
 .search-bar i {
@@ -116,6 +116,63 @@ body {
     border-color: var(--primary-gold);
 }
 
+.filter-status-container {
+    max-width: 1200px;
+    margin-bottom: 40px;
+    display: flex;
+    gap: 10px;
+    padding: 0 20px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.filter-btn {
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: 1px solid #30363d;
+    background: #161b22;
+    color: var(--text-light);
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+}
+
+.filter-btn.active {
+    border-color: var(--primary-gold);
+    background: var(--primary-gold);
+    color: #000;
+    font-weight: bold;
+}
+
+.filter-btn.verde {
+    border-color: #2ecc71;
+    color: #2ecc71;
+}
+
+.filter-btn.amarelo {
+    border-color: #f1c40f;
+    color: #f1c40f;
+}
+
+.filter-btn.vermelho{
+    border-color: #e74c3c;
+    color: #e74c3c;
+}
+
+/* Cores específicas no hover ou quando ativos */
+.filter-btn.verde:hover {
+    background: #2ecc701e;
+}
+
+.filter-btn.amarelo:hover {
+    background: #f1c40f1e;
+}
+
+.filter-btn.vermelho:hover{
+    background: #e74c3c1e;
+}
+
 /* ==================================================
    GRID DE ALUNOS
 ================================================== */
@@ -134,6 +191,25 @@ body {
     transition: 0.3s;
 }
 
+/* Cores do Semáforo */
+.status-verde {
+    border-color: #2ecc71 !important; /* Verde Sucesso */
+}
+
+.status-amarelo {
+    border-color: #f1c40f !important; /* Amarelo Atenção */
+}
+
+.status-vermelho {
+    border-color: #e74c3c !important; /* Vermelho Crítico */
+}
+
+/* Ajuste no badge para combinar com o semáforo se desejar */
+.status-vermelho .media-badge {
+    background: rgba(231, 76, 60, 0.2);
+    color: #ff6b6b;
+    border: 1px solid #e74c3c;
+}
 .card-aluno:hover {
     background: #1c2128;
     border-color: var(--primary-gold);
@@ -167,6 +243,33 @@ body {
     font-size: 0.75rem;
     color: #555;
 }
+
+/* admin.css */
+
+/* Cores dinâmicas para o Badge de Média */
+.media-badge.verde {
+    background: rgba(46, 204, 113, 0.2);
+    color: #2ecc71;
+    border: 1px solid #2ecc71;
+}
+
+.media-badge.amarelo {
+    background: rgba(241, 196, 15, 0.2);
+    color: #f1c40f;
+    border: 1px solid #f1c40f;
+}
+
+.media-badge.vermelho {
+    background: rgba(231, 76, 60, 0.2);
+    color: #e74c3c;
+    border: 1px solid #e74c3c;
+}
+
+/* Garante que o badge no modal também siga o padrão se necessário */
+#modalMediaBadge.verde { background: #2ecc71; color: #000; }
+#modalMediaBadge.amarelo { background: #f1c40f; color: #000; }
+#modalMediaBadge.vermelho { background: #e74c3c; color: #000; }
+
 
 /* ==================================================
    MODAL
@@ -211,11 +314,17 @@ body {
     border-bottom: 1px solid #30363d;
 }
 
+#modalNomeAluno{
+    margin-bottom: 10px;
+}
+
 .modal-body-scroll {
     padding: 20px;
     overflow-y: auto;
     flex-grow: 1;
 }
+
+
 
 /* ==================================================
    CONTEÚDO INTERNO DO MODAL
