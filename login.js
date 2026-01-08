@@ -63,17 +63,21 @@ async function loginComFeedback(btn) {
         return;
     }
 
-    // Login bem-sucedido
-btn.className = "btn-feedback salvo";
+// Login bem-sucedido
+    btn.className = "btn-feedback salvo";
     localStorage.setItem("usuarioLogado", data.id);
     const nomeFormatado = data.nome.toUpperCase().trim();
     localStorage.setItem("nomeUsuario", nomeFormatado);
 
     setTimeout(() => {
-        // REDIRECIONAMENTO INTELIGENTE
-        if (nomeFormatado === "ADMIN") {
+        // REDIRECIONAMENTO CORRIGIDO
+        const admins = ["ADMIN", "DAVI COSTA"];
+        
+        if (admins.includes(nomeFormatado)) {
+            console.log("Redirecionando Admin...");
             window.location.href = "admin.html";
         } else {
+            console.log("Redirecionando Aluno...");
             window.location.href = "index.html";
         }
     }, 700);

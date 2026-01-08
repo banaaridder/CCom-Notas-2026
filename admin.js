@@ -1,6 +1,21 @@
 let filtroCorAtual = 'todos';
-
 const supabaseAdmin = window.supabaseClient;
+
+// --- SEGURANÇA MÁXIMA (admin.js) ---
+(function() {
+    const id = localStorage.getItem("usuarioLogado");
+    const nome = (localStorage.getItem("nomeUsuario") || "").toUpperCase().trim();
+    const permitidos = ["ADMIN", "DAVI COSTA"];
+
+    // Se não tiver ID (não está logado) ou o nome não for permitido
+    if (!id || !permitidos.includes(nome)) {
+        console.error("Acesso negado para:", nome);
+        window.location.replace("index.html"); // Usa replace para não deixar voltar no botão 'voltar'
+        return;
+    }
+    console.log("Acesso Admin confirmado para:", nome);
+})();
+// ---------------------------------------------
 
 const alunosOficiais = ["ROGER", "D SILVA", "GABRIEL PIMENTEL", "REBELO", "DAVI COSTA", "GOES", "FRANCO", "CONTILE", "LOBO", "GUILHERME SOUZA", "ALMEIDA", "DOS REIS", "MATEUS RIBEIRO", "SAMUEL VICTOR", "YURY LINS", "J VICTOR", "LUCAS RYAN", "ROSANOVA", "CORDEIRO SILVA", "TEODORO", "DAVI CARLOS", "L MARTINS", "CAIO NASCIMENTO", "MATHEUS SILVA", "CESAR", "CESTARO", "PERROTTE", "WAGNER PEREIRA", "CLEMENTE", "WALLACE OLIVEIRA", "ESTEVAO", "PEDRO CARVALHO", "R SILVA", "GUILHERME FERREIRA", "QUEIROZ", "LEMOS", "LIESSI", "REIS SOUSA", "SOUZA MOTA", "ALCANTARA", "ADRIEL VALENÇA", "THALES", "VICTOR PEREIRA", "VALE", "LUIZ SANTOS", "BERTUCE", "KAUA SOUZA", "CLAUDIO", "DE ALBUQUERQUE", "GABRIEL SILVA", "MENDONCA", "AMORIM", "P MOURA", "EDUARDO", "TAUAN", "V MAGALHAES", "CONCEICAO", "CYRILLO", "LUCAS ABREU", "BARCELLOS", "MAURO", "LISBOA", "GUEDES", "PRADO", "THIAGO WESLLEY", "STELLE", "MEIRELES", "MONTANHA", "VITOR", "MATHEUS BARBOSA", "ANTONIO SILVA", "ASSUNCAO", "GABRIEL AMORA", "VERRI", "DE ANGELO", "JOAO CESARIO", "LUCAS ALVES", "L SILVEIRA", "FAGUNDES", "COSTA", "AURINO", "R MOURA", "JULIACI", "LUAN SILVA", "JOAO SANTOS", "ARTHUR", "ISIDORO", "ENZO FERRARI", "CARLOS EDUARDO", "FEITOSA", "CAPUTO", "DE CASTRO", "LUCAS CRUZ", "DIOGO VINICIUS", "VICTOR SANTOS", "E FAGNER", "SILVA GOMES", "PIRES SOUZA", "C ALCANTARA", "JULIAO", "CAMPOS", "MAURILIO", "JOAO RODRIGUES", "LATTO", "BASTOS", "TEOFILO", "MARCENES", "FRANK", "FARIAS", "JEZIEL", "J RIBEIRO", "EDUARDO NASCIMENTO", "F DANTAS", "NASCIMENTO ANTUNES", "SIMOES", "TRANCOZO", "RITZMANN", "CASTRO ALVES", "CHRISTIAN", "S GABRIEL", "DEIVISSON", "THOMAS", "CAMILO", "TAVARES NETO", "SERPA", "GIMENEZ", "ZAKUR", "CARVALHO SOUZA", "DE ARAUJO", "DOMINGUES", "GONÇALVES", "D LIMA"];
 
@@ -41,7 +56,8 @@ async function carregarDados() {
         const mapaUsuarios = {};
         usuarios.forEach(u => mapaUsuarios[u.id] = u.nome.toUpperCase().trim());
         
-        const apenasAlunos = usuarios.filter(u => u.nome.toUpperCase().trim() !== "ADMIN");
+        const restritos = ["ADMIN", "DAVI COSTA"];
+        const apenasAlunos = usuarios.filter(u => !restritos.includes(u.nome.toUpperCase().trim()));
         document.getElementById("total-alunos").textContent = apenasAlunos.length;
         document.getElementById("total-notas").textContent = notas.length;
         
@@ -281,7 +297,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (e.target == modal) modal.style.display = "none"; 
     };
 });
-
 
 
 function filtrarPorCor(cor) {

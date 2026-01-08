@@ -128,6 +128,14 @@ display: inline-flex;
     text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
 }
 
+/* Badge ADMIN */
+.badge-pill.admin {
+    background-color: #000000; /* Fundo Preto */
+    color: #ff4757;            /* Texto Vermelho ou Dourado (#ffd700) */
+    border: 1px solid #ff4757;
+    box-shadow: 0 0 5px rgba(255, 71, 87, 0.5);
+}
+
 /* Ajuste para o Header não ficar muito grande */
 .badges-header .badge-pill {
     font-size: 0.65rem;
