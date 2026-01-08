@@ -53,28 +53,28 @@
     </button>
 </header>
 
-<nav class="mobile-menu">
-    
-            <a href="qts.html">QTS</a>
-            <a href="calendario.html">Calendário</a>
-            <a href="campo.html">Campo</a>
-            <a href="papiro.html">Papiro</a>
-            <a href="index.html">Notas</a>
-            <a href="ranking.html">Ranking Geral</a>
 
-    <!-- SAIR MOBILE -->
+<nav class="mobile-menu">
+    <a href="qts.html">QTS</a>
+    <a href="calendario.html">Calendário</a>
+    <a href="campo.html">Campo</a>
+    <a href="papiro.html">Papiro</a>
+    <a href="index.html">Notas</a>
+    <a href="ranking.html">Ranking Geral</a>
+
+    <div class="user-info-mobile">
+        <span id="username-mobile" class="username">Carregando...</span>
+        <div id="user-badges-mobile" class="badges-header"></div>
+    </div>
+
     <a href="login.html" class="logout-mobile">
-<div class="user-info-header">
-    <span id="username" class="username">Carregando...</span>
-    <div id="user-badges-header" class="badges-header"></div>
-</div>
-</div>
         <i class="fas fa-right-from-bracket"></i>
         Sair
     </a>
 </nav>
 
 <div class="overlay"></div>
+
 
 <div class="container-materias" >
     <h2 class="titulo-sessao">Matérias do CCom</h2>
@@ -121,7 +121,115 @@
     </div>
 </div>
 
+<main class="container-papiro">
+        <h2 class="titulo-sessao"><i class="fa-solid fa-list-check"></i> Checklist de Avaliações</h2>
+        
+        <div class="papiro-grid">
+            <div class="card-papiro-missao" data-materia="tecmil">
+                <div class="card-header-missao">
+                    <i class="fas fa-walkie-talkie icon-materia"></i>
+                    <div class="info">
+                        <h3>Téc. Mil. Com</h3>
+                        <div class="mini-progress"><div class="fill"></div></div>
+                    </div>
+                    <span class="percent-tag">0%</span>
+                </div>
+                <ul class="kit-items">
+                    <li class="item"><label class="checkbox-container"><input type="checkbox" data-prova="aa1"><span class="checkmark"></span><span class="item-nome">AA1</span></label><span class="countdown-prova"></span></li>
+                    <li class="item"><label class="checkbox-container"><input type="checkbox" data-prova="aa2"><span class="checkmark"></span><span class="item-nome">AA2</span></label><span class="countdown-prova"></span></li>
+                    <li class="item"><label class="checkbox-container"><input type="checkbox" data-prova="ac"><span class="checkmark"></span><span class="item-nome">AC</span></label><span class="countdown-prova"></span></li>
+                </ul>
+            </div>
 
+            <div class="card-papiro-missao" data-materia="fund">
+                <div class="card-header-missao">
+                    <i class="fas fa-podcast icon-materia"></i>
+                    <div class="info">
+                        <h3>Fundamentos</h3>
+                        <div class="mini-progress"><div class="fill"></div></div>
+                    </div>
+                    <span class="percent-tag">0%</span>
+                </div>
+                <ul class="kit-items">
+                    <li class="item"><label class="checkbox-container"><input type="checkbox" data-prova="aa"><span class="checkmark"></span><span class="item-nome">AA</span></label><span class="countdown-prova"></span></li>
+                    <li class="item"><label class="checkbox-container"><input type="checkbox" data-prova="ac"><span class="checkmark"></span><span class="item-nome">AC</span></label><span class="countdown-prova"></span></li>
+                </ul>
+            </div>
+
+            <div class="card-papiro-missao" data-materia="empre">
+                <div class="card-header-missao">
+                    <i class="fas fa-map-location-dot icon-materia"></i>
+                    <div class="info">
+                        <h3>Emprego Com</h3>
+                        <div class="mini-progress"><div class="fill"></div></div>
+                    </div>
+                    <span class="percent-tag">0%</span>
+                </div>
+                <ul class="kit-items">
+                    <li class="item"><label class="checkbox-container"><input type="checkbox" data-prova="aa"><span class="checkmark"></span><span class="item-nome">AA</span></label><span class="countdown-prova"></span></li>
+                    <li class="item"><label class="checkbox-container"><input type="checkbox" data-prova="ac"><span class="checkmark"></span><span class="item-nome">AC</span></label><span class="countdown-prova"></span></li>
+                </ul>
+            </div>
+
+            <div class="card-papiro-missao" data-materia="ciber">
+                <div class="card-header-missao">
+                    <i class="fas fa-microchip icon-materia"></i>
+                    <div class="info">
+                        <h3>Cibernética</h3>
+                        <div class="mini-progress"><div class="fill"></div></div>
+                    </div>
+                    <span class="percent-tag">0%</span>
+                </div>
+                <ul class="kit-items">
+                    <li class="item"><label class="checkbox-container"><input type="checkbox" data-prova="aa1"><span class="checkmark"></span><span class="item-nome">AA1</span></label><span class="countdown-prova"></span></li>
+                    <li class="item"><label class="checkbox-container"><input type="checkbox" data-prova="aa2"><span class="checkmark"></span><span class="item-nome">AA2</span></label><span class="countdown-prova"></span></li>
+                    <li class="item"><label class="checkbox-container"><input type="checkbox" data-prova="ac"><span class="checkmark"></span><span class="item-nome">AC</span></label><span class="countdown-prova"></span></li>
+                </ul>
+            </div>
+
+            <div class="card-papiro-missao" data-materia="pt">
+                <div class="card-header-missao">
+                    <i class="fas fa-pen-nib icon-materia"></i>
+                    <div class="info">
+                        <h3>Português</h3>
+                        <div class="mini-progress"><div class="fill"></div></div>
+                    </div>
+                    <span class="percent-tag">0%</span>
+                </div>
+                <ul class="kit-items">
+                    <li class="item"><label class="checkbox-container"><input type="checkbox" data-prova="ac"><span class="checkmark"></span><span class="item-nome">AC</span></label><span class="countdown-prova"></span></li>
+                </ul>
+            </div>
+
+            <div class="card-papiro-missao" data-materia="racio">
+                <div class="card-header-missao">
+                    <i class="fas fa-brain icon-materia"></i>
+                    <div class="info">
+                        <h3>Raciocínio Lógico</h3>
+                        <div class="mini-progress"><div class="fill"></div></div>
+                    </div>
+                    <span class="percent-tag">0%</span>
+                </div>
+                <ul class="kit-items">
+                    <li class="item"><label class="checkbox-container"><input type="checkbox" data-prova="ac"><span class="checkmark"></span><span class="item-nome">AC</span></label><span class="countdown-prova"></span></li>
+                </ul>
+            </div>
+
+            <div class="card-papiro-missao" data-materia="didat">
+                <div class="card-header-missao">
+                    <i class="fas fa-graduation-cap icon-materia"></i>
+                    <div class="info">
+                        <h3>Didática</h3>
+                        <div class="mini-progress"><div class="fill"></div></div>
+                    </div>
+                    <span class="percent-tag">0%</span>
+                </div>
+                <ul class="kit-items">
+                    <li class="item"><label class="checkbox-container"><input type="checkbox" data-prova="ac"><span class="checkmark"></span><span class="item-nome">AC</span></label><span class="countdown-prova"></span></li>
+                </ul>
+            </div>
+        </div>
+    </main>
 
 <div class="ferramenta-tecnica">
     <h2><i class="fas fa-list-ul"></i> Consulta Rápida Tática</h2>
@@ -180,7 +288,7 @@
         </div>
     </div>
 
-    <div id="codigoq" class="tab-content">
+    <div id="codigoq" class="tab-content" style="display: none;">
         <div class="tabela-scroll">
             <table class="tabela-consulta">
                 <thead>
