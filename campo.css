@@ -197,39 +197,31 @@ body {
 /* =========================
    CONTEÚDO E ACORDEÃO (CENTRALIZADO)
 ========================= */
+/* Conteúdo do Card - Inicialmente escondido */
 .card-content {
     max-height: 0;
     overflow: hidden;
-    opacity: 0;
-    padding: 0 20px; /* Removido o padding-left exagerado */
-    display: flex;
-    flex-direction: column;
-    transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1), 
-                opacity 0.4s ease, 
-                padding 0.4s ease;
-    margin-left: 20px;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
+    background: var(--bg-card-2);
+    padding: 0 20px; /* Padding lateral mantido, vertical zerado */
 }
 
-.card-campo.active .card-content, 
+/* Estado Ativo (Aberto) */
+.card-campo.active .card-content,
 .card-aprestamento.active .card-content {
-    max-height: 2500px;
-    opacity: 1;
-    padding: 20px; /* Padding uniforme */
-    border-top: 1px solid rgba(0, 175, 239, 0.1);
+    max-height: 1500px; /* Valor alto para comportar listas longas */
+    padding: 20px;
+    border-top: 1px solid var(--border-soft);
 }
 
+/* Rotação da Seta */
 .seta-expandir {
-    color: var(--primary);
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: transform 0.3s ease;
 }
 
 .card-campo.active .seta-expandir,
 .card-aprestamento.active .seta-expandir {
-    transform: translateY(-50%) rotate(180deg);
+    transform: rotate(180deg);
 }
 
 /* =========================

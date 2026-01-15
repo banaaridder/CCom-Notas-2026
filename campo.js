@@ -1,17 +1,25 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const usuarioId = localStorage.getItem("usuarioLogado");
 
-    // 1. EXPANSÃO DOS CARDS
-    const headers = document.querySelectorAll('.card-header');
-    headers.forEach(header => {
-        header.addEventListener('click', function(e) {
-            // Não expande se clicar no checkbox ou no master check
-            if (e.target.closest('.checkbox-container') || e.target.closest('.kit-master-check')) return;
-            
-            const card = this.closest('.card-campo, .card-aprestamento');
-            if (card) card.classList.toggle('active');
-        });
+    // 1. EXPANSÃO DOS CARDS (Otimizado para Mobile)
+const headers = document.querySelectorAll('.card-header');
+headers.forEach(header => {
+    header.addEventListener('click', function(e) {
+        // Ignora se o clique for no checkbox para não fechar o card ao marcar missão
+        if (e.target.closest('.checkbox-container') || e.target.closest('.kit-master-check') || e.target.type === 'checkbox') {
+            return;
+        }
+        
+        const card = this.closest('.card-campo, .card-aprestamento');
+        
+        // Fecha outros cards se quiser manter apenas um aberto (opcional)
+        // document.querySelectorAll('.card-campo.active').forEach(c => { if(c !== card) c.classList.remove('active'); });
+
+        if (card) {
+            card.classList.toggle('active');
+        }
     });
+});
 
     // 2. ESCUTAR MUDANÇAS (SALVAMENTO AUTOMÁTICO)
     document.addEventListener('change', async (e) => {
