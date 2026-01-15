@@ -38,7 +38,7 @@ body {
     left: 0;
     width: 100%;
     z-index: 1100;
-
+    margin-bottom: 200px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -54,9 +54,64 @@ body {
 
     border-bottom: 1px solid rgba(0,175,239,0.25);
     backdrop-filter: blur(6px);
-
+    
     transition: background 0.3s ease, backdrop-filter 0.3s ease;
+    flex-direction: column;
 }
+
+/* Banner Estático no Topo Absoluto */
+.banner-missao {
+    width: 100%;
+    background: linear-gradient(90deg, #004e6e 0%, #00afef 50%, #004e6e 100%);
+    color: white;
+    padding: 10px 15px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center; /* Centraliza o texto */
+    display: none; /* Ativado pelo JS */
+    z-index: 1001;
+    position: fixed; /* Importante para empurrar o header */
+    top: 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.texto-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* Garante que o Header acompanhe a posição */
+.header {
+    position: fixed;
+    top: 0; /* JS ajustará isso para a altura do banner */
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    transition: top 0.2s ease;
+}
+
+
+
+/* AJUSTE ESSENCIAL PARA O CONTEÚDO NÃO FICAR EMBAIXO DO HEADER */
+body {
+    /* Ajuste este valor conforme a altura somada do seu header + banner */
+    padding-top: 110px; 
+}
+
+/* Ajuste para Mobile */
+@media (max-width: 768px) {
+    body {
+        padding-top: 100px;
+    }
+    .banner-missao {
+        font-size: 0.7rem;
+        padding: 4px 0;
+    }
+}
+
 
 
 /* Espaço do conteúdo */
@@ -425,6 +480,7 @@ display: flex;
         top: 50%; /* <--- ALTERE DE 30% PARA 50% */
         transform: translateY(-50%); /* Isso agora funcionará corretamente */
     }
+
 }
 
 @media (max-width: 420px) {
@@ -442,3 +498,4 @@ display: flex;
 .mobile-menu.active + .menu-toggle i {
     transform: rotate(90deg);
 }
+

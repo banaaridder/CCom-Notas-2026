@@ -71,9 +71,9 @@ input::placeholder {
     gap: 40px; /* Espaço entre matérias e média */
     padding: 24px;
     max-width: 1200px;
-    margin: 0 auto;
     position: relative;
     overflow: hidden;
+    
 }
 
 .materias {
@@ -81,6 +81,7 @@ input::placeholder {
     width: 100%;
     max-width: 800px; /* Largura fixa para não esticar demais */
      overflow: hidden;
+    margin-top: -40px;
 }
 
 /* Container Principal */
@@ -287,7 +288,7 @@ input:checked ~ .simulacao-box,
     .media-geral {
         position: fixed;
         right: 40px; 
-        top: 120px;
+        top: 150px;
         width: 280px; /* Defina uma largura real, não 10px */
         margin: 0;
     }

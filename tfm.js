@@ -132,7 +132,8 @@ function abrirModalTFM(chave) {
     document.getElementById('tfmTitle').innerText = modalidade.titulo;
     document.getElementById('tfmIcon').className = modalidade.icon;
     document.getElementById('modalTFM').style.display = 'flex';
-}
+  
+}   
 
 function formatarValor(valor, ehTempo) {
     if (!ehTempo) return valor; // Se for flexão/abdominal, retorna o número puro
@@ -863,5 +864,4 @@ function filtrarCancoes() {
             card.classList.add('hidden');
         }
     });
-
 }

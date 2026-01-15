@@ -174,3 +174,86 @@ document.addEventListener("DOMContentLoaded", () => {
     // ... suas outras funções (configurarMediaMobile, carregarNotasDoUsuario, etc)
     carregarDistintivosHeader(); 
 }); 
+
+
+const EVENTOS_CALENDARIO = [
+    { nome: "INÍCIO DO CURSO", data: "2026-01-22T15:00:00" },
+    { nome: "1º SIESP", data: "2026-05-15T08:00:00" },
+    { nome: "CAMPO BÁSICO", data: "2026-06-10T08:00:00" },
+    { nome: "FORMATURA (SARGENTO)", data: "2026-11-21T10:00:00" } // Data final
+];
+
+function atualizarBannerMissao() {
+    const banner = document.getElementById('bannerContagem');
+    const containerTexto = document.getElementById('textoContagem');
+    if (!banner || !containerTexto) return;
+
+    const agora = new Date();
+    const EVENTOS_CALENDARIO = [
+        { nome: "INÍCIO DO CURSO", data: "2026-01-22T15:00:00" },
+        { nome: "1° ECD Op Pedra Galena", data: "2026-03-09T08:00:00" },
+        { nome: "CARNAVAL", data: "2026-02-14T10:00:00" },
+        { nome: "1º SIESP", data: "2026-05-25T08:00:00" },
+        { nome: "1° ELD FITCOM", data: "2026-07-13T08:00:00" },
+        { nome: "FÉRIAS", data: "2026-07-13T08:00:00" },
+        { nome: "FORMATURA", data: "2026-11-21T10:00:00" }
+    ];
+
+    let mensagem = "";
+    let eventoEncontrado = null;
+
+    // Busca eventos próximos (14 dias)
+    for (let ev of EVENTOS_CALENDARIO) {
+        const dataEv = new Date(ev.data);
+        const diff = Math.ceil((dataEv - agora) / (1000 * 60 * 60 * 24));
+        if (diff > 0 && diff <= 14 && ev.nome !== "FORMATURA") {
+            eventoEncontrado = `${diff} FORA PARA ${ev.nome}!`;
+            break;
+        }
+    }
+
+    if (!eventoEncontrado) {
+        const dataSargento = new Date("2026-11-28T10:00:00");
+        const diffS = Math.ceil((dataSargento - agora) / (1000 * 60 * 60 * 24));
+        eventoEncontrado = diffS > 0 ? `${diffS} FORA PARA SER SARGENTO!` : "MISSÃO CUMPRIDA!";
+    }
+
+    containerTexto.innerHTML = `<i class="fas fa-clock"></i> ${eventoEncontrado}`;
+    banner.style.display = 'block';
+
+    // Ajusta as posições logo após mostrar
+    setTimeout(ajustarPosicaoSuperior, 50);
+}
+
+function ajustarPosicaoSuperior() {
+    const banner = document.getElementById('bannerContagem');
+    const header = document.querySelector('.header');
+    const layout = document.querySelector('.layout, .container-materias, .campos-container');
+
+    if (banner && window.getComputedStyle(banner).display !== 'none') {
+        const alturaBanner = banner.offsetHeight;
+        
+        // Header desce para dar espaço ao banner
+        header.style.top = alturaBanner + 'px';
+        
+        // O conteúdo da página desce (Header + Banner)
+        if (layout) {
+            const alturaTotal = header.offsetHeight + alturaBanner;
+            layout.style.marginTop = (alturaTotal - 50) + 'px';
+        }
+    } else {
+        header.style.top = '0px';
+    }
+}
+
+
+
+
+// No final da sua função atualizarBannerMissao(), após o display = 'block'
+setTimeout(ajustarPosicaoSuperior, 100);
+
+// Também ajuste ao redimensionar a tela (caso o banner mude de altura)
+window.onresize = ajustarPosicaoSuperior;
+
+document.addEventListener('DOMContentLoaded', atualizarBannerMissao);
+
