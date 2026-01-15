@@ -132,7 +132,6 @@ function abrirModalTFM(chave) {
     document.getElementById('tfmTitle').innerText = modalidade.titulo;
     document.getElementById('tfmIcon').className = modalidade.icon;
     document.getElementById('modalTFM').style.display = 'flex';
-    document.body.style.overflow = 'hidden';
 }
 
 function formatarValor(valor, ehTempo) {
@@ -864,4 +863,5 @@ function filtrarCancoes() {
             card.classList.add('hidden');
         }
     });
+
 }
