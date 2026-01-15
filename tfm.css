@@ -488,6 +488,12 @@
     flex-wrap: wrap;
 }
 
+@media (max-width: 768px){
+    .filtros-categoria{
+        margin-top: 0;
+    }
+}
+
 .btn-filtro {
     background: #1a1a1a;
     border: 1px solid #333;
