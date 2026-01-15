@@ -64,9 +64,7 @@ body {
     padding-top: 95px;
 }
 
-.user-info-header{
-    max-width: 150px;
-}
+
 
 
 .badges-container {
@@ -204,7 +202,14 @@ display: inline-flex;
     font-size: 14px;
 }
 
+/*.nav-links a:hover{
+    font-size: 14.5px;
+    text-shadow: rgb(0,175,239) 1px 0 20px;
+    transition: 0.3s;
+}
+
 /* Classe de destaque para o Painel Admin */
+
 .link-admin-destaque {
     color: #ff9f43 !important; /* Dourado padrão */
     font-weight: bold !important;
@@ -237,6 +242,18 @@ display: inline-flex;
     display: flex;
     align-items: center;
     gap: 8px;
+}
+
+.user-info-header{
+
+    max-width: 100px;
+}
+
+.sair-btn {
+
+    color: rgb(0,175,239);
+    text-decoration: none;
+    font-size: 14px;
 }
 
 /* =========================

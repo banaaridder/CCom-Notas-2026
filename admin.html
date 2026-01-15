@@ -29,32 +29,61 @@
 <body>
 <header class="header">
     <img src="assets/com.png" class="logo">
-    <div class="center">
+  <div class="center">
         <h1>COMUNICAÇÕES</h1>
+
+        <!-- NAV CENTRAL -->
         <nav class="nav-links">
             <a href="qts.html">QTS</a>
             <a href="calendario.html">Calendário</a>
             <a href="campo.html">Campo</a>
             <a href="papiro.html">Papiro</a>
+            <a href="tfm.html">TFM</a>
             <a href="index.html">Notas</a>
             <a href="ranking.html">Ranking Geral</a>
         </nav>
     </div>
-    <a href="login.html" class="logout-desktop">
-        <span class="username" id="username"></span>
-        <i class="fas fa-right-from-bracket"></i> Sair
+
+    <!-- SAIR DESKTOP -->
+    <div class="logout-desktop">
+<div class="user-info-header">
+    <span id="username" class="username">Carregando...</span>
+    <div id="user-badges-header" class="badges-header"></div>
+</div>
+<a href="login.html" class="sair-btn">
+        <i class="fas fa-right-from-bracket"></i>
+        Sair
     </a>
-    <img src="assets/AL.png" class="logo">
-    <button class="menu-toggle" id="menuToggle"><span></span><span></span><span></span></button>
+    </div>
+    
+
+    <!-- BOTÃO MOBILE -->
+        <button class="menu-toggle" id="menuToggle">
+    <span></span>
+    <span></span>
+    <span></span>
+    </button>
 </header>
+
 
 <nav class="mobile-menu">
     <a href="qts.html">QTS</a>
     <a href="calendario.html">Calendário</a>
     <a href="campo.html">Campo</a>
     <a href="papiro.html">Papiro</a>
+    <a href="TFM.html">TFM</a>
     <a href="index.html">Notas</a>
     <a href="ranking.html">Ranking Geral</a>
+
+    <div class="user-info-mobile">
+        <span id="username-mobile" class="username">Carregando...</span>
+        <div id="user-badges-mobile" class="badges-header"></div>
+    </div>
+
+    <a href="login.html" class="logout-mobile">
+        <i class="fas fa-right-from-bracket"></i>
+        Sair
+    </a>
 </nav>
 
 <div class="overlay"></div>
@@ -111,9 +140,6 @@
         
         <div id="modalListaNotas" class="modal-body-scroll"></div>
 
-        <button onclick="gerarPDFIndividual()" class="btn-pdf" style="background: #e74c3c; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; margin-top: 10px;">
-             <i class="fa-solid fa-file-pdf"></i> Gerar Relatório PDF
-        </button>
         
     </div>
 </div>

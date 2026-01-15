@@ -23,17 +23,7 @@ body {
     padding: 0 20px;
 }
 
-.titulo-sessao {
-    margin-top: 50px;
-    color: var(--primary-blue);
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-size: 1.25rem;
-    margin-bottom: 25px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
+
 
 .grid-materias {
     display: grid;
@@ -204,6 +194,30 @@ body {
 
 
 
+/* Ajuste do Modal para garantir que ele ocupe o topo absoluto */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.562); 
+    z-index: 999999 !important; /* Valor astronômico */
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(20px);
+    margin-top: 0;
+}
+
+.modal-content {
+    background: #0a0a0a;
+    border: 1px solid var(--primary-blue);
+    z-index: 1000000 !important;
+    
+}
+
+
 .ferramenta-calc {
     background: #111;
     border: 1px solid rgba(0, 175, 239, 0.3);
@@ -311,16 +325,6 @@ body {
     box-shadow: 0 0 15px var(--primary-glow);
 }
 
-h2 {
-    color: var(--primary-blue);
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-size: 1.25rem;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
 
 /* --- TABS ESTILIZADAS --- */
 .tabs {
@@ -507,7 +511,17 @@ body { background-color: var(--bg-dark); color: #e6e6e6; font-family: 'Segoe UI'
 
 .container-papiro { max-width: 1000px; margin: 100px auto 40px; padding: 0 20px; }
 
-.titulo-sessao { color: var(--primary); text-transform: uppercase; letter-spacing: 2px; font-size: 1.1rem; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
+.titulo-sessao {
+    margin-top: 50px;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 1.6rem;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
 .papiro-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
 

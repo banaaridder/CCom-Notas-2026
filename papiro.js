@@ -182,29 +182,70 @@ function abrirMateria(id) {
     const materia = dadosMaterias[id];
     if(!materia) return;
 
+    // Preenche os dados
     document.getElementById('modalTitle').innerText = materia.titulo;
     document.getElementById('modalDescription').innerText = materia.resumo;
     document.getElementById('modalIcon').className = `fas ${materia.icon}`;
     document.getElementById('linkManual').href = materia.pdf;
     document.getElementById('linkEbaula').href = materia.ebaula;
 
-    document.getElementById('materiaModal').style.display = 'flex';
+    // Exibe o modal
+    const modal = document.getElementById('materiaModal');
+    modal.style.display = 'flex';
+
+    // Esconde o Header e Menu (Igual ao TFM)
+    const header = document.querySelector('.header');
+    const menuBtn = document.getElementById('menuToggle');
+    const mobileMenu = document.querySelector('.mobile-menu');
+
+    if (header) header.classList.add('header-sumir');
+    if (menuBtn) menuBtn.classList.add('header-sumir');
+    if (mobileMenu) mobileMenu.classList.add('header-sumir');
+
+    // Bloqueia scroll
+    document.body.style.overflow = 'hidden';
 }
 
 function fecharModal() {
-    document.getElementById('materiaModal').style.display = 'none';
+    const modal = document.getElementById('materiaModal');
+    modal.style.display = 'none';
+
+    // Volta o Header e Menu
+    const header = document.querySelector('.header');
+    const menuBtn = document.getElementById('menuToggle');
+    const mobileMenu = document.querySelector('.mobile-menu');
+
+    if (header) header.classList.remove('header-sumir');
+    if (menuBtn) menuBtn.classList.remove('header-sumir');
+    if (mobileMenu) mobileMenu.classList.remove('header-sumir');
+
+    // Libera scroll
+    document.body.style.overflow = 'auto';
 }
 
+// Fechar com clique fora do modal
 window.addEventListener('click', (event) => {
     const modal = document.getElementById('materiaModal');
-    if (event.target == modal) fecharModal();
+    if (event.target == modal) {
+        fecharModal();
+    }
 });
+
+// Fechar com a tecla ESC
+document.addEventListener('keydown', (event) => {
+    if (event.key === "Escape") {
+        fecharModal();
+    }
+});
+
+// --- OUTRAS FUNÇÕES ---
 
 function calcularAntena() {
     const freq = document.getElementById('freqAntena').value;
     const resultadoContainer = document.getElementById('resultado-container');
     
     if (freq && freq > 0) {
+        // 
         const total = 142.5 / freq;
         const perna = total / 2;
         document.getElementById('total-antena').innerText = total.toFixed(2) + " m";

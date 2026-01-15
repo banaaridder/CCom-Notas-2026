@@ -1,0 +1,513 @@
+/* Ajuste para o conteúdo não ficar escondido sob o header fixo */
+.container-materias {
+    padding-top: 100px;
+    margin-bottom: 50px;
+}
+
+/* Card do TFM - Estilo clicável similar ao Admin */
+.card-papiro-missao {
+    cursor: pointer;
+    transition: transform 0.2s, border-color 0.3s, box-shadow 0.3s;
+    border: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.card-papiro-missao:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 15px var(--primary-glow);
+    background: rgba(0, 175, 239, 0.05);
+}
+
+.resumo-card {
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 10px;
+    font-style: italic;
+}
+
+/* Modal Customizado para Tabela */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 3000;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(10px);
+    
+}
+
+
+.modal-content {
+    background: #111;
+    border: 1px solid var(--primary-blue);
+    width: 90%;
+    max-width: 500px;
+    
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.tabela-scroll {
+     height: 90vh;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-top: 15px;
+    border: 1px solid #222;
+    border-radius: 8px;
+}
+
+.tabela-indices {
+    width: 100%;
+    border-collapse: collapse;
+    
+    
+}
+
+.tabela-indices th {
+    background: #1a1a1a;
+    color: var(--primary-blue);
+    padding: 12px;
+    font-size: 0.8rem;
+    position: sticky;
+    top: 0;
+    text-transform: uppercase;
+}
+
+.tabela-indices td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #222;
+    font-size: 0.9rem;
+}
+
+.nota-destaque {
+    color: var(--military-green);
+    font-weight: bold;
+}
+
+.close-modal {
+    float: right;
+    font-size: 24px;
+    cursor: pointer;
+    color: #fff;
+}
+
+
+.card-papiro-missao {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-papiro-missao:hover {
+    transform: translateY(-8px);
+    border-color: var(--primary-blue);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5), 0 0 15px var(--primary-glow);
+}
+
+.resumo-card {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+    margin: 10px 0;
+}
+
+/* Garante que o título da sessão combine com o Papiro */
+.titulo-sessao h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.5rem;
+    color: #fff;
+}
+
+/* GRID DE PREVIEWS */
+.grid-mementos-visual {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 25px;
+    margin-top: 25px;
+}
+
+.card-preview {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-preview:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-blue);
+    box-shadow: 0 5px 15px rgba(0, 175, 239, 0.2);
+}
+
+/* ÁREA DA IMAGEM (O MEMENTO) */
+.preview-box {
+    position: relative;
+    height: 280px; /* Altura fixa para parecer folha A4 */
+    background: #2a2a2a;
+    cursor: zoom-in;
+    overflow: hidden;
+}
+
+.preview-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ou 'contain' se quiser ver a folha inteira sem cortar */
+    opacity: 0.8;
+    transition: 0.3s;
+}
+
+.preview-box:hover img {
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+/* ÍCONE DE LUPA NO HOVER */
+.overlay-zoom {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.overlay-zoom i {
+    font-size: 2rem;
+    color: #fff;
+    text-shadow: 0 0 10px #000;
+}
+
+.preview-box:hover .overlay-zoom {
+    opacity: 1;
+}
+
+/* RODAPÉ DO CARD */
+.preview-footer {
+    padding: 15px;
+    text-align: center;
+    background: #111;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.preview-footer h3 {
+    font-size: 1rem;
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+.preview-footer p {
+    font-size: 0.8rem;
+    color: #888;
+    margin-bottom: 15px;
+}
+
+.btn-download-card {
+    display: block;
+    background: var(--primary-blue);
+    color: #000;
+    padding: 8px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.85rem;
+    transition: 0.2s;
+}
+
+.btn-download-card:hover {
+    background: #0099cc;
+    color: #fff;
+}
+
+/* --- MODAL DE VISUALIZAÇÃO DE IMAGEM --- */
+
+/* O fundo escuro */
+.modal-overlay {
+    z-index: 9999 !important;
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.92); /* Um pouco mais escuro */
+    justify-content: center;
+    align-items: center;
+    padding: 20px; /* Garante um espaço mínimo nas bordas da tela */
+}
+
+/* O container imediato da imagem */
+.modal-content-img {
+    position: relative;
+    /* Estes dois são cruciais para centralizar SVGs rebeldes */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* Garante que o container nunca seja maior que a tela */
+    max-width: 100%;
+    max-height: 100%;
+}
+
+/* A imagem propriamente dita (JPG, PNG ou SVG) */
+.modal-content-img img {
+    /* O QUE VOCÊ PEDIU: Limita a altura a 85% da altura da visão (viewport height) */
+    max-height: 85vh; 
+    
+    /* Garante que a largura se ajuste automaticamente para não distorcer */
+    width: auto;
+    max-width: 90vw; /* Limite de segurança para largura também */
+    
+    /* Estética */
+    border: 2px solid var(--primary-blue);
+    border-radius: 8px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.8);
+
+    /* CRUCIAL PARA SVG: */
+    display: block; /* Remove espaços fantasmas abaixo da imagem */
+    /* Garante que a imagem inteira caiba dentro das restrições sem ser cortada */
+    object-fit: contain; 
+}
+
+/* Ajuste no botão de fechar para ficar mais visível */
+.modal-content-img .close-modal {
+    position: absolute;
+    top: -35px;
+    right: -10px;
+    color: #fff;
+    font-size: 35px;
+    background: rgba(0,0,0,0.5);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--primary-blue);
+    z-index: 10001;
+}
+
+/* --- CALCULADORA DE PACE --- */
+.container-pacer {
+    margin-top: 30px;
+    width: 100%;
+}
+
+.pacer-horizontal {
+    display: flex;
+    background: rgba(15, 16, 17, 0.9);
+    border: 1px solid #333;
+    border-radius: 12px;
+    overflow: hidden;
+    min-height: 120px;
+}
+
+/* Lado dos Inputs */
+.pacer-inputs {
+    flex: 2;
+    padding: 20px;
+    border-right: 1px solid #333;
+}
+
+
+
+.pacer-header-mini {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.pacer-header-mini i { color: var(--primary-blue); }
+.pacer-header-mini h3 { font-size: 0.9rem; color: #fff; text-transform: uppercase; }
+
+.pacer-row {
+    display: flex;
+    gap: 20px;
+}
+
+.pacer-field { flex: 1; }
+.pacer-field label { display: block; font-size: 0.75rem; color: #888; margin-bottom: 5px; }
+
+.pacer-field input {
+    width: 100%;
+    background: rgba(15, 16, 17, 0.9);
+    border: 1px solid #444;
+    padding: 10px;
+    color: #fff;
+    border-radius: 6px;
+    font-family: 'Orbitron', sans-serif; /* Ou sua fonte padrão */
+}
+
+.pacer-field input:focus{
+    outline: none;
+    border-color: rgb(0,175,239);
+    box-shadow: 0 0 6px rgba(0,175,239,0.6);
+}
+
+/* Lado do Resultado */
+.pacer-display {
+    flex: 1;
+    background: linear-gradient(135deg, rgba(0, 175, 239, 0.05) 0%, rgba(0,0,0,0) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: 0.3s;
+}
+
+.pacer-display.ativo {
+    background: rgba(0, 175, 239, 0.15);
+}
+
+.display-label { display: block; font-size: 0.7rem; color: var(--primary-blue); font-weight: bold; }
+.display-valor { display: block; font-size: 2.2rem; font-weight: 800; color: #fff; line-height: 1; margin: 5px 0; }
+.display-unidade { font-size: 0.8rem; color: #666; }
+
+@media (max-width: 768px) {
+    .pacer-horizontal { flex-direction: column; }
+    .pacer-inputs { border-right: none; border-bottom: 1px solid #333; }
+    .pacer-display { padding: 20px; }
+}
+
+
+/* CANCIONEIRO TFM */
+.container-cancioneiro {
+    margin-top: 40px;
+    margin-bottom: 200px;
+}
+
+.cancioneiro-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.search-box-cancion {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+}
+
+.search-box-cancion i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--primary-blue);
+}
+
+.search-box-cancion input {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid #333;
+    padding: 10px 10px 10px 35px;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 0.9rem;
+    outline: none;
+    transition: 0.3s;
+}
+
+.search-box-cancion input:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 10px rgba(0, 175, 239, 0.2);
+}
+
+/* Esconder cards que não batem com a busca */
+.card-cancao.hidden {
+    display: none;
+}
+
+.grid-cancioneiro {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 15px;
+}
+
+.card-cancao {
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: 0.3s;
+}
+
+.cancao-header {
+    padding: 15px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255,255,255,0.02);
+}
+
+.cancao-header h3 { font-size: 0.9rem; color: #fff; margin: 0; }
+.cancao-header i { color: var(--primary-blue); transition: 0.3s; }
+
+.cancao-corpo {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-out, padding 0.3s;
+    background: #0a0a0a;
+    color: #bbb;
+    font-size: 0.85rem;
+    line-height: 1.6;
+}
+
+/* Estado Aberto */
+.card-cancao.active { border-color: var(--primary-blue); }
+.card-cancao.active .cancao-corpo {
+    max-height: 500px; /* Altura suficiente para a letra */
+    padding: 15px;
+    border-top: 1px solid #222;
+}
+.card-cancao.active .cancao-header i { transform: rotate(180deg); }
+
+.letra-linha { display: block; margin-bottom: 5px; font-style: italic; }
+
+.filtros-categoria {
+    margin-top: 16px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn-filtro {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: #888;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.7rem;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-filtro.active {
+    background: var(--primary-blue);
+    color: #fff;
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 10px rgba(0, 175, 239, 0.3);
+}
+
+.btn-filtro:hover:not(.active) {
+    border-color: var(--primary-blue);
+    color: #fff;
+}

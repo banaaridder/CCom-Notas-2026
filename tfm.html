@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>TFM CCom</title>
+
+    <!-- Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="tfm.css">
+    <link rel="stylesheet" href="papiro.css"> 
+    <link rel="stylesheet" href="header.css">
+    <link rel="stylesheet" href="ranking.css">
+    
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+
+    <meta name="theme-color" content="#1b383a">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+   <header class="header">
+    <img src="assets/com.png" class="logo">
+
+     <img src="assets/com.png" class="logo-mobile">
+
+    <div class="center">
+        <h1>COMUNICAÇÕES</h1>
+
+        <!-- NAV CENTRAL -->
+        <nav class="nav-links">
+            <a href="qts.html">QTS</a>
+            <a href="calendario.html">Calendário</a>
+            <a href="campo.html">Campo</a>
+            <a href="papiro.html">Papiro</a>
+            <a href="tfm.html">TFM</a>
+            <a href="index.html">Notas</a>
+            <a href="ranking.html">Ranking Geral</a>
+        </nav>
+    </div>
+
+    <!-- SAIR DESKTOP -->
+    <div class="logout-desktop">
+<div class="user-info-header">
+    <span id="username" class="username">Carregando...</span>
+    <div id="user-badges-header" class="badges-header"></div>
+</div>
+<a href="login.html" class="sair-btn">
+        <i class="fas fa-right-from-bracket"></i>
+        Sair
+    </a>
+    </div>
+    
+    
+    <!-- BOTÃO MOBILE -->
+        <button class="menu-toggle" id="menuToggle">
+    <span></span>
+    <span></span>
+    <span></span>
+    </button>
+</header>
+
+
+<nav class="mobile-menu">
+    <a href="qts.html">QTS</a>
+    <a href="calendario.html">Calendário</a>
+    <a href="campo.html">Campo</a>
+    <a href="papiro.html">Papiro</a>
+    <a href="TFM.html">TFM</a>
+    <a href="index.html">Notas</a>
+    <a href="ranking.html">Ranking Geral</a>
+
+    <div class="user-info-mobile">
+        <span id="username-mobile" class="username">Carregando...</span>
+        <div id="user-badges-mobile" class="badges-header"></div>
+    </div>
+
+    <a href="login.html" class="logout-mobile">
+        <i class="fas fa-right-from-bracket"></i>
+        Sair
+    </a>
+</nav>
+
+<div class="overlay"></div>
+
+<div class="container-materias">
+
+    <div class="container-pacer">
+    <div class="pacer-horizontal">
+        
+        <div class="pacer-inputs">
+            <div class="pacer-header-mini">
+                <i class="fas fa-stopwatch"></i>
+                <h3>Calculadora de Pace</h3>
+            </div>
+            
+            <div class="pacer-row">
+                <div class="pacer-field">
+                    <label>Distância (metros)</label>
+                    <input type="number" id="pacerDistancia" placeholder="Ex: 3000" oninput="calcularPaceAuto()">
+                </div>
+                
+                <div class="pacer-field">
+                    <label>Tempo (MM:SS)</label>
+                    <input type="text" id="pacerTempo" placeholder="00:00" maxlength="5" oninput="formatarTempo(this); calcularPaceAuto()">
+                </div>
+            </div>
+        </div>
+
+        <div class="pacer-display" id="pacerDisplay">
+            <div class="display-content">
+                <span class="display-label">RITMO (PACE)</span>
+                <span class="display-valor" id="valorPace">--:--</span>
+                <span class="display-unidade">min/km</span>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+    <h2 class="titulo-sessao">Índices do TAF</h2>
+    
+    <div class="grid-materias">
+        <div class="card-materia" onclick="abrirModalTFM('corrida')">
+            <div class="card-icon"><i class="fas fa-person-running"></i></div>
+            <h3>Corrida 3KM</h3>
+        </div>
+
+        <div class="card-materia" onclick="abrirModalTFM('flexao')">
+            <div class="card-icon"><i class="fas fa-dumbbell"></i></div>
+            <h3>Flexão de Braços</h3>
+        </div>
+
+        <div class="card-materia" onclick="abrirModalTFM('abdominal')">
+            <div class="card-icon"><i class="fas fa-square-person-confined" id="abd-icon"></i></div>
+            <h3>Abdominal Supra</h3>
+        </div>
+
+        <div class="card-materia" onclick="abrirModalTFM('barra')">
+            <div class="card-icon"><i class="fas fa-child-reaching"></i></div>
+            <h3>Barra Fixa</h3>
+        </div>
+
+        <div class="card-materia" onclick="abrirModalTFM('natacao')">
+            <div class="card-icon"><i class="fas fa-swimmer"></i></div>
+            <h3>Natação (50m)</h3>
+        </div>
+
+        <div class="card-materia" onclick="abrirModalTFM('ppm')">
+            <div class="card-icon"><i class="fas fa-signal"></i></div>
+            <h3>PPM</h3>
+        </div>
+                <a href="assets/port_389_decex_ped_cfgs.pdf" class="btn-download" download>
+                <i class="fas fa-file-download"></i> Índices Oficiais DeCEx (Anx. B)
+            </a>
+    </div>
+
+<div class="container-mementos">
+    <h2 class="titulo-sessao">Mementos TFM</h2>
+    
+    <div class="grid-mementos-visual">
+        
+        <div class="card-preview">
+            <div class="preview-box" onclick="abrirImagem('assets/memento-aquecimento-dinamico-EsEFEx.svg')">
+                <img src="assets/memento-aquecimento-dinamico-EsEFEx.svg" alt="Preview Aquecimento Dinâmico" onerror="this.src='https://placehold.co/300x400/000/FFF?text=Sem+Imagem'">
+                <div class="overlay-zoom"><i class="fas fa-search-plus"></i></div>
+            </div>
+            <div class="preview-footer">
+                <h3>Aquecimento</h3>
+                <p>Dinâmico</p>
+                <a href="assets/memento-aquecimento-dinamico-EsEFEx.pdf" download class="btn-download-card">
+                    <i class="fas fa-download"></i> Baixar PDF
+                </a>
+            </div>
+        </div>
+
+        <div class="card-preview">
+            <div class="preview-box" onclick="abrirImagem('assets/memento-aquecimento-estatico-EsEFEx.svg')">
+                <img src="assets/memento-aquecimento-estatico-EsEFEx.svg" alt="Preview Aquecimento Estático" onerror="this.src='https://placehold.co/300x400/000/FFF?text=Sem+Imagem'">
+                <div class="overlay-zoom"><i class="fas fa-search-plus"></i></div>
+            </div>
+            <div class="preview-footer">
+                <h3>Aquecimento</h3>
+                <p>Estático</p>
+                <a href="assets/memento-aquecimento-estatico-EsEFEx.pdf" download class="btn-download-card">
+                    <i class="fas fa-download"></i> Baixar PDF
+                </a>
+            </div>
+        </div>
+
+        <div class="card-preview">
+            <div class="preview-box" onclick="abrirImagem('assets/memento-alongamento-EsEFEx.svg')">
+                <img src="assets/memento-alongamento-EsEFEx.svg" alt="Preview Alongamento" onerror="this.src='https://placehold.co/300x400/000/FFF?text=Sem+Imagem'">
+                <div class="overlay-zoom"><i class="fas fa-search-plus"></i></div>
+            </div>
+            <div class="preview-footer">
+                <h3>Alongamento</h3>
+                <p>3x Por Dia</p>
+                <a href="assets/memento_alongamento.pdf" download class="btn-download-card">
+                    <i class="fas fa-download"></i> Baixar PDF
+                </a>
+            </div>
+        </div>
+
+        <div class="card-preview">
+            <div class="preview-box" onclick="abrirImagem('assets/memento-ginastica-basica-EsEFEx.svg')">
+                <img src="assets/memento-ginastica-basica-EsEFEx.svg" alt="Preview Ginástica Básica" onerror="this.src='https://placehold.co/300x400/000/FFF?text=Sem+Imagem'">
+                <div class="overlay-zoom"><i class="fas fa-search-plus"></i></div>
+            </div>
+            <div class="preview-footer">
+                <h3>Ginástica Básica</h3>
+                <p>Sequência 1 a 10</p>
+                <a href="assets/memento-ginastica-basica-EsEFEx.pdf" download class="btn-download-card">
+                    <i class="fas fa-download"></i> Baixar PDF
+                </a>
+            </div>
+        </div>
+
+        <div class="card-preview">
+            <div class="preview-box" onclick="abrirImagem('assets/memento-cross-operacional-EsEFEx.svg')">
+                <img src="assets/memento-cross-operacional-EsEFEx.svg" alt="Preview Cross Operacional" onerror="this.src='https://placehold.co/300x400/000/FFF?text=Sem+Imagem'">
+                <div class="overlay-zoom"><i class="fas fa-search-plus"></i></div>
+            </div>
+            <div class="preview-footer">
+                <h3>Cross Operacional</h3>
+                <p>Sequência Verde/Amarela/Azul/Vermelha</p>
+                <a href="assets/memento-cross-operacional-EsEFEx.pdf" download class="btn-download-card">
+                    <i class="fas fa-download"></i> Baixar PDF
+                </a>
+            </div>
+        </div>
+
+        <div class="card-preview">
+            <div class="preview-box" onclick="abrirImagem('assets/memento-ptc-EsEFEx.svg')">
+                <img src="assets/memento-ptc-EsEFEx.svg" alt="Preview PTC" onerror="this.src='https://placehold.co/300x400/000/FFF?text=Sem+Imagem'">
+                <div class="overlay-zoom"><i class="fas fa-search-plus"></i></div>
+            </div>
+            <div class="preview-footer">
+                <h3>PTC</h3>
+                <p>Todos Exercícios</p>
+                <a href="assets/memento-ptc-EsEFEx.pdf" download class="btn-download-card">
+                    <i class="fas fa-download"></i> Baixar PDF
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+<div class="container-cancioneiro">
+    <div class="cancioneiro-header-flex">
+        <h2 class="titulo-sessao">Canções TFM</h2>
+
+        <div class="filtros-categoria">
+            <button class="btn-filtro active" onclick="filtrarPorCategoria('TODAS', this)">Todas</button>
+            <button class="btn-filtro" onclick="filtrarPorCategoria('GERAL', this)">Gerais</button>
+            <button class="btn-filtro" onclick="filtrarPorCategoria('COM', this)">COM</button>
+            <button class="btn-filtro" onclick="filtrarPorCategoria('PQD', this)">PQD</button>
+            <button class="btn-filtro" onclick="filtrarPorCategoria('SELVA', this)">Selva</button>
+            <button class="btn-filtro" onclick="filtrarPorCategoria('PANTANAL', this)">Pantanal</button>
+            <button class="btn-filtro" onclick="filtrarPorCategoria('CAATINGA', this)">Caatinga</button>
+            <button class="btn-filtro" onclick="filtrarPorCategoria('MONTANHA', this)">Montanha</button>
+            <button class="btn-filtro" onclick="filtrarPorCategoria('PE', this)">PE</button>
+        </div>
+        
+        <div class="search-box-cancion">
+            <i class="fas fa-search"></i>
+            <input type="text" id="inputBuscaCancao" placeholder="Pesquisar título ou letra..." onkeyup="filtrarCancoes()">
+        </div>
+    </div>
+    
+    <div class="grid-cancioneiro" id="gridCancioneiro">
+        </div>
+</div>
+
+</div>
+
+<div id="modalImagem" class="modal-overlay" onclick="fecharImagem()">
+    <div class="modal-content-img">
+        <span class="close-modal">&times;</span>
+        <img id="imgPreview" src="" alt="Memento Preview">
+    </div>
+</div>
+
+
+
+
+</div>
+
+<div id="modalTFM" class="modal-overlay">
+    <div class="modal-content">
+        <span class="close-modal" onclick="fecharModalTFM()">&times;</span>
+        <div class="modal-header">
+            <i id="tfmIcon" class="fas fa-running"></i>
+            <h2 id="tfmTitle">Modalidade</h2>
+        </div>
+        <div class="modal-body">
+            <div class="tabela-scroll">
+                <table class="tabela-indices">
+                    <thead>
+                        <tr>
+                            <th>NOTA</th>
+                            <th>AA</th>
+                            <th>AC</th>
+                        </tr>
+                    </thead>
+                    <tbody id="corpoTabelaIndices">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script src="header.js"></script>
+<script src="tfm.js"></script>
+<script src="auth.js"></script>
+
+
+</body>
+</html>
