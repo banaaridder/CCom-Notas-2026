@@ -197,26 +197,48 @@ body {
 /* =========================
    CONTEÚDO E ACORDEÃO (CENTRALIZADO)
 ========================= */
-/* Conteúdo do Card - Inicialmente escondido */
-.card-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
-    background: var(--bg-card-2);
-    padding: 0 20px; /* Padding lateral mantido, vertical zerado */
+
+/* Remove o destaque azul nativo ao clicar no mobile */
+.card-campo, 
+.card-header, 
+.card-cancao,
+.btn-filtro,
+.card-aprestamento {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none; /* Impede o menu de contexto ao segurar */
 }
 
-/* Estado Ativo (Aberto) */
-.card-campo.active .card-content,
+.card-header {
+    user-select: none; /* Impede que o texto seja selecionado acidentalmente ao clicar rápido */
+    touch-action: manipulation; /* Remove o delay de 300ms do clique no mobile */
+}
+
+
+/* Conteúdo do Card - Versão Ultra Leve */
+.card-content {
+    display: none; /* Muda de 'block' para 'none' para não vazar nada */
+    opacity: 0;
+    overflow: hidden;
+    padding: 0 20px; /* Zera o padding vertical no estado fechado */
+    transition: opacity 0.2s ease;
+}
+
+/* Quando o card está ativo */
+.card-campo.active .card-content, 
 .card-aprestamento.active .card-content {
-    max-height: 1500px; /* Valor alto para comportar listas longas */
-    padding: 20px;
+    display: block; /* Mostra o conteúdo */
+    opacity: 1;
+    padding: 20px; /* Devolve o padding apenas quando aberto */
     border-top: 1px solid var(--border-soft);
 }
-
-/* Rotação da Seta */
+/* Seta - Apenas rotação simples, sem delay */
 .seta-expandir {
-    transition: transform 0.3s ease;
+    transition: transform 0.2s ease;
+}
+
+* {
+    -webkit-tap-highlight-color: transparent !important;
+    outline: none !important;
 }
 
 .card-campo.active .seta-expandir,

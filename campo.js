@@ -2,22 +2,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     const usuarioId = localStorage.getItem("usuarioLogado");
 
 const headers = document.querySelectorAll('.card-header');
-
 headers.forEach(header => {
-    header.addEventListener('click', function(e) {
-        // Ignora cliques em elementos de input/check
-        if (e.target.closest('.checkbox-container') || e.target.type === 'checkbox') {
-            return;
-        }
+    header.onclick = function(e) {
+        // Impede fechar ao clicar nos checks
+        if (e.target.closest('.checkbox-container') || e.target.type === 'checkbox') return;
 
-        // Identifica o card pai (funciona tanto para Campo quanto para TFM)
         const card = this.closest('.card-campo, .card-aprestamento');
         
-        if (card) {
-            // Alterna a classe active
-            card.classList.toggle('active');
+        // Alterna a classe active
+        if (card.classList.contains('active')) {
+            card.classList.remove('active');
+        } else {
+            // Opcional: fecha outros cards antes de abrir o atual
+            // document.querySelectorAll('.card-campo.active').forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
         }
-    });
+    };
 });
     // 2. ESCUTAR MUDANÇAS (SALVAMENTO AUTOMÁTICO)
     document.addEventListener('change', async (e) => {
