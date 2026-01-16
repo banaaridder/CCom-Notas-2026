@@ -245,7 +245,7 @@ const cancoesTFM = [
         categoria: "COM",
         letra: [
             "Sou comunicante sou muito operacional",
-            "não tente me imitar se naum vc vai se dar mau",
+            "não tente me imitar se não vc vai se dar mau",
             "na infantaria vc vai me ver",
             "eu opero radio ainda comando um GC",
             "na cavalaria vc vai me adimirar",
@@ -864,4 +864,5 @@ function filtrarCancoes() {
             card.classList.add('hidden');
         }
     });
+
 }
