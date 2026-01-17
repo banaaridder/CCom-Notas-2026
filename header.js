@@ -176,13 +176,6 @@ document.addEventListener("DOMContentLoaded", () => {
 }); 
 
 
-const EVENTOS_CALENDARIO = [
-    { nome: "INÍCIO DO CURSO", data: "2026-01-22T15:00:00" },
-    { nome: "1º SIESP", data: "2026-05-15T08:00:00" },
-    { nome: "CAMPO BÁSICO", data: "2026-06-10T08:00:00" },
-    { nome: "FORMATURA (SARGENTO)", data: "2026-11-21T10:00:00" } // Data final
-];
-
 function atualizarBannerMissao() {
     const banner = document.getElementById('bannerContagem');
     const containerTexto = document.getElementById('textoContagem');
@@ -190,23 +183,27 @@ function atualizarBannerMissao() {
 
     const agora = new Date();
     const EVENTOS_CALENDARIO = [
-        { nome: "INÍCIO DO CURSO", data: "2026-01-22T15:00:00" },
-        { nome: "1° ECD Op Pedra Galena", data: "2026-03-09T08:00:00" },
-        { nome: "CARNAVAL", data: "2026-02-14T10:00:00" },
-        { nome: "1º SIESP", data: "2026-05-25T08:00:00" },
-        { nome: "1° ELD FITCOM", data: "2026-07-13T08:00:00" },
-        { nome: "FÉRIAS", data: "2026-07-13T08:00:00" },
-        { nome: "FORMATURA", data: "2026-11-21T10:00:00" }
+        { nome: "INÍCIO DO CURSO", data: "2026-01-22T00:01:00" },
+        { nome: "CARNAVAL", data: "2026-02-14T00:01:00" },
+        { nome: "Entrega do Sabre", data: "2026-03-07T00:01:00" },
+        { nome: "1° ECD Op Pedra Galena", data: "2026-03-09T00:01:00" },
+        { nome: "1° ELD FITCOM", data: "2026-05-11T00:01:00" },
+        { nome: "1º SIESP", data: "2026-05-25T00:01:00" },
+        { nome: "FÉRIAS", data: "2026-07-13T00:01:00" },
+        { nome: "2° ELD Operação Gavião", data: "2026-06-29T00:01:00" },
+        { nome: "3° ELD Operação Gavião 2", data: "2026-06-10T00:01:00" },
+        { nome: "2º SIESP", data: "2026-09-21T00:01:00" },
+        { nome: "FORMATURA", data: "2026-11-21T00:01:00" }
     ];
 
     let mensagem = "";
     let eventoEncontrado = null;
 
-    // Busca eventos próximos (14 dias)
+    // Busca eventos próximos (200 dias)
     for (let ev of EVENTOS_CALENDARIO) {
         const dataEv = new Date(ev.data);
         const diff = Math.ceil((dataEv - agora) / (1000 * 60 * 60 * 24));
-        if (diff > 0 && diff <= 14 && ev.nome !== "FORMATURA") {
+        if (diff > 0 && diff <= 200 && ev.nome !== "FORMATURA") {
             eventoEncontrado = `${diff} FORA PARA ${ev.nome}!`;
             break;
         }
