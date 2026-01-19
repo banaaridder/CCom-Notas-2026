@@ -8,6 +8,12 @@
     --cor-prova: #795548;
 }
 
+.box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 /* --- CONTAINER E ESTRUTURA --- */
 .calendar-container {
     width: 95%;
@@ -211,4 +217,5 @@
     #calendario { width: 100%; height: auto; }
     .month-container { max-width: 100%; flex: 1 1 100%; }
     .calendar-header h2 { font-size: 1.1rem; }
+
 }
