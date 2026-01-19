@@ -111,6 +111,12 @@ body {
     margin: 40px auto;
 }
 
+@media (min-width: 768px){
+    .materia.ranking{
+        margin-top: 70px;
+    }
+}
+
 /* =========================
    TABELA
 ========================= */

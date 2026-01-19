@@ -477,8 +477,8 @@ display: inline-flex;
 display: flex;
         position: absolute;
         right: 20px; 
-        top: 50%; /* <--- ALTERE DE 30% PARA 50% */
-        transform: translateY(-50%); /* Isso agora funcionará corretamente */
+        top: 50%;
+        transform: translateY(-50%); 
     }
 
 }

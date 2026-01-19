@@ -1,39 +1,191 @@
-#calendario{
+/* --- VARIÁVEIS E CORES ORIGINAIS --- */
+:root {
+    --cor-campo: #26a641; 
+    --cor-feriado: #d32f2f; 
+    --cor-recesso: #0288d1; 
+    --cor-festa: #fbc02d; 
+    --cor-arma: #7b1fa2;
+    --cor-prova: #795548;
+}
 
+/* --- CONTAINER E ESTRUTURA --- */
+.calendar-container {
+    width: 95%;
+    height: 100%;
+    margin: 20px auto;
+    background: #1a1a1a;
+    border: 2px solid #00afef;
+    border-radius: 12px;
+    padding: 20px;
+    color: white;
+}
+
+#calendarContainer {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.month-container {
+    background: #1e1e1e;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 30px;
+    transition: all 0.3s ease;
+    flex: 1;
+    min-width: 200px;
+    max-width: 350px;
+    min-height: 300px;
+    margin-bottom: 20px;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+/* --- ESTILO DOS DIAS E TOOLTIP --- */
+.calendar-day {
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    background: #252525;
+    z-index: 1; /* Nível base */
+}
+
+/* Balão de texto (Tooltip) */
+.calendar-day::after {
+    content: attr(data-description);
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.95);
+    color: #fff;
+    padding: 7px 12px;
+    border-radius: 5px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    border: 1px solid #00afef;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+    pointer-events: none;
+}
+
+.calendar-day:hover {
+    z-index: 50; /* Sobe ao passar o mouse */
+    filter: brightness(1.2);
+}
+
+.calendar-day:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* --- CONEXÃO VISUAL DE EVENTOS (IDEIA 3) --- */
+.calendar-day.campo, 
+.calendar-day.recesso, 
+.calendar-day.festa {
+    border-radius: 0;
+    margin: 0 -2px;
+    z-index: 2; /* Fica acima do Fim de Semana comum */
+}
+
+.calendar-day.event-start {
+    border-top-left-radius: 8px !important;
+    border-bottom-left-radius: 8px !important;
+    margin-left: 0;
+}
+
+.calendar-day.event-end {
+    border-top-right-radius: 8px !important;
+    border-bottom-right-radius: 8px !important;
+    margin-right: 0;
+}
+
+.calendar-day.event-start.event-end {
+    border-radius: 8px !important;
+}
+
+/* --- CORES DOS EVENTOS E PRIORIDADE --- */
+/* Eventos programados usam !important para sobrepor a cor do FDS */
+.calendar-day.campo { background-color: var(--cor-campo) !important; }
+.calendar-day.recesso { background-color: var(--cor-recesso) !important; }
+.calendar-day.festa { background-color: var(--cor-festa) !important; color: black !important; }
+.calendar-day.arma { background-color: var(--cor-arma) !important; }
+.calendar-day.prova { background-color: var(--cor-prova) !important; }
+.calendar-day.hoje { outline: 3px solid #00afef; z-index: 10; }
+
+/* Fim de Semana (Cor de fundo menos importante) */
+.calendar-day.fds {
+    background-color: #3a0a0a; /* Vermelho escuro */
+    color: #ff4444;
+    z-index: 1;
+}
+
+/* Feriado (FDS sem evento programado ou feriado oficial) */
+.calendar-day.feriado {
+    background-color: var(--cor-feriado) !important;
+    color: white !important;
+    font-weight: bold;
+    z-index: 1;
+}
+
+/* --- CABEÇALHOS E FILTROS --- */
+.month-container h3 { font-size: 0.9rem; margin-bottom: 8px; color: #00afef; text-align: center; }
+.day-name { text-align: center; font-weight: bold; color: #888; font-size: 0.9rem; padding-bottom: 10px; }
+.day-name.fds-label { color: #ff4444; }
+
+.calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.calendar-header h2 { font-size: 1.5rem; color: #00afef; text-transform: capitalize; }
+.calendar-header button { background: transparent; border: 1px solid #00afef; color: #00afef; padding: 8px 15px; border-radius: 5px; cursor: pointer; transition: 0.3s; }
+.calendar-header button:hover { background: #00afef; color: black; }
+
+/* Estilização Individual dos Botões de Filtro */
+.filter-container { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; padding: 10px; background: #252525; border-radius: 8px; }
+.filter-btn { border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: bold; transition: 0.3s; opacity: 0.6; color: rgb(53, 53, 53); }
+.filter-btn.active { opacity: 1; transform: scale(1.05); }
+
+
+.btn-campo { background-color: var(--cor-campo); color: white;}
+.btn-feriado { background-color: var(--cor-feriado); color: white; }
+.btn-recesso { background-color: var(--cor-recesso); color: white; }
+.btn-festa { background-color: var(--cor-festa); color: black; }
+.btn-arma { background-color: var(--cor-arma); color: white; }
+.btn-prova { background-color: var(--cor-prova); color: white; }
+
+/* --- LAYOUT DO SITE (ORIGINAL) --- */
+#calendario {
     height: 100%;
     background-color: white;
     border-radius: 12px;
 }
 
-@media (max-width: 728px){
-    #calendario{
-       width: 100%;
-       height: auto;
-    }
-
-}
-
-.box{
-    display:flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.box-calendario{
+.box-calendario {
     margin-top: 50px;
-    width: 90%;
+    width: 95%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-       background: linear-gradient(180deg, var(--bg-card), var(--bg-card-2));
+    background: linear-gradient(180deg, var(--bg-card), var(--bg-card-2));
     border: 1px solid var(--border-soft);
     border-radius: 10px;
-    padding: 30px;
+    padding: 10px;
     margin-bottom: 24px;
     box-shadow: var(--shadow-soft);
     animation: fadeIn 0.4s ease forwards;
-     overflow: hidden;
+    overflow: hidden;
 }
 
 .btn-download {
@@ -48,6 +200,15 @@
     transition: background 0.3s;
 }
 
-.btn-download:hover {
-    background-color: #008fca;
+.btn-download:hover { background-color: #008fca; }
+
+/* --- RESPONSIVIDADE --- */
+@media (max-width: 1000px) {
+    .month-container { max-width: 48%; }
+}
+
+@media (max-width: 728px) {
+    #calendario { width: 100%; height: auto; }
+    .month-container { max-width: 100%; flex: 1 1 100%; }
+    .calendar-header h2 { font-size: 1.1rem; }
 }

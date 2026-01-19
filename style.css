@@ -81,7 +81,7 @@ input::placeholder {
     width: 100%;
     max-width: 800px; /* Largura fixa para não esticar demais */
      overflow: hidden;
-    margin-top: -40px;
+    margin-top:  -40px;
 }
 
 /* Container Principal */
@@ -358,6 +358,7 @@ button:hover {
     }
 
     .materias {
+        margin-top: -20px;
         margin-bottom: 0px;
         width: 100%;
     }

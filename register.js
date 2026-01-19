@@ -45,7 +45,7 @@ async function registrarComFeedback(btn) {
     }
 
     // 3. LISTA DE ALUNOS AUTORIZADOS
-    const alunosOficiais = [
+const alunosOficiais = [
   "ROGER", "D SILVA", "GABRIEL PIMENTEL", "REBELO", "DAVI COSTA", 
   "GOES", "FRANCO", "CONTILE", "LOBO", "GUILHERME SOUZA", 
   "ALMEIDA", "DOS REIS", "MATEUS RIBEIRO", "SAMUEL VICTOR", "YURY LINS", 
@@ -73,7 +73,7 @@ async function registrarComFeedback(btn) {
   "DEIVISSON", "THOMAS", "CAMILO", "TAVARES NETO", "SERPA", 
   "GIMENEZ", "ZAKUR", "CARVALHO SOUZA", "DE ARAUJO", "DOMINGUES", 
   "GONÇALVES", "D LIMA", "ADMIN"
-    ];
+];
 
     if (!alunosOficiais.includes(usuarioRaw)) {
         exibirErro("Nome de guerra não autorizado.", [usuarioInput]);
@@ -126,5 +126,4 @@ async function registrarComFeedback(btn) {
             inputs.forEach(i => i.classList.remove("input-erro"));
         }, 2500);
     }
-
 }

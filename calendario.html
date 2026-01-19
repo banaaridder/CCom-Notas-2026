@@ -86,7 +86,30 @@
 <div class="overlay"></div>
 
 <div class="box">
+
 <div class="box-calendario">
+    <div class="calendar-container">
+        <div class="calendar-header">
+            <button id="prevMonth"><i class="fas fa-chevron-left"></i></button>
+            <h2 id="monthDisplay">JANEIRO 2026</h2>
+            <button id="nextMonth"><i class="fas fa-chevron-right"></i></button>
+        </div>
+
+        <div class="filter-container">
+            <button class="filter-btn active" data-type="todos">Todos</button>
+            <button class="filter-btn btn-campo" data-type="campo">Campos</button>
+            <button class="filter-btn btn-feriado" data-type="feriado">Sem Expediente</button>
+            <button class="filter-btn btn-prova" data-type="prova">Provas</button>
+            <button class="filter-btn btn-arma" data-type="arma">Armas</button>
+        </div>
+
+        <div id="calendarContainer"></div>
+
+        <div id="eventDetail" class="event-detail">
+            <p><i class="fas fa-info-circle"></i> Em desenvolvimento... Pode haver dados incorretos.</p>
+        </div>
+    </div>
+
 <img src="assets/Calendário 2026  CCom.svg" id="calendario">
             <a href="assets/Calendário-2026-CCom-Versão-NAO-OFICIAL-por-AL-DAVI-COSTA.pdf" class="btn-download" download>
                 <i class="fas fa-file-download"></i> Baixar Calendário PDF
@@ -94,11 +117,11 @@
             
 </div>
 
-</div>
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase.js"></script>
+<script src="calendario.js"></script>
 <script src="header.js"></script>
 <script src="auth.js"></script>
 
