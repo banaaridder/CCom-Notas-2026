@@ -119,6 +119,10 @@
     margin: 10px 0;
 }
 
+.btn-download{
+    max-height: fit-content;
+}
+
 /* Garante que o título da sessão combine com o Papiro */
 .titulo-sessao h2 {
     font-family: 'Orbitron', sans-serif;
@@ -227,6 +231,7 @@
     font-weight: bold;
     font-size: 0.85rem;
     transition: 0.2s;
+   
 }
 
 .btn-download-card:hover {

@@ -49,7 +49,7 @@ const indicesTFM = {
         ]
     },
     'natacao': {
-        titulo: 'Natação 50m',
+        titulo: 'Natação 25m',
         isTempo: true, // Aqui o sistema formata como tempo
         dados: [
             { nota: 10.0, aa: 17, ac: 15 }, { nota: 9.5, aa: 18, ac: 16 },
@@ -62,6 +62,18 @@ const indicesTFM = {
             { nota: 3.0, aa: 56, ac: 54 }, { nota: 2.5, aa: 58, ac: 56 },
             { nota: 2.0, aa: 60, ac: 58 }, { nota: 1.5, aa: 62, ac: 60 },
             { nota: 1.0, aa: 64, ac: 62 }, { nota: 0, aa: 65, ac: 68 }
+        ]
+    },
+
+    'corda': {
+        titulo: 'Subida na corda',
+        dados: [
+            { nota: 10.0, aa: "4,8 m", ac: "5,0 m" }, { nota: 9.0, aa: "4,6 m", ac: "4,8 m" },
+            { nota: 8.0, aa: "4,4 m", ac: "4,6 m" }, { nota: 7.0, aa: "4,2 m", ac: "4,4 m" },
+            { nota: 6.0, aa: "4,0 m", ac: "4,2 m" }, { nota: 5.0, aa: "3,8 m", ac: "4,0 m" },
+            { nota: 4.0, aa: "3,6 m", ac: "3,8 m" }, { nota: 3.0, aa: "3,4 m", ac: "3,6 m" },
+            { nota: 2.0, aa: "3,2 m", ac: "3,4 m" }, { nota: 1.0, aa: "3,0 m", ac: "3,2 m" },
+            { nota: 0.0, aa: "< 3,0 m", ac: "< 3,2 m" }
         ]
     },
 
