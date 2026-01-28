@@ -1,4 +1,4 @@
-const url = 'assets/qts/QTFM.pdf';
+const url = 'assets/QTFM.pdf';
 
 let pdfDoc = null,
     pageNum = 1,
