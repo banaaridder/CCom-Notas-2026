@@ -89,6 +89,37 @@
 
 <div class="container-materias">
 
+
+    <div class="title">
+    <h1>QUADRO DE TRABALHO QUINZENAL</h1>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+
+<div class="box">
+    <div class="box-qts">
+        <div class="controles-topo">
+            <span id="page-info">Carregando PDF...</span>
+        </div>
+
+        <div class="qts-container">
+            <button class="nav-btn prev" id="prev-page"><i class="fas fa-chevron-left"></i></button>
+            
+            <div id="pdf-wrapper">
+                <canvas id="pdf-render"></canvas>
+            </div>
+
+            <button class="nav-btn next" id="next-page"><i class="fas fa-chevron-right"></i></button>
+        </div>
+
+        <a href="assets/qts/QTFM.pdf" class="btn-download" download>
+            <i class="fas fa-file-download"></i> Baixar QTFM Completo (PDF)
+        </a>
+    </div>
+</div>
+
+
+
     <div class="container-pacer">
     <div class="pacer-horizontal">
         
@@ -254,6 +285,8 @@
         </div>
 
     </div>
+
+    
 
 <div class="container-cancioneiro">
     <div class="cancioneiro-header-flex">
