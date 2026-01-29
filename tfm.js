@@ -384,7 +384,7 @@ const cancoesTFM = [
         ]
     },
     {
-        titulo: "n",
+        titulo: "Audaz Comunicante",
         categoria: "COM",
         letra: [
             "Rondon (2x)",
@@ -1023,4 +1023,5 @@ function filtrarCancoes() {
             card.classList.add('hidden');
         }
     });
+
 }
