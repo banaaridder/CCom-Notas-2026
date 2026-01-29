@@ -324,6 +324,80 @@ function calcularPaceAuto() {
 
 
 const cancoesTFM = [
+    {
+        titulo: "Ó Tu, Comunicante",
+        categoria: "COM",
+        letra: [
+            "Ó tu, comunicante que no extremo do Brasil",
+            "conecta a tropa pelo rádio ou pelo fio",
+            "Ligando as terras brasileiras",
+            "Dentre todas a primeira",
+            "E a ela e só a ela há de servir",
+            "Ó tu, comunicante da defesa do Brasil",
+            "Estás Alerta com seu rádio e seu fuzil",
+            "Honrando a tua grande história",
+            "Teu passado, tua glória",
+            "teu presente, teu povir",
+            "Sois os vigilantes desta terra",
+            "que, se ama a paz, não teme a guerra",
+            "E tens um passado de glória",
+            "a garantir a vitória!",
+            "Ó tu, comunicante pioneiro do Brasil",
+            "Sua mensagem está no céu",
+            "No mar, na terra, onde for",
+            "Aceita o brado estremecido",
+            "De Rondon engrandecido que enaltece o teu valor!"
+        ]
+    },
+    {
+        titulo: "Não Preciso do Infante",
+        categoria: "COM",
+        letra: [
+            "Nao preciso do infante",
+            "Longe de mim o engenheiro",
+            "Sou comunicante",
+            "Sou da arma mais vibrante",
+            "Nao quero cavalaria",
+            "Longe de mim o artilheiro",
+            "Sou de Rondon",
+            "Mais que um batalhao inteiro",
+            "Nao faz falta a intendencia",
+            "Longe de mim o matbel",
+            "Sou de rondon",
+            "Vou marchando até o céu"
+        ]
+    },
+    {
+        titulo: "Barulho de Trovão",
+        categoria: "COM",
+        letra: [
+            "Mas que barulho é esse que parece um trovão?",
+            "É o curso de Com na sua vibração",
+            "Aluno velho de guerra",
+            "Que deixou sua morada",
+            "Faz tremer agora a terra",
+            "Com sua marcha adestrada",
+            "Comunicante que quer carinho",
+            "O bizu é desertar",
+            "Quem tem sede no caminho",
+            "Nunca pode operar"
+        ]
+    },
+    {
+        titulo: "n",
+        categoria: "COM",
+        letra: [
+            "Rondon (2x)",
+            "Rondon deixou um legado para as gerações",
+            "Eu vibro porque sou de comunicações",
+            "Rondon (2x)",
+            "Seu símbolo é o vetor",
+            "Azul e altaneiro",
+            "Audaz comunicante",
+            "Nobre guerreiro",
+            "Rondon (2x)"
+        ]
+    },
 
     {
         titulo: "Sou comunicante",
@@ -387,7 +461,7 @@ const cancoesTFM = [
             "Eu Controlo a esquadra sem pressa",
             "E em menos de uma hora dominamos a ESA",
         ]
-    },
+    },          
 
 
     {

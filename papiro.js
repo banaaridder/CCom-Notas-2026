@@ -6,49 +6,49 @@ const dadosMaterias = {
         titulo: 'Técnicas Militares de Com.',
         icon: 'fas fa-walkie-talkie',   
         resumo: 'Estudo de normas de exploração, indicativos, autenticação e montagem de antenas de campanha.',
-        pdf: 'assets/manual_tecmil.pdf',
+        pdf: 'https://drive.google.com/drive/folders/1a1LL8-4fXVaxvY1kp1qcmN9X3LIgxEnW?usp=drive_link   ',
         ebaula: 'https://secretariaebaula.eb.mil.br'
     },
     'fund': {
         titulo: 'Fundamentos das Comunicações',
         icon: 'fas fa-podcast',
         resumo: 'Base teórica sobre ondas eletromagnéticas, espectro de frequência, tipos de modulação (AM, FM, Digital) e fenômenos de propagação.',
-        pdf: 'assets/manual_fundamentos.pdf',
+        pdf: 'https://drive.google.com/drive/folders/1zOdZKqcFaNLiw-CDuIcGG-OzIW1U2Q9_?usp=drive_link',
         ebaula: 'https://secretariaebaula.eb.mil.br'
     },
     'ciber': {
         titulo: 'Cibernética',
         icon: 'fas fa-microchip',
         resumo: 'Estudo da Segurança da Informação (Criptografia, Integridade e Disponibilidade) e protocolos de defesa do EB.',
-        pdf: 'assets/manual_cibernetica.pdf',
+        pdf: 'https://drive.google.com/drive/folders/1-sVouBKR9jRU3ce6VBQ6wcDrp5D0K1AK?usp=drive_link',
         ebaula: 'https://secretariaebaula.eb.mil.br'
     },
     'empre': {
         titulo: 'Emprego das Comunicações',
         icon: 'fas fa-map-location-dot',
         resumo: 'A aplicação tática das comunicações no apoio ao Comando e planejamento de Postos de Comando (PC).',
-        pdf: 'assets/manual_emprego.pdf',
+        pdf: 'https://drive.google.com/drive/folders/1iQbRp7vsg36CtgXxLIEFYRNxCs--ueGy?usp=drive_link',
         ebaula: 'https://secretariaebaula.eb.mil.br'
     },
     'pt': {
         titulo: 'Português Instrumental',
         icon: 'fas fa-pen-nib',
         resumo: 'Padronização da redação oficial militar, clareza e concisão em relatórios e mensagens rádio.',
-        pdf: 'assets/manual_portugues.pdf',
+        pdf: 'https://drive.google.com/drive/folders/1zo2K1Nk1fjK7WtLRffpJIg6vdtCAe-Yb?usp=drive_link',
         ebaula: 'https://secretariaebaula.eb.mil.br'
     },
     'racio': {
         titulo: 'Raciocínio Lógico',
         icon: 'fas fa-brain',
         resumo: 'Lógica proposicional e diagramas para tomada de decisão rápida sob pressão.',
-        pdf: 'assets/manual_logica.pdf',
+        pdf: 'https://drive.google.com/drive/folders/1y6GU06n6H3D9kLER4i8MpWph9_c9OcSh?usp=drive_link',
         ebaula: 'https://secretariaebaula.eb.mil.br'
     },
     'didat': {
         titulo: 'Didática de Instrução',
         icon: 'fas fa-graduation-cap',
         resumo: 'Processos de ensino-aprendizagem, técnicas de instrução militar e elaboração de planos de sessão.',
-        pdf: 'assets/manual_didatica.pdf',
+        pdf: 'https://drive.google.com/',
         ebaula: 'https://secretariaebaula.eb.mil.br'
     }
 };
