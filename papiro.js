@@ -37,6 +37,13 @@ const dadosMaterias = {
         pdf: 'https://drive.google.com/drive/folders/1zo2K1Nk1fjK7WtLRffpJIg6vdtCAe-Yb?usp=drive_link',
         ebaula: 'https://secretariaebaula.eb.mil.br'
     },
+    'ing': {
+        titulo: 'Inglês',
+        icon: 'fas fa-pen-nib',
+        resumo: 'Bizus, audios, simulados para você conseguir sua habilitação no idioma que mais oferece oportunidades aos militares',
+        pdf: 'https://drive.google.com/drive/folders/1t4AXPdJkVkk3sHQRhafM4HH8Tc24BD2w?usp=drive_link',
+        ebaula: 'https://secretariaebaula.eb.mil.br'
+    },
     'racio': {
         titulo: 'Raciocínio Lógico',
         icon: 'fas fa-brain',

@@ -186,6 +186,10 @@ body {
     font-weight: bold;
     border-radius: 5px;
     transition: background 0.3s;
+    height: fit-content;
+    align-items: center;
+    text-align: center;
+    
 }
 
 .btn-download:hover {
