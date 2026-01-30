@@ -105,6 +105,13 @@ body {
     position: relative;
 }
 
+.seta-expandir{
+    display: flex;
+    
+    right: 50px;
+    position: fixed;
+}
+
 .card-info h3 {
     margin: 0; 
     font-size: 1.1rem;
