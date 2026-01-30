@@ -1023,5 +1023,4 @@ function filtrarCancoes() {
             card.classList.add('hidden');
         }
     });
-
 }

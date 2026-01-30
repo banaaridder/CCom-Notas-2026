@@ -213,8 +213,6 @@ body {
     touch-action: manipulation; /* Remove o delay de 300ms do clique no mobile */
 }
 
-
-/* Conteúdo do Card - Versão Ultra Leve */
 .card-content {
     display: none; /* Muda de 'block' para 'none' para não vazar nada */
     opacity: 0;

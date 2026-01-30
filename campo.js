@@ -13,18 +13,16 @@ headers.forEach(header => {
         if (card.classList.contains('active')) {
             card.classList.remove('active');
         } else {
-            // Opcional: fecha outros cards antes de abrir o atual
-            // document.querySelectorAll('.card-campo.active').forEach(c => c.classList.remove('active'));
+
             card.classList.add('active');
         }
     };
 });
-    // 2. ESCUTAR MUDANÇAS (SALVAMENTO AUTOMÁTICO)
+    // (SALVAMENTO AUTOMÁTICO)
     document.addEventListener('change', async (e) => {
         if (e.target.type === 'checkbox') {
             const cb = e.target;
 
-            // Se for o check principal do card (o de borda azul)
             if (cb.classList.contains('check-campo')) {
                 const card = cb.closest('.card-campo');
                 if (card) {
@@ -42,7 +40,7 @@ headers.forEach(header => {
         }
     });
 
-    // 3. INICIALIZAÇÃO COM PEQUENO ATRASO
+    //  INICIALIZAÇÃO COM PEQUENO ATRASO
     // O timeout garante que o 'supabaseClient' definido no outro arquivo já esteja disponível
     atualizarContadores();
     

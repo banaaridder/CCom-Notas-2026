@@ -9,17 +9,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const listaAdmins = ["ADMIN", "DAVI COSTA"]; // Quem tem poderes de admin
     const usuarioEhAdmin = listaAdmins.includes(nomeUsuario);
 
-    // 1. Exibe o nome do usuário
+    // Exibe o nome do usuário
     if (nomeUsuario) {
         if (spanUsername) spanUsername.textContent = nomeUsuario;
         if (spanUsernameMobile) spanUsernameMobile.textContent = nomeUsuario;
     }
 
-    // 2. Lógica de RESTRIÇÃO (Esconder abas)
-    // Apenas a conta "ADMIN" pura perde o acesso às abas de aluno.
-    // O Davi Costa continua vendo tudo normal.
+    // Lógica de RESTRIÇÃO (Esconder abas)
     if (nomeUsuario === "ADMIN") {
-        const paginasParaRemover = ["Notas", "Campo"];
+        const paginasParaRemover = [];
 
         const removerLinks = (container) => {
             if (!container) return;
@@ -35,7 +33,11 @@ document.addEventListener("DOMContentLoaded", () => {
         removerLinks(mobileMenu);
     }
 
-    // 3. Lógica de INJEÇÃO (Botão Painel + Badge)
+    if (nomeUsuario === "ADMIN") {
+        
+    }
+
+    // Lógica de INJEÇÃO (Botão Painel + Badge)
     // Aplica para todos na listaAdmins (Admin e Davi Costa)
     if (usuarioEhAdmin) {
         
@@ -69,7 +71,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (containerBadgesMob) containerBadgesMob.innerHTML += badgeAdminHTML;
     }
     
-    // ... Aqui abaixo viria o restante da lógica dos outros badges (01, Caçador, etc) ...
 });
 
 

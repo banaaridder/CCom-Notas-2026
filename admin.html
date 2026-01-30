@@ -10,7 +10,6 @@
 
 
     <script>
-    // Nova trava que aceita você e o ADMIN
     const permitidos = ["ADMIN", "DAVI COSTA"];
     const nomeAtual = (localStorage.getItem("nomeUsuario") || "").toUpperCase().trim();
     
@@ -28,9 +27,12 @@
 </head>
 <body>
    <header class="header">
-    <img src="assets/com.png" class="logo">
-
+  <a href="index.html">
+        <img src="assets/com.png" class="logo">
+    </a>
+<a href="index.html">
      <img src="assets/com.png" class="logo-mobile">
+     </a>
 
     <div class="center">
         <h1>COMUNICAÇÕES</h1>

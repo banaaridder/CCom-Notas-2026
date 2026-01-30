@@ -78,6 +78,9 @@ if (btnSalvar) {
             // Chamamos o salvarNotas passando o snapshot atual
             salvarNotas(criarSnapshot());
         }
+        if (nomeUsuario === "ADMIN") {
+        checkTeste.removeAttribute("disabled");
+    }
     });
 }
 

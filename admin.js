@@ -135,7 +135,7 @@ function abrirModal(nome, registro) {
         return;
     }
 
-    // --- LÓGICA DE COR DO BADGE ADICIONADA AQUI ---
+    // --- LÓGICA DE COR DO BADGE  ---
     const mediaGeral = registro.media_geral || "--";
     badgeModal.textContent = mediaGeral;
     

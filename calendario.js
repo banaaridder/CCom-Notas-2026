@@ -52,7 +52,11 @@ const eventos = [
     { data: "2026-05-24", fim: "2026-05-24", titulo: "Dia da Infantaria", tipo: "arma" },
     { data: "2026-06-10", fim: "2026-06-10", titulo: "Dia da Artilharia", tipo: "arma" },
  //   { data: "2026-04-06", fim: "2026-04-10", titulo: "AC1 Armt Mun Tir II", tipo: "prova" },
-    { data: "2026-07-13", fim: "2026-07-26", titulo: "Recesso Escolar", tipo: "recesso" }
+    { data: "2026-07-13", fim: "2026-07-26", titulo: "Recesso Escolar", tipo: "recesso" },
+
+        { data: "2026-07-17", fim: "2026-07-21", titulo: "PCI", tipo: "pci" },
+        { data: "2026-07-28", fim: "2026-07-02", titulo: "PCI", tipo: "pci" }
+
 ];
 
 let currentMonth = 0; 
