@@ -72,7 +72,7 @@ const alunosOficiais = [
   "TRANCOZO", "RITZMANN", "CASTRO ALVES", "CHRISTIAN", "S GABRIEL", 
   "DEIVISSON", "THOMAS", "CAMILO", "TAVARES NETO", "SERPA", 
   "GIMENEZ", "ZAKUR", "CARVALHO SOUZA", "DE ARAUJO", "DOMINGUES", 
-  "GONÇALVES", "D LIMA", "ADMIN"
+  "GONÇALVES", "D LIMA", "ADMIN", "BITTENCOURT"
 ];
 
     if (!alunosOficiais.includes(usuarioRaw)) {
@@ -126,4 +126,5 @@ const alunosOficiais = [
             inputs.forEach(i => i.classList.remove("input-erro"));
         }, 2500);
     }
+
 }
