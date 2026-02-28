@@ -45,6 +45,26 @@ const eventos = [
     { data: "2026-11-19", fim: "2026-11-19", titulo: "Término CFGS", tipo: "festa" },
     { data: "2026-11-21", fim: "2026-11-21", titulo: "Formatura de Encerramento", tipo: "festa" },
 
+        // --- PROVAS ---
+    { data: "2026-03-31", fim: "2026-03-31", titulo: "AA FUND COM", tipo: "prova" },
+    { data: "2026-04-09", fim: "2026-04-09", titulo: "AA1 TEC MIL COM", tipo: "prova" },
+    { data: "2026-05-04", fim: "2026-05-04", titulo: "AA2 TEC MIL COM", tipo: "prova" },
+    { data: "2026-06-11", fim: "2026-06-11", titulo: "AC TEC MIL COM", tipo: "prova" },
+    { data: "2026-06-23", fim: "2026-06-23", titulo: "AC FUND COM", tipo: "prova" },
+    { data: "2026-06-11", fim: "2026-06-11", titulo: "AA EMPREGO DAS COM", tipo: "prova" },
+
+    { data: "2026-06-07", fim: "2026-06-07", titulo: "AC EMPREGO DAS COM", tipo: "prova" },
+    { data: "2026-05-21", fim: "2026-05-21", titulo: "AA1 CIBER", tipo: "prova" },
+    { data: "2026-06-25", fim: "2026-06-25", titulo: "AA2 CIBER", tipo: "prova" },
+    { data: "2026-07-31", fim: "2026-07-31", titulo: "AC CIBER", tipo: "prova" },
+
+
+    { data: "2026-03-07", fim: "2026-03-07", titulo: "Entrega do Sabre", tipo: "festa" },
+    { data: "2026-05-28", fim: "2026-05-28", titulo: "Aniversário da ESA", tipo: "festa" },
+    { data: "2026-08-25", fim: "2026-08-25", titulo: "Dia do Soldado", tipo: "festa" },
+    { data: "2026-11-19", fim: "2026-11-19", titulo: "Término CFGS", tipo: "festa" },
+    { data: "2026-11-21", fim: "2026-11-21", titulo: "Formatura de Encerramento", tipo: "festa" },
+
     // --- OUTROS ---
     { data: "2026-05-05", fim: "2026-05-05", titulo: "Dia das Comunicações", tipo: "arma" },
     { data: "2026-04-10", fim: "2026-04-10", titulo: "Dia da Engenharia", tipo: "arma" },
