@@ -276,3 +276,153 @@ function openTab(evt, tabName) {
     document.getElementById(tabName).style.display = "block";
     evt.currentTarget.classList.add("active");
 }
+
+
+/// Exemplo de como capturar a mudança no novo modelo
+document.querySelectorAll('.assuntos-list input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', async () => {
+        const materia = cb.dataset.materia;
+        const ud = cb.dataset.ud;
+        const assunto = cb.dataset.ass;
+        const status = cb.checked;
+
+        // Chame sua função de salvar passando esses 3 parâmetros
+        // Sugestão: concatenar no ID da prova: `${materia}_${ud}_${assunto}`
+        await salvarEstadoNoBanco(materia, `${ud}_${assunto}`, status);
+        
+        // Função para atualizar contador visual da matéria (opcional)
+        atualizarContadoresMateria(materia);
+    });
+});
+
+
+document.addEventListener('DOMContentLoaded', async () => {
+    
+    // Conexão com Supabase e Usuário
+    const client = window.supabase || window.supabaseClient;
+    const usuarioId = localStorage.getItem("usuarioLogado");
+
+    if (!client || !usuarioId) {
+        console.warn("Usuário ou Supabase não identificados. Redirecionando...");
+        // window.location.href = "login.html"; // Descomente se quiser forçar o login
+        return;
+    }
+
+    // 1. INJETAR TAGS DE PORCENTAGEM NO HTML DINAMICAMENTE
+    document.querySelectorAll('.ud-group').forEach(ud => {
+        const summary = ud.querySelector('.ud-title');
+        if (!summary.querySelector('.percent-badge')) {
+            summary.innerHTML += ' <span class="percent-badge ud-badge">0%</span>';
+        }
+    });
+
+    document.querySelectorAll('.materia-wrapper').forEach(mat => {
+        const stats = mat.querySelector('.materia-stats');
+        if (!stats.querySelector('.percent-badge')) {
+            stats.innerHTML = '<span class="percent-badge mat-badge">0%</span> ' + stats.innerHTML;
+        }
+    });
+
+    // 2. FUNÇÃO QUE CALCULA AS PORCENTAGENS E PINTA DE VERDE
+    function atualizarProgressoVisual() {
+        document.querySelectorAll('.materia-wrapper').forEach(materia => {
+            const uds = materia.querySelectorAll('.ud-group');
+            let materiaTotalChecks = 0;
+            let materiaChecksMarcados = 0;
+
+            uds.forEach(ud => {
+                const checkboxes = ud.querySelectorAll('input[type="checkbox"]');
+                const totalUD = checkboxes.length;
+                const marcadosUD = Array.from(checkboxes).filter(cb => cb.checked).length;
+                
+                materiaTotalChecks += totalUD;
+                materiaChecksMarcados += marcadosUD;
+
+                // Atualiza a Porcentagem da UD
+                const porcentagemUD = totalUD > 0 ? Math.round((marcadosUD / totalUD) * 100) : 0;
+                const badgeUD = ud.querySelector('.ud-badge');
+                if(badgeUD) badgeUD.innerText = `${porcentagemUD}%`;
+
+                // Aplica classe verde nos Assuntos individuais
+                checkboxes.forEach(cb => {
+                    const li = cb.closest('.assunto-item');
+                    if (cb.checked) li.classList.add('concluido');
+                    else li.classList.remove('concluido');
+                });
+
+                // Aplica classe verde na UD se estiver 100%
+                if (porcentagemUD === 100 && totalUD > 0) ud.classList.add('concluido');
+                else ud.classList.remove('concluido');
+            });
+
+            // Atualiza a Porcentagem Geral da Matéria
+            const porcentagemMateria = materiaTotalChecks > 0 ? Math.round((materiaChecksMarcados / materiaTotalChecks) * 100) : 0;
+            const badgeMateria = materia.querySelector('.mat-badge');
+            if(badgeMateria) badgeMateria.innerText = `${porcentagemMateria}%`;
+
+            // Aplica classe verde na Matéria se estiver 100%
+            if (porcentagemMateria === 100 && materiaTotalChecks > 0) materia.classList.add('concluido');
+            else materia.classList.remove('concluido');
+        });
+    }
+
+    // 3. SALVAR NO SUPABASE
+    async function salvarEstadoNoBanco(materia, provaId, checked) {
+        try {
+            const { error } = await client
+                .from('estados_papiro')
+                .upsert({
+                    user_id: usuarioId,
+                    materia: materia,
+                    prova: provaId,     // O provaId será algo como "UD1_A"
+                    is_checked: checked,
+                    updated_at: new Date()
+                }, { onConflict: 'user_id, materia, prova' });
+            
+            if (error) throw error;
+        } catch (err) {
+            console.error("Erro ao salvar no banco:", err.message);
+        }
+    }
+
+    // 4. CARREGAR DADOS DO SUPABASE AO ABRIR A TELA
+    async function carregarDadosIniciais() {
+        try {
+            const { data, error } = await client
+                .from('estados_papiro')
+                .select('materia, prova, is_checked')
+                .eq('user_id', usuarioId);
+
+            if (error) throw error;
+
+            if (data) {
+                data.forEach(item => {
+                    // Busca o checkbox específico usando a Materia e o ProvaID (UD + Ass)
+                    const cb = document.querySelector(`input[data-materia="${item.materia}"][data-prova="${item.prova}"]`);
+                    if (cb) cb.checked = item.is_checked;
+                });
+            }
+
+            // Após carregar tudo, roda a função para atualizar as cores e porcentagens
+            atualizarProgressoVisual();
+
+        } catch (err) {
+            console.error("Erro ao carregar dados:", err.message);
+        }
+    }
+
+    // 5. EVENTO DE CLIQUE (QUANDO O ALUNO MARCA/DESMARCA ALGO)
+    document.querySelectorAll('.assunto-item input[type="checkbox"]').forEach(cb => {
+        // Criamos um ID único juntando UD e Ass (Ex: "UD1_A") para salvar no banco
+        const provaId = `UD${cb.dataset.ud}_${cb.dataset.ass}`;
+        cb.dataset.prova = provaId; // Guarda no próprio elemento
+
+        cb.addEventListener('change', async () => {
+            atualizarProgressoVisual(); // Atualiza a cor e % na hora para o usuário
+            await salvarEstadoNoBanco(cb.dataset.materia, provaId, cb.checked); // Manda pro banco em background
+        });
+    });
+
+    // START
+    await carregarDadosIniciais();
+});

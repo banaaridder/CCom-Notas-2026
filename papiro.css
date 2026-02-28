@@ -24,7 +24,6 @@ body {
 }
 
 
-
 .grid-materias {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); /* Melhora a responsividade */
@@ -579,3 +578,164 @@ body { background-color: var(--bg-dark); color: #e6e6e6; font-family: 'Segoe UI'
 }
 .checkbox-container input:checked ~ .checkmark:after { display: block; }
 .checkbox-container input:checked ~ .item-nome { color: #fff; text-decoration: line-through; opacity: 0.6; }
+
+
+/* Container de Matérias em Lista Vertical */
+.papiro-grid-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+/* Card da Matéria (Acordeão Pai) */
+.materia-wrapper {
+    background: var(--card-bg);
+    border: 1px solid var(--border-soft);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: 0.3s;
+}
+
+.materia-wrapper[open] {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 20px var(--primary-glow);
+}
+
+.materia-header {
+    padding: 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none; /* Remove seta padrão */
+    font-weight: bold;
+    background: linear-gradient(90deg, rgba(0, 175, 239, 0.05) 0%, transparent 100%);
+}
+
+.materia-header::-webkit-details-marker { display: none; } /* Safari */
+
+.header-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-info i {
+    color: var(--primary-blue);
+    font-size: 1.2rem;
+}
+
+.materia-stats {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    background: rgba(255,255,255,0.05);
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+/* Unidades Didáticas (Acordeão Filho) */
+.materia-content {
+    padding: 10px 20px 20px;
+    border-top: 1px solid var(--border-soft);
+}
+
+.ud-group {
+    margin-bottom: 10px;
+    border-left: 2px solid var(--primary-blue);
+    background: rgba(255,255,255,0.02);
+}
+
+.ud-title {
+    padding: 12px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #fff;
+    list-style: none;
+    font-weight: 600;
+}
+
+/* Lista de Assuntos */
+.assuntos-list {
+    list-style: none;
+    padding: 5px 0 10px 40px;
+}
+
+.assunto-item {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+.assunto-item:last-child { border: none; }
+
+/* Responsividade Mobile */
+@media (max-width: 600px) {
+    .assuntos-list { padding-left: 20px; }
+    .materia-header { padding: 15px; }
+    .header-info span { font-size: 0.9rem; }
+}
+
+/* ==========================================
+   FEEDBACK VISUAL DE CONCLUSÃO (VERDE)
+========================================== */
+
+/* 1. Assunto Concluído */
+.assunto-item {
+    border-radius: 5px;
+    margin-bottom: 5px;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+}
+
+.assunto-item.concluido {
+    
+    
+    padding: 10px;
+    background: rgba(40, 223, 116, 0.144);
+}
+
+.assunto-item.concluido .item-nome {
+    text-decoration: line-through;
+    color: var(--military-green);
+    opacity: 0.8;
+}
+
+/* 2. UD Concluída */
+.ud-group.concluido {
+    border-left: 3px solid var(--military-green);
+}
+
+.ud-group.concluido > summary {
+    color: var(--military-green);
+    background: rgba(46, 204, 113, 0.05);
+}
+
+/* 3. Matéria Concluída */
+.materia-wrapper.concluido {
+    border-color: var(--military-green);
+    box-shadow: 0 0 15px rgba(46, 204, 113, 0.2);
+}
+
+.materia-wrapper.concluido .materia-header i,
+.materia-wrapper.concluido .materia-header span {
+    color: var(--military-green);
+}
+
+/* 4. Tags de Porcentagem */
+.percent-badge {
+    font-size: 0.75rem;
+    padding: 3px 8px;
+    border-radius: 8px;
+    background: rgba(0, 175, 239, 0.1);
+    color: var(--primary-blue);
+    margin-left: 10px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+/* Badge verde quando bater 100% */
+.concluido .percent-badge,
+.percent-badge.completo {
+    background: rgba(46, 204, 113, 0.1);
+    color: var(--military-green);
+}
