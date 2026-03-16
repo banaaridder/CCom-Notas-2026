@@ -123,11 +123,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 .from('estados_papiro')
                 .upsert({
                     user_id: usuarioId, // Usa o ID do localStorage
-                    materia: materia,
-                    prova: prova,
-                    is_checked: checked,
+                    chacklist_data: { checks: estado},
                     updated_at: new Date()
-                }, { onConflict: 'user_id, materia, prova' });
+                });
             
             if (error) throw error;
         } catch (err) {
@@ -139,8 +137,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
             const { data, error } = await client
                 .from('estados_papiro')
-                .select('materia, prova, is_checked')
-                .eq('user_id', usuarioId);
+                .select('checklist_data')
+                .eq('user_id', id);
 
             if (error) throw error;
 
