@@ -391,8 +391,10 @@ function calcularTiro() {
     const ac2 = parseFloat(document.getElementById("tiro-ac2")?.value);
     let soma = 0, peso = 0;
 
-    if (!isNaN(aa)) { soma += aa * 1; peso += 1; }
-    if (!isNaN(ac1)) { soma += ac1 * 2; peso += 2; }
+    if (!isNaN(aa)) {
+        const notaPst = (aa / 4);
+        soma += notaPst * 2; peso += 2; }
+    if (!isNaN(ac1)) { soma += ac1 * 1; peso += 1; }
     if (!isNaN(ac2)) { soma += ac2 * 2; peso += 2; }
 
     const media = peso > 0 ? soma / peso : null;
