@@ -1,3 +1,10 @@
+
+const nomeUsuario = localStorage.getItem('usuarioLogado');
+
+if (!nomeUsuario) {
+    console.error("Usuário não identificado. Redirecionando para login...");
+     window.location.href = 'login.html';}
+
 window.onerror = function(msg, url, line) {
     alert("Erro: " + msg + "\nLinha: " + line);
 };
