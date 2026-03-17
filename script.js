@@ -386,26 +386,36 @@ function calcularTFM() {
 }
 
 function calcularTiro() {
-
     const pontosPst = parseFloat(document.getElementById("tiro-ac-pst")?.value);
     const aafz = parseFloat(document.getElementById("tiro-aa-fz")?.value);
     const acfz = parseFloat(document.getElementById("tiro-ac-fz")?.value);
     
     let soma = 0, peso = 0;
 
-    // Converte os pontos (máx 40) para nota (0 a 10) e aplica peso 2 (pois agora é AC)
+    // Cálculo Pistola (AC): Pontos / 40 * 10 com Peso 2
     if (!isNaN(pontosPst)) { 
         const notaPst = (pontosPst / 40) * 10;
         soma += notaPst * 2; 
         peso += 2; 
     }
     
-    // Fuzil continua com peso 2
-    if (!isNaN(aafz)) { soma += aafz * 1; peso += 1; }
-    if (!isNaN(acfz)) { soma += acfz * 2; peso += 2; }
+    // Cálculo Fuzil AA: Peso 1
+    if (!isNaN(aafz)) { 
+        soma += aafz * 1; 
+        peso += 1; 
+    }
+
+    // Cálculo Fuzil AC: Peso 2
+    if (!isNaN(acfz)) { 
+        soma += acfz * 2; 
+        peso += 2; 
+    }
 
     const media = peso > 0 ? soma / peso : null;
-    document.getElementById("media-tiro").textContent = media ? media.toFixed(3) : "--";
+    const spanTiro = document.getElementById("media-tiro");
+    if (spanTiro) {
+        spanTiro.textContent = media !== null ? media.toFixed(3) : "--";
+    }
     return media;
 }
 
