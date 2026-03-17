@@ -386,30 +386,27 @@ function calcularTFM() {
 }
 
 function calcularTiro() {
-    const aa = parseFloat(document.getElementById("tiro-aa")?.value);
-    const ac1 = parseFloat(document.getElementById("tiro-ac1")?.value);
-    const ac2 = parseFloat(document.getElementById("tiro-ac2")?.value);
+
+    const pontosPst = parseFloat(document.getElementById("tiro-ac-pst")?.value);
+    const aafz = parseFloat(document.getElementById("tiro-aa-fz")?.value);
+    const acfz = parseFloat(document.getElementById("tiro-ac-fz")?.value);
+    
     let soma = 0, peso = 0;
 
-    if (!isNaN(aa)) { soma += aa * 1; peso += 1; }
-    if (!isNaN(ac1)) { soma += ac1 * 2; peso += 2; }
-    if (!isNaN(ac2)) { soma += ac2 * 2; peso += 2; }
+    // Converte os pontos (máx 40) para nota (0 a 10) e aplica peso 2 (pois agora é AC)
+    if (!isNaN(pontosPst)) { 
+        const notaPst = (pontosPst / 40) * 10;
+        soma += notaPst * 2; 
+        peso += 2; 
+    }
+    
+    // Fuzil continua com peso 2
+    if (!isNaN(aafz)) { soma += aafz * 1; peso += 1; }
+    if (!isNaN(acfz)) { soma += acfz * 2; peso += 2; }
 
     const media = peso > 0 ? soma / peso : null;
     document.getElementById("media-tiro").textContent = media ? media.toFixed(3) : "--";
     return media;
-}
-
-function calcularMateriaSimples(container) {
-    const input = container.querySelector("input");
-    const span = container.querySelector(".media-materia");
-    const nota = parseFloat(input.value);
-    if (!isNaN(nota)) {
-        span.textContent = nota.toFixed(3);
-        return nota;
-    }
-    span.textContent = "--";
-    return null;
 }
 
 function calcularTudo() {
