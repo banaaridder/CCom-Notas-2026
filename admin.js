@@ -258,7 +258,7 @@ function exportarParaExcel() {
             "Barra AC": d["barra-ac"] || 0,
             "Natação AA": fmtT(d["natacao-aa"]),
             "Natação AC": fmtT(d["natacao-ac"]),
-            "Tiro Pst": d["tiro-aa"] || "--",
+            "Tiro Pst": (parseFloat(d["tiro-aa"])/4 || 0).toFixed(3),
             "Tiro Fz AA": d["tiro-ac1"] || "--",
             "Tiro Fz AC": d["tiro-ac2"] || "--",
             "Tec. Mil AA1": (parseFloat(d["acertos-tec-aa1"])/parseFloat(d["total-tec-aa1"])*10 || 0).toFixed(2),
