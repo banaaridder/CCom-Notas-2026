@@ -491,7 +491,7 @@ const PROVAS_OBRIGATORIAS = {
     "total-tec-aa2":90,
     "total-fund-aa": 80, 
     "total-ciber-aa1":96,
-    "total-pt-ac":96,
+    "total-pt-ac":94,
     
     "nota-bas": true,     
     "corrida-aa": true,  
