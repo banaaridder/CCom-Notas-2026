@@ -78,7 +78,9 @@ if (btnSalvar) {
             // Chamamos o salvarNotas passando o snapshot atual
             salvarNotas(criarSnapshot());
         }
-
+        if (nomeUsuario === "ADMIN") {
+        checkTeste.removeAttribute("disabled");
+    }
     });
 }
 
@@ -413,31 +415,68 @@ function calcularMateriaSimples(container) {
 }
 
 function calcularTudo() {
-    let soma = 0, count = 0;
+    let soma2oAno = 0, count2oAno = 0;
     const materias = ["tec", "fund", "ciber", "empre", "pt", "racio", "didat"];
 
+    // 1. Calcula as matérias padrão do 2º Ano
     materias.forEach(m => {
         const media = calcularMateria(m);
         const span = document.getElementById(`media-${m}`);
         if (media !== null) {
             span.textContent = media.toFixed(3);
-            soma += media;
-            count++;
+            soma2oAno += media;
+            count2oAno++;
         } else { span.textContent = "--"; }
     });
 
+    // 2. Calcula as matérias "simples" do 2º Ano (TCC, Conceito, etc.)
     document.querySelectorAll('[data-tipo="simples"]').forEach(materia => {
-        const media = calcularMateriaSimples(materia);
-        if (media !== null) { soma += media; count++; }
+        // Verifica se este bloco é o do Básico pelo ID real do seu HTML (nota-bas)
+        const isBasico = materia.querySelector("#nota-bas");
+        
+        if (!isBasico) {
+            // Se não for o básico (ex: TCC, Conceito), calcula e soma no 2º ano
+            const media = calcularMateriaSimples(materia);
+            if (media !== null) { soma2oAno += media; count2oAno++; }
+        } else {
+            // Se for o básico, apenas atualiza o span visual dele na tela
+            // evitando que ele seja contabilizado na soma do 2º ano
+            calcularMateriaSimples(materia);
+        }
     });
 
+    // 3. Calcula Tiro e TFM (Matérias do 2º Ano)
     const mediaTiro = calcularTiro();
-    if (mediaTiro !== null) { soma += mediaTiro; count++; }
+    if (mediaTiro !== null) { soma2oAno += mediaTiro; count2oAno++; }
 
     const mediaTFM = calcularTFM();
-    if (mediaTFM !== null) { soma += mediaTFM; count++; }
+    if (mediaTFM !== null) { soma2oAno += mediaTFM; count2oAno++; }
 
-    const mediaFinal = count > 0 ? soma / count : null;
+    // 4. Obtém a Média Isolada do 2º Ano (Qualificação)
+    const media2oAno = count2oAno > 0 ? soma2oAno / count2oAno : null;
+
+    // 5. Resgata a nota do 1º Ano (Básico) usando o ID exato do seu HTML
+    const inputBasico = document.getElementById("nota-bas"); 
+    let notaBasico = null;
+    if (inputBasico && inputBasico.value !== "") {
+        notaBasico = parseFloat(inputBasico.value);
+    }
+
+    // 6. Calcula a Média Geral (Nova Regra: Média simples entre 1º Ano e 2º Ano)
+    let mediaFinal = null;
+    
+    if (media2oAno !== null && notaBasico !== null) {
+        // Se o aluno tem notas dos dois anos, faz a média entre eles
+        mediaFinal = (media2oAno + notaBasico) / 2;
+    } else if (media2oAno !== null) {
+        // Se o básico estiver vazio, mostra a média provisória do 2º ano
+        mediaFinal = media2oAno; 
+    } else if (notaBasico !== null) {
+        // Se o 2º ano estiver vazio, mostra a nota do básico
+        mediaFinal = notaBasico; 
+    }
+
+    // 7. Atualiza o layout do rodapé flutuante com a nota correta
     document.getElementById("media-geral").textContent = mediaFinal !== null ? mediaFinal.toFixed(3) : "--";
     window.mediaGeralAtual = mediaFinal;
 }
