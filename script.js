@@ -70,19 +70,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (checkTeste) checkTeste.checked = false;
 
     const btnSalvar = document.getElementById("btnSalvar");
-if (btnSalvar) {
-    btnSalvar.addEventListener("click", () => {
-        const checkTeste = document.getElementById("btn-modo-teste");
-        // Só permite salvar se não estiver no modo teste
-        if (checkTeste && !checkTeste.checked) {
-            // Chamamos o salvarNotas passando o snapshot atual
-            salvarNotas(criarSnapshot());
-        }
-        if (nomeUsuario === "ADMIN") {
-        checkTeste.removeAttribute("disabled");
+    if (btnSalvar) {
+        btnSalvar.addEventListener("click", () => {
+            const checkTeste = document.getElementById("btn-modo-teste");
+            // Só permite salvar se não estiver no modo teste
+            if (checkTeste && !checkTeste.checked) {
+                salvarNotas(criarSnapshot());
+            }
+            // Evita erro de 'undefined' caso nomeUsuario não tenha carregado do auth.js globalmente ainda
+            if (typeof nomeUsuario !== "undefined" && nomeUsuario === "ADMIN" && checkTeste) {
+                checkTeste.removeAttribute("disabled");
+            }
+        });
     }
-    });
-}
 
     configurarModoTeste();
     configurarMediaMobile(); // Ativa a média flutuante
@@ -93,10 +93,12 @@ if (btnSalvar) {
         calcularTudo();
         agendarAutoSave();
     });
+
+    aplicarConfiguracaoProvas(); 
 });
 
 /* =========================
-   MÉDIA MOBILE FLUTUANTE (BACKUP RESTAURADO)
+   MÉDIA MOBILE FLUTUANTE
 ========================= */
 function configurarMediaMobile() {
     const containerMedia = document.getElementById('container-media');
@@ -134,6 +136,9 @@ function criarSnapshot() {
         if (!el.id || el.id === "btn-modo-teste") return;
         dados[el.id] = el.type === "checkbox" ? el.checked : el.value;
     });
+
+    dados["apto_ranking"] = verificarAptoRanking();
+
     // Salva médias calculadas para o ranking
     ["media-tfm", "media-tiro", "media-tec", "media-fund", "media-ciber", "media-empre", "media-pt", "media-racio", "media-didat"].forEach(id => {
         const el = document.getElementById(id);
@@ -155,7 +160,7 @@ function configurarModoTeste() {
         } else {
             statusTexto.innerText = "Restaurando notas reais...";
             if (btnSalvar) btnSalvar.disabled = false;
-            await carregarNotasDoUsuario(); // Limpa inputs voltando dados do banco
+            await carregarNotasDoUsuario(); 
             statusTexto.innerText = "Desativado - Notas reais restauradas.";
             statusTexto.style.color = "#ccc";
         }
@@ -169,7 +174,6 @@ function agendarAutoSave() {
     const snapshotAtual = criarSnapshot();
     if (snapshotAtual === ultimoSnapshot) return;
 
-    // ADICIONA O PULSO: Indica que há algo novo para salvar
     const btnSalvar = document.getElementById("btnSalvar");
     if (btnSalvar) btnSalvar.classList.add("pendente");
 
@@ -241,7 +245,7 @@ async function salvarNotas(snapshotAtual) {
         }
     } finally {
         setTimeout(() => {
-            if (!checkTeste.checked) btn.className = "btn-salvar";
+            if (checkTeste && !checkTeste.checked) btn.className = "btn-salvar";
         }, 2000);
     }
 }
@@ -251,7 +255,6 @@ async function carregarNotasDoUsuario() {
     const usuarioId = localStorage.getItem("usuarioLogado");
     if (!usuarioId) return;
 
-    // Limpa todos os inputs antes de carregar (previne resíduos do modo teste)
     document.querySelectorAll("input[type='number'], input[type='text']").forEach(i => i.value = "");
 
     const { data } = await window.supabaseClient
@@ -393,7 +396,8 @@ function calcularTiro() {
 
     if (!isNaN(aa)) {
         const notaPst = (aa / 4);
-        soma += notaPst * 2; peso += 2; }
+        soma += notaPst * 2; peso += 2; 
+    }
     if (!isNaN(ac1)) { soma += ac1 * 1; peso += 1; }
     if (!isNaN(ac2)) { soma += ac2 * 2; peso += 2; }
 
@@ -431,16 +435,12 @@ function calcularTudo() {
 
     // 2. Calcula as matérias "simples" do 2º Ano (TCC, Conceito, etc.)
     document.querySelectorAll('[data-tipo="simples"]').forEach(materia => {
-        // Verifica se este bloco é o do Básico pelo ID real do seu HTML (nota-bas)
         const isBasico = materia.querySelector("#nota-bas");
         
         if (!isBasico) {
-            // Se não for o básico (ex: TCC, Conceito), calcula e soma no 2º ano
             const media = calcularMateriaSimples(materia);
             if (media !== null) { soma2oAno += media; count2oAno++; }
         } else {
-            // Se for o básico, apenas atualiza o span visual dele na tela
-            // evitando que ele seja contabilizado na soma do 2º ano
             calcularMateriaSimples(materia);
         }
     });
@@ -455,7 +455,7 @@ function calcularTudo() {
     // 4. Obtém a Média Isolada do 2º Ano (Qualificação)
     const media2oAno = count2oAno > 0 ? soma2oAno / count2oAno : null;
 
-    // 5. Resgata a nota do 1º Ano (Básico) usando o ID exato do seu HTML
+    // 5. Resgata a nota do 1º Ano (Básico)
     const inputBasico = document.getElementById("nota-bas"); 
     let notaBasico = null;
     if (inputBasico && inputBasico.value !== "") {
@@ -466,18 +466,16 @@ function calcularTudo() {
     let mediaFinal = null;
     
     if (media2oAno !== null && notaBasico !== null) {
-        // Se o aluno tem notas dos dois anos, faz a média entre eles
         mediaFinal = (media2oAno + notaBasico) / 2;
     } else if (media2oAno !== null) {
-        // Se o básico estiver vazio, mostra a média provisória do 2º ano
         mediaFinal = media2oAno; 
     } else if (notaBasico !== null) {
-        // Se o 2º ano estiver vazio, mostra a nota do básico
         mediaFinal = notaBasico; 
     }
 
     // 7. Atualiza o layout do rodapé flutuante com a nota correta
-    document.getElementById("media-geral").textContent = mediaFinal !== null ? mediaFinal.toFixed(3) : "--";
+    const elMediaGeral = document.getElementById("media-geral");
+    if (elMediaGeral) elMediaGeral.textContent = mediaFinal !== null ? mediaFinal.toFixed(3) : "--";
     window.mediaGeralAtual = mediaFinal;
 }
 
@@ -488,3 +486,50 @@ function mascaraTempo(input) {
     input.value = valor;
 }
 
+const PROVAS_OBRIGATORIAS = {
+    "total-tec-aa1": 84, 
+    "total-tec-aa2":90,
+    "total-fund-aa": 80, 
+    "total-ciber-aa1":96,
+    "total-pt-ac":96,
+    
+    "nota-bas": true,     
+    "corrida-aa": true,  
+    "flexao-aa": true, 
+    "barra-aa": true,   
+    "natacao-aa": true, 
+    "corda-aa": true, 
+    "tiro-aa": true,
+    "tiro-ac1": true
+};
+
+function aplicarConfiguracaoProvas() {
+    for (const [idInput, valorConfig] of Object.entries(PROVAS_OBRIGATORIAS)) {
+        if (idInput.startsWith("total-") && typeof valorConfig === "number") {
+            const sufixo = idInput.replace("total-", ""); 
+            const inputTotal = document.getElementById(`total-${sufixo}`);
+            if (inputTotal) {
+                inputTotal.value = valorConfig; 
+                inputTotal.disabled = true;    
+            }
+        }
+    }
+}
+
+function verificarAptoRanking() {
+    for (const idInput of Object.keys(PROVAS_OBRIGATORIAS)) {
+        let idParaVerificar = idInput;
+        
+        if (idInput.startsWith("total-")) {
+            idParaVerificar = idInput.replace("total-", "acertos-");
+        }
+
+        const inputAluno = document.getElementById(idParaVerificar);
+        if (!inputAluno) continue;
+
+        if (inputAluno.value.trim() === "") {
+            return false;
+        }
+    }
+    return true; 
+}
