@@ -398,9 +398,11 @@ function calcularTiro() {
         const notaPst = (aa / 4);
         soma += notaPst * 2; peso += 2; 
     }
+    if (!isNaN(ac2)) {
+        const notaFz2 = (ac2 / 5);
+        soma += notaFz2 * 2; peso += 2; 
+    }
     if (!isNaN(ac1)) { soma += ac1 * 1; peso += 1; }
-    if (!isNaN(ac2)) { soma += ac2 * 2; peso += 2; }
-
     const media = peso > 0 ? soma / peso : null;
     document.getElementById("media-tiro").textContent = media ? media.toFixed(3) : "--";
     return media;
