@@ -468,7 +468,7 @@ function calcularTudo() {
     let mediaFinal = null;
     
     if (media2oAno !== null && notaBasico !== null) {
-        mediaFinal = (media2oAno + notaBasico) / 2;
+        mediaFinal = ((media2oAno*2) + notaBasico) / 3;
     } else if (media2oAno !== null) {
         mediaFinal = media2oAno; 
     } else if (notaBasico !== null) {
