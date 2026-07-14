@@ -502,7 +502,8 @@ const PROVAS_OBRIGATORIAS = {
     "natacao-aa": true, 
     "corda-aa": true, 
     "tiro-aa": true,
-    "tiro-ac1": true
+    "tiro-ac1": true,
+    "tiro-ac2": true
 };
 
 function aplicarConfiguracaoProvas() {
