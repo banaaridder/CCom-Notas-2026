@@ -503,7 +503,9 @@ const PROVAS_OBRIGATORIAS = {
     "corda-aa": true, 
     "tiro-aa": true,
     "tiro-ac1": true,
-    "tiro-ac2": true
+    "tiro-ac2": true,
+    "nota-tcc": true
+
 };
 
 function aplicarConfiguracaoProvas() {
